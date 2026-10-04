@@ -1,5 +1,6 @@
-corpus/
-node_modules/
-*.deb
 *.AppImage
+corpus/
+*.deb
+node_modules/
+*.split.js
 *.tar.gz
