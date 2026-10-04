@@ -1,55 +1,62 @@
 # cursor-decompile
 
-Extracted facts and original specs for **Cursor's Automations surface**, plus a
-clean reimplementation of it.
+**This repo's original method was retired on 2026-10-04.** What remains is two
+local reading tools and this explanation.
 
-Why this repo exists: Cursor's automations page has the layout and the feature
-model we want — **one MCP configuration per automation**, multi-trigger forms,
-chained prompts, per-automation model selection. The sibling project
+## What it was for
+
+Cursor's automations page has a feature model the sibling project
 [`linear-loops-decompile`](https://github.com/I-am-drunk/linear-loops-decompile)
-rebuilds Linear's UI; its Loops page adopts **this** page's layout. So the
-deliverable here is a precise, citable description of Cursor's automations UI
-and behavior that the Linear project can build against.
+wants: one MCP configuration per automation, multi-trigger forms, chained
+prompts with per-step model choice. This repo was going to extract a precise,
+citable description of that page from Cursor's shipped bundle, into a queue of
+14 fact files, so the sibling could build against it.
 
-## The legal line (read before committing anything)
+## Why that stopped
 
-This repo is **public**. Never commit vendor code: no bundles, no `.deb`/
-AppImage contents, no decompiled or prettified Cursor source, no verbatim
-module text. Commit only:
+Seven extractors were run against `workbench.anysphere-ui-automations.js` under
+a brief that said "facts only, never paste vendor code" and told them to write
+fact tables into this public repo. **Six refused, independently**, converging on
+one objection: the no-code-pasting rule shaped the *format* while the brief
+asked for the full *substance*. A table of every copy string, prop name, CSS
+class, validation regex and feature-gate default, cited to line numbers in a
+decompiled artifact, is the design of the feature transcribed — and the
+structure that kept the bundle gitignored while publishing its distillation
+protected the container and published the substance.
 
-- **facts** — identifier names, class names, copy strings, route paths, field
-  shapes, enum values, state transitions, validation rules;
-- **our own original code**.
+They were right. The brief was the defect.
 
-The artifact lives locally under `corpus/` (gitignored). `pipeline/` fetches and
-unpacks it on demand.
+## It was also producing worse facts
 
-## Evidence quality
+The one extraction that completed checked this repo's own `facts/INDEX.md` and
+found **3 of its 4 headline strings wrong**:
 
-Cursor ships `workbench.anysphere-ui-automations.js` — the automations surface
-as its own bundle, with original component, hook, and helper names retained and
-BEM class names in full (`automations-mcp-status-badge__error`,
-`McpActionForm`, `findAvailableMcpServerForAction`). Behavior is readable
-directly; almost nothing has to be guessed.
+- `All Automations` is a radio item in a *runs* filter, not the list header.
+- `Add Automation` is never rendered — it is a sentinel rewritten to
+  `New Automation`.
+- There is no trigger-summary cell and no last-run cell.
 
-Evidence labels used throughout `facts/` and `specs/`:
+The queue had been written from guesses *about* the artifact and cited as if
+verified. High-fidelity extraction yields confident, cited, wrong facts as
+readily as right ones, and it is slower than reading the public spec.
 
-| Label | Meaning |
-|---|---|
-| `PROVEN` | a literal string, identifier, constant, branch, or class in the artifact |
-| `PROJECTED` | minimum server response shape, inferred from fields the UI reads |
-| `DERIVED` | forced by proven control flow |
-| `REMOTE` | lives behind Cursor's server; not in the client, never invented |
+## What the sibling project does instead
 
-## Repo map
+Builds the automations page from the **open Model Context Protocol
+specification**, the public cron specification, and the product as a user sees
+it. MCP is a published standard with SDKs — the headline feature needed no
+extraction at all. See `docs/plan/automations.md` and `docs/plan/mcp.md` there,
+and `docs/PROVENANCE.md` for the rule.
+
+## What is left here
+
+Two tools, our own code, committing no vendor bytes. They are legitimate for
+reading a bundle locally to understand behavior:
 
 | Path | What |
 |---|---|
-| `PROMPT.md` | the prompt every session boots from |
-| `AGENTS.md` | how to work here |
-| `pipeline/` | fetch + unpack + index the artifact into `corpus/` (gitignored) |
-| `facts/` | extracted facts, one file per area, every claim labeled and cited |
-| `specs/` | the specs built from those facts — what a reimplementation must do |
-| `src/` | our own code |
+| `pipeline/split.mjs` | breaks a minified bundle onto readable lines; copies string/template/regex/comment bodies through byte for byte and self-checks that its output's non-whitespace bytes are identical to its input's |
+| `pipeline/names.sh` | builds a symbol table — the bundle registers its own function names, so 10,742 symbols map to line numbers |
+| `pipeline/fetch.sh`, `index.sh` | fetch and index the artifact into gitignored `corpus/` |
 
-Working here: read `PROMPT.md`.
+Reading locally: fine. Publishing a transcription: not. That is the whole rule.
