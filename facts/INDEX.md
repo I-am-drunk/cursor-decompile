@@ -1,39 +1,34 @@
-# facts/INDEX.md — the work queue
+# Evidence index
 
-One row = one file = one PR. Claim on issue **#1** before branching.
+Checked 2026-10-05. `DOCUMENTED` means the public source says the statement;
+it does not certify an authenticated UI layout.
 
-Artifact: `workbench.anysphere-ui-automations.js` (8.85 MB), Cursor 3.23.12.
-The automations surface is its own bundle and retains original identifier
-names, so these rows are extraction, not inference.
+| Label | Meaning |
+|---|---|
+| DOCUMENTED | supported by a public specification or official documentation |
+| OBSERVED | reproduced in the product with route, state, and capture citation |
+| EXTRACTED_UI | measured UI value with a reproducible reference-corpus locator |
+| OWNER_REQUIREMENT | requested product behavior; not a vendor fact |
+| DESIGN | our proposed interface or implementation choice |
+| UNVERIFIED | missing or insufficient evidence; cannot be called parity |
 
-| Row | File | Scope | Status |
+| ID | Fact | Label | Source / locator |
 |---|---|---|---|
-| F-LIST | `list-view.md` | The automations list: `AutomationsListHeader`, `AutomationRowActions`, `AutomationRowActionMenuItem`, `AutomationsCompactSearchInput`, "All Automations" / "Add Automation" / "Automation filters", filter vocabulary, row status badges, empty states (`automations-action-icon-empty`) | open |
-| F-DETAIL | `detail-view.md` | The automation detail/editor page: section order and every section component — `AutomationSection`, `ActionsSection`, `PromptsSection`, `MemoriesSection`, `EnvironmentSection`, `MarkdownSection`, `ParameterSection`, `BooleanParameterSection`, `EnumParameterSection` | open |
-| F-TRIGGER | `triggers.md` | Trigger model: `AddTriggerMenu`, `SingleTriggerCard`, `MultiTriggerForm`, `TriggerRow`, `HoverOptionsTriggerRow`, `isDuplicateTriggerMcp`, the trigger-type catalog, per-type option forms | open |
-| F-MCP | `mcp.md` | **The headline feature — MCP per automation.** `McpActionForm`, `McpActionRow`, `McpServerSubmenu`, `McpStatusBadge`, `buildMcpPluginByServerName`, `createMcpActionDraftState`, `findAvailableMcpServerForAction`, `isMcpServerMissing`, `matchMcpServersByAuthRefs`, `normalizeMcpUrl`, `resolveMcpServerStatusTarget`, `resolveNamedMcpLogo`, `sortMcpServersByName`, `getHumanReadableMcpError`, `onSetupMcp`, `resolveTemplateMcpActionsForPrefill` | open |
-| F-ACTIONS | `actions.md` | Non-MCP actions: `SlackActionForm`, `hasSlackMcpAction`, `MicrosoftTeamsActionForm`, `PrCommentActionForm`, `AddToolMenu`, the action-kind registry | open |
-| F-PROMPT | `prompts.md` | Prompt config: `AutomationPromptEditorCard`, `AutomationPromptTextarea`, `ChainPromptConfigRow`, `ChainPromptModelPicker`, `PromptModelPicker`, `PromptRunModeMenu`, chaining semantics (`automations_chain_prompts`) | open |
-| F-SCHEDULE | `schedule.md` | Scheduling: `InlineCronCustomEditor`, cron grammar and presets, the single `rrule` reference, timezone handling, validation copy | open |
-| F-RUNS | `runs.md` | Run surfaces: `AutomationRunSummaryDialog`, `AutomationRunSummaryBody`, `automationRunViewModelEquals`, "Automation failed", run status lattice | open |
-| F-WEBHOOK | `webhook.md` | `WebhookConfigPanel`, generate/copy affordances, the allowlist tokenized input (`automations-allowlist-token*`) | open |
-| F-SCOPE | `scope-and-env.md` | `applyDefaultAutomationScopeToDraft`, org-scoped triggers (`automations_org_scoped_triggers_ui`), `EnvironmentSection`, repo/branch pickers (`SharedRepositoryPicker`, `SharedBranchPicker`, `HeaderBranchPicker`, the `automations-branch-picker-*` family) | open |
-| F-TEMPLATE | `templates.md` | `TemplateCard`, `TemplateGallerySectionView`, prefill paths, suggested categories | open |
-| F-FLAGS | `flags.md` | The 10 `automations_*` feature flags: what each gates, and which branch ships on by default | open |
-| F-LAYOUT | `layout.md` | **What the Linear project consumes.** Page skeleton, `PageHeader`, content containers (`automations-content-container`, `automations-detail-content`), caption/stack primitives, the spacing and radius scale, light/dark token flow | open |
-| F-LINEAR | `linear-trigger.md` | `automations_linear_status_trigger_filter` — Cursor's own Linear integration, which is the shape our integration should match | open |
+| A01 | Automations run cloud agents on schedules or events | DOCUMENTED | [Automations](https://cursor.com/docs/cloud-agent/automations), introduction |
+| A02 | More than one trigger is allowed; any trigger fires a run | DOCUMENTED | [Triggers](https://cursor.com/docs/cloud-agent/automations#triggers) |
+| A03 | Setup chooses a trigger, prompt, optional tools, repository context, then saves and activates | DOCUMENTED | [Getting started](https://cursor.com/docs/cloud-agent/automations#getting-started); workflow steps, not geometric section order |
+| A04 | An automation can connect an MCP server; connection grants all that server's tools | DOCUMENTED | [MCP server](https://cursor.com/docs/cloud-agent/automations#mcp-server) |
+| A05 | The model is selectable for an automation | DOCUMENTED | [Model](https://cursor.com/docs/cloud-agent/automations#model) |
+| A06 | Repository context can be none, single, or multi-repo | DOCUMENTED | [Repositories](https://cursor.com/docs/cloud-agent/automations#repositories) |
+| A07 | Linear trigger kinds include issue created, status changed, and end of cycle | DOCUMENTED | [Linear triggers](https://cursor.com/docs/cloud-agent/automations#linear-triggers) |
+| A08 | Webhook URL and authentication API key are generated after saving | DOCUMENTED | [Webhook triggers](https://cursor.com/docs/cloud-agent/automations#webhook-triggers) |
+| L01 | Linear supports OAuth2 and PKCE for integrations | DOCUMENTED | [OAuth2](https://linear.app/developers/oauth-2-0-authentication), PKCE |
+| L02 | Linear data-change webhooks support issues and cycles | DOCUMENTED | [Webhooks](https://linear.app/developers/webhooks), supported models; not proof of a dedicated end-of-cycle event |
+| V01 | Automations page geometry, fonts, copy, section order, responsive states | UNVERIFIED | authenticated page unavailable (HTTP 403); T3 preview unavailable; [capture requirements](../specs/automations-layout.md) |
+| V02 | Chained-prompt controls and exact MCP configuration cardinality | UNVERIFIED | not settled by the public facts above; do not reuse old INDEX assertions |
+| O01 | Whole-Cursor exact UI; exact Cursor Automations layout in Linear Loops | OWNER_REQUIREMENT | owner directive 2026-10-05; [contract](../specs/linear-as-integration.md) |
+| O02 | Linear account connection and selectable inference including T3 Code Connect | OWNER_REQUIREMENT | owner directive 2026-10-05; provider capabilities require implementation evidence |
 
-## Fact-file format
-
-```markdown
-# <area>
-
-Artifact: cursor 3.23.12 · `workbench.anysphere-ui-automations.js`
-
-| Fact | Value | Label | Citation |
-|---|---|---|---|
-| list header label | `All Automations` | PROVEN | identifier `AutomationsListHeader` |
-```
-
-Behavior that needs more than a table row goes in `specs/<area>.md` and links
-back to the fact rows it rests on.
+The [old queue](../docs/archive/2026-10-04.md) is historical, not a source.
+Capture UI facts for the current plan; do not promote old guessed labels or
+internal component names into verified public behavior.
