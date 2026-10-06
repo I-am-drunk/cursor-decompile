@@ -1,33 +1,44 @@
-# AGENTS.md
+# How to work here
 
-## The loop
+Boot: [README.md](README.md) → this file → [STATUS.md](STATUS.md) →
+[PLAN.md](PLAN.md). The reusable goal lives in [prompt.md](prompt.md).
 
-1. Read `README.md`, this file, the tail of issue **#1**, and `gh pr list`.
-2. Claim a row from `facts/INDEX.md` on #1 (one line, signed with your session
-   id). One task per session. Earliest claim wins; if beaten, take another row.
-3. Branch `facts/<area>` or `src/<slice>`. Commit often.
-4. Open a PR: what, why, evidence. Then take the next row — do not sit on it.
-5. Reviewing open PRs beats opening a new one when the queue is non-empty.
+1. Read the tail of [#1](https://github.com/I-am-drunk/cursor-decompile/issues/1)
+   and open PRs. Review the oldest PR before authoring when the queue is non-empty.
+2. Claim one unclaimed slice with no open PR: lane, scope, current session id;
+   at most five lines on #1. Claim before branching. Earliest claim wins.
+3. Branch `<lane>-<slug>` from main in an isolated checkout. Push within an
+   hour; an unpushed branch does not hold a claim after an hour.
+4. Open one thin PR with what, why, and evidence. Update STATUS.md in it.
+   One task per session. Findings belong in files; comments stay short.
 
-## Rules
+## Evidence and code
 
-- **Public repo.** No vendor code, ever. Facts and our own code only. The
-  artifact lives in gitignored `corpus/`.
-- **Every fact is labeled and cited.** `PROVEN` / `PROJECTED` / `DERIVED` /
-  `REMOTE`, plus where you found it (bundle file + identifier or byte offset).
-  No label, no merge.
-- **Tables over prose.** A fact file lists facts. If you are writing
-  paragraphs about a fact, you are writing the spec, which goes in `specs/`.
-- **Don't invent server behavior.** A boundary the client doesn't settle gets
-  `REMOTE` and a note on what the client observably requires.
+- Whole-Cursor exact UI and behavior are the target; Automations is first.
+- Commit our own code and citable facts. Never commit vendor bundles, source,
+  archives, or credentials. Keep reference captures in gitignored `corpus/`.
+- Use [facts/INDEX.md](facts/INDEX.md) labels. Public docs prove documented
+  behavior; observed UI and extracted UI facts prove the captured state.
+- Each UI package needs `ui-facts.json`: property/value, source locator, reference
+  version, route/state, viewport, and capture date. A citation must actually
+  support the claim. Missing dimensions or copy remain `UNVERIFIED`.
+- Compare screenshots and interactions with the same reference state. Read
+  [the layout acceptance contract](specs/automations-layout.md) before UI work.
+- Zero runtime dependencies, strict TypeScript, boring patterns. Node type
+  stripping: no enums, namespaces, or constructor parameter properties.
 
-## Tooling
+## Validation and merge
 
-`gh` for all GitHub work: `gh issue comment 1 -b '...'`, `gh pr create`,
-`gh pr view N --comments`. No MCP, no PAT handling needed.
+This baseline has reading tools, but no product UI or CI gate. For docs PRs,
+check local links, source claims, and `git diff --check` on a fresh clone. For
+reader changes, run `node --test pipeline/read.test.mjs`; see
+[the tool contract](pipeline/README.md). The first product implementation slice
+must add `ci/check-src.sh` covering its meaningful checks and evidence.
 
-## Coordination
+A peer COMMENT review is required when another session is active. Sessions
+share one GitHub account, so formal self-approval is unavailable. Check issue
+comments and inline review comments; fix or answer all feedback before merge.
+No self-merge with active peers. Main is PR-only.
 
-One thread: issue **#1**. Claims, findings, and questions go there as short
-comments. Do not open an issue per claim — that mistake cost the sibling repo
-70 junk issues.
+Use authenticated `gh` for GitHub. Use available T3 tools to register PRs and
+inspect the shared browser. The repository is the durable coordination channel.
