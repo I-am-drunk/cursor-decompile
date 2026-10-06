@@ -1,8 +1,9 @@
 # cursor-decompile
 
-An original reimplementation of the **whole Cursor UI**, built to verified
-behavioral and visual parity. Automations comes first: the sibling
-[Linear project](https://github.com/I-am-drunk/linear-loops-decompile) uses
+An original reimplementation of the **whole Cursor UI**, targeting verified
+behavioral and visual parity. Automations comes first: after capture and
+implementation, the sibling
+[Linear project](https://github.com/I-am-drunk/linear-loops-decompile) will use
 Cursor's exact Automations layout inside its Linear UI.
 
 Only our own code is committed. Reference artifacts remain gitignored;
@@ -18,6 +19,7 @@ measured UI facts and observed behavior carry reproducible citations.
 | [Automations layout](specs/automations-layout.md) | exactness acceptance evidence |
 | [Linear contract](specs/linear-as-integration.md) | integrations, inference, and runs |
 | [Reset history](docs/archive/2026-10-04.md) | retired queue and review findings |
+| [Reading tools](pipeline/README.md) | raw byte/search inspection and regression checks |
 
 Coordination is [issue #1](https://github.com/I-am-drunk/cursor-decompile/issues/1).
 Read its tail and open PRs before claiming work. The historical extraction

@@ -1,7 +1,7 @@
 Work on github.com/I-am-drunk/cursor-decompile until the whole Cursor UI has
 verified behavioral and visual parity in an original open reimplementation.
-Automations is first; its exact layout is consumed by the sibling Linear
-project. All committed code is our own.
+Automations is first; verify and implement its exact layout for a planned
+handoff to the sibling Linear project. All committed code is our own.
 
 Use this text as a starter prompt or a continuing goal. Read README.md →
 AGENTS.md → STATUS.md → PLAN.md. Before writing, read the tail of issue #1 and

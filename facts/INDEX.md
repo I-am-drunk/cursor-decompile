@@ -24,7 +24,7 @@ it does not certify an authenticated UI layout.
 | A08 | Webhook URL and authentication API key are generated after saving | DOCUMENTED | [Webhook triggers](https://cursor.com/docs/cloud-agent/automations#webhook-triggers) |
 | L01 | Linear supports OAuth2 and PKCE for integrations | DOCUMENTED | [OAuth2](https://linear.app/developers/oauth-2-0-authentication), PKCE |
 | L02 | Linear data-change webhooks support issues and cycles | DOCUMENTED | [Webhooks](https://linear.app/developers/webhooks), supported models; not proof of a dedicated end-of-cycle event |
-| V01 | Automations page geometry, fonts, copy, section order, responsive states | UNVERIFIED | authenticated page unavailable (HTTP 403); T3 preview unavailable; [capture requirements](../specs/automations-layout.md) |
+| V01 | Automations page geometry, fonts, copy, section order, responsive states | UNVERIFIED | no authenticated state capture; see the dated attempt and [capture requirements](../specs/automations-layout.md) |
 | V02 | Chained-prompt controls and exact MCP configuration cardinality | UNVERIFIED | not settled by the public facts above; do not reuse old INDEX assertions |
 | O01 | Whole-Cursor exact UI; exact Cursor Automations layout in Linear Loops | OWNER_REQUIREMENT | owner directive 2026-10-05; [contract](../specs/linear-as-integration.md) |
 | O02 | Linear account connection and selectable inference including T3 Code Connect | OWNER_REQUIREMENT | owner directive 2026-10-05; provider capabilities require implementation evidence |

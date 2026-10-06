@@ -29,9 +29,11 @@ Boot: [README.md](README.md) → this file → [STATUS.md](STATUS.md) →
 
 ## Validation and merge
 
-This baseline has no CI gate or implementation. For docs PRs, check local links,
-source claims, and `git diff --check` on a fresh clone. The first implementation
-slice must add `ci/check-src.sh` covering its meaningful checks and evidence.
+This baseline has reading tools, but no product UI or CI gate. For docs PRs,
+check local links, source claims, and `git diff --check` on a fresh clone. For
+reader changes, run `node --test pipeline/read.test.mjs`; see
+[the tool contract](pipeline/README.md). The first product implementation slice
+must add `ci/check-src.sh` covering its meaningful checks and evidence.
 
 A peer COMMENT review is required when another session is active. Sessions
 share one GitHub account, so formal self-approval is unavailable. Check issue

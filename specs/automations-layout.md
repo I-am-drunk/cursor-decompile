@@ -26,6 +26,8 @@ implementation screenshots use the same state, meaningful interactions match,
 and a peer checks both. Record every remaining mismatch explicitly. A feature
 working from docs alone does not complete the layout task.
 
-T3 preview status/open were unavailable in the reset environment; the public
-Automations URL returned HTTP 403. This records missing capture evidence, not a
-change in product scope. Authenticated capture is the next C-AUTOMATIONS slice.
+On 2026-10-05, T3 preview status/open were unavailable in the reset environment
+and the Automations app URL returned HTTP 403. The public documentation was
+readable. That attempt supplied no authenticated state capture; it does not
+establish current browser availability. Authenticated capture is the next
+C-AUTOMATIONS slice.
