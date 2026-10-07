@@ -1,0 +1,78 @@
+{
+  "label": "DOCUMENTED",
+  "source": {
+    "url": "https://cursor.com/blog/automations",
+    "title": "Build agents that run automatically",
+    "publishedDate": "2026-03-05",
+    "retrievedDate": "2026-10-07",
+    "htmlSha256": "49f104b5da4b2feb593a33647913c975a42b72504f85ac2f8b471febcbb2c2a2",
+    "embeddedPlaybackId": "00QMZHDmPVrg00wxQglgnYXlXZ639VpcYzMR1g314vvvs"
+  },
+  "referenceBuild": null,
+  "recordingDate": null,
+  "route": null,
+  "accountPermissions": null,
+  "viewportCssPixels": null,
+  "devicePixelRatio": null,
+  "browserZoom": null,
+  "themeSetting": null,
+  "thumbnailEndpoint": "https://image.mux.com/00QMZHDmPVrg00wxQglgnYXlXZ639VpcYzMR1g314vvvs/thumbnail.jpg",
+  "frames": [
+    {
+      "requestedTimeSeconds": 5,
+      "file": "corpus/public/automations-2026-03-05/05s.jpg",
+      "byteLength": 94789,
+      "sha256": "b8fea773312f83fbd70aa0f0c33ba9652c5df38ca81dabf3fe286d5c393b242b",
+      "encodedWidth": 1920,
+      "encodedHeight": 1080
+    },
+    {
+      "requestedTimeSeconds": 10,
+      "file": "corpus/public/automations-2026-03-05/10s.jpg",
+      "byteLength": 95839,
+      "sha256": "65987152328b97f38752df358980a14df5947626d1e7b802bdba5193427cd2f0",
+      "encodedWidth": 1920,
+      "encodedHeight": 1080
+    },
+    {
+      "requestedTimeSeconds": 36,
+      "file": "corpus/public/automations-2026-03-05/36s.jpg",
+      "byteLength": 69693,
+      "sha256": "f0b1b17cb5f12cf4a17f9ded48beda9f0835c299ba2f152ac68d3ca14884e0a1",
+      "encodedWidth": 1920,
+      "encodedHeight": 1080
+    },
+    {
+      "requestedTimeSeconds": 51,
+      "file": "corpus/public/automations-2026-03-05/51s.jpg",
+      "byteLength": 84869,
+      "sha256": "1a19478631a0224b0720b54bd80e9db4f8361c76a518564c5c8015a7338d8220",
+      "encodedWidth": 1920,
+      "encodedHeight": 1080
+    },
+    {
+      "requestedTimeSeconds": 53,
+      "file": "corpus/public/automations-2026-03-05/53s.jpg",
+      "byteLength": 81221,
+      "sha256": "14f6f9817a79e691e1e28f8fe1312103d838a492587b4a5928e092e60b713e47",
+      "encodedWidth": 1920,
+      "encodedHeight": 1080
+    },
+    {
+      "requestedTimeSeconds": 78,
+      "file": "corpus/public/automations-2026-03-05/78s.jpg",
+      "byteLength": 89895,
+      "sha256": "b1b49dae7b5d2f5be9e279275b4c23864fcd6db45d1fbe567b07285e05134cae",
+      "encodedWidth": 1920,
+      "encodedHeight": 1080
+    },
+    {
+      "requestedTimeSeconds": 84,
+      "file": "corpus/public/automations-2026-03-05/84s.jpg",
+      "byteLength": 95948,
+      "sha256": "2721852baa44f0a94be7cabe50cc78e2b1ab0ccc7a81b5bb0f40cf91aa7f241b",
+      "encodedWidth": 1920,
+      "encodedHeight": 1080
+    }
+  ]
+}
