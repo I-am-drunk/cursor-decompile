@@ -82,11 +82,31 @@ empty card: A[7297984,7299500).
 | DL42 | Outlined search InputGroup: border-box, width 100% of DL24 wrapper, height 28px, radius 6px, gap 6px, padding 4px vertically and 8px inline. Default border is 1px secondary-stroke; input-field background. | A[7187317,7190921), A[7192150,7194091) | `.ui-9f619`, `.ui-h8yej3`, `.ui-170hpbr`, `.ui-1043rbw`, `.ui-pkkfsy`, `.ui-174jhef`, `.ui-cby3z1`, `.ui-e8kt42`, `.ui-1ftrzfz`, `.ui-n29lvp`, `.ui-1ecvjd7`, `.ui-1cx02xk`, `.ui-l27skc`, `.ui-1gwrjia` |
 | DL43 | Search input: 13px /18px, tracking 0. The outlined branch renders no leading search icon; a trimmed nonempty query adds `Clear search`. That button clears on mouse-down while preserving focus. | A[7185000,7187317), A[7304961,7307000) | `.ui-11wthnw`, `.ui-1ja60sm`, `.ui-12oo3zp` |
 
+## Control defaults
+
+These declared resets accompany DL01–DL43 in the same pinned A/G artifacts.
+They do not establish browser-computed or authenticated visual parity.
+
+| ID | Fact | Source bytes / CSS locators in G |
+|---|---|---|
+| DL44 | The `reset` layer sets padding and margin to 0 for `button`, `input`, `select`, and `textarea`, at every viewport width. The shared style initializer injects this stylesheet into the document head. | G[15009365,15009554); selector G[15009478,15009552); export G[14978290,14978308); injector G[21412418,21412608); initializer G[21413432,21413777) |
+| DL45 | Default tab buttons explicitly use appearance none, border style none, transparent background, and border-box sizing. DL41 supplies their padding; DL44 supplies zero margins. | A[7059901,7060523); `.ui-jyslct`, `.ui-ng3xce`, `.ui-jbqb8w`, `.ui-9f619` |
+| DL46 | The inner search input uses flex 1, min-width 0, transparent background, and inherited font family. All four border widths are 0 and styles are none. Padding/margins come from DL44; the outer frame retains DL42's border and padding. | A[7185746,7186184), A[7194092,7194800), A[7304961,7307000); `.ui-98rzlu`, `.ui-euugli`, `.ui-jbqb8w`, `.ui-jb2p0i`, `.ui-972fbf`, `.ui-1ejq31n`, `.ui-10w94by`, `.ui-18oe1m7`, `.ui-1qhh985`, `.ui-1sy0etr`, `.ui-14e42zd`, `.ui-stzfhl` |
+| DL47 | `All Runs` uses a small text Button, secondary tone, and trailing `arrow-right-up` icon. It uses the container frame and does not select the pill shape. | G[42131706,42131831); shape/default-frame resolution G[4339628,4341000) |
+| DL48 | `All Runs`: height 20px, radius 4px, vertical padding 0, inline padding 6px, gap 6px; typography 13px /18px, -0.08px tracking. No fixed width. | G[4336278,4339630), G[4323804,4323890); `.ui-1a6rlst`, `.ui-1e1y6u3`, `.ui-exx8yu`, `.ui-18d9i69`, `.ui-19bzwdx`, `.ui-v853mj`, `.ui-pkkfsy`, `.ui-11wthnw`, `.ui-1ja60sm`, `.ui-vu1jfw` |
+| DL49 | `All Runs` uses border-box sizing and a 1px solid transparent border. Its text variant has transparent background both at rest and on hover; its secondary text becomes primary text on hover. | Root G[4337906,4338173); variant/tone definitions G[4332627,4334600), G[4335612,4335880); binding G[4340700,4343000); `.ui-9f619`, `.ui-mkeg23`, `.ui-1y0btm7`, `.ui-9r1u3d`, `.ui-elcf9h`, `.ui-g74ub2`, `.ui-1luhpj5`, `.ui-hqa6pe`, `.ui-1j8p2m6`, `.ui-e6ovir`, `.ui-gl2jp8`, `.ui-qfdz8i` |
+| DL50 | The default row-actions call omits trigger size. `More actions` therefore uses a small ghost IconButton with `dots-3-horizontal`; it has its own root styles, not the text Button's 1px border. | A[7302494,7302536), A[7263085,7264334), A[236693,237919), A[238000,240150) |
+| DL51 | `More actions`: 20px square, 4px radius, border-box, centered inline-flex, no shrinking, zero padding/margins, border width 0/style none, appearance none. Its ghost background is transparent at rest and tertiary on hover. | A[235000,238150), A[238000,240150); background definitions A[184031,184470), A[185451,185770); `.ui-16bvwqk`, `.ui-1a6rlst`, `.ui-1e1y6u3`, `.ui-9f619`, `.ui-3nfvp2`, `.ui-6s0dn4`, `.ui-l56j7k`, `.ui-2lah0s`, `.ui-exx8yu`, `.ui-18d9i69`, `.ui-yri2b`, `.ui-1c1uobl`, `.ui-dj266r`, `.ui-14z9mp`, `.ui-at24cr`, `.ui-1lziwak`, `.ui-c342km`, `.ui-ng3xce`, `.ui-jyslct`, `.ui-elcf9h`, `.ui-g74ub2`, `.ui-14iu9ww`, `.ui-e032zu` |
+
+Size/radius defaults: G[15049824,15049846) is `--cursor-radius-sm:4px`;
+G[15050943,15050967) is `--cursor-spacing-1-5:6px`;
+G[15051579,15051602) is `--cursor-spacing-5:20px`.
+
 ## Remaining evidence
 
 `UNVERIFIED`: authenticated state, account overrides, viewport/scale, effective
 font family/root font, screenshots and interactive execution. This file does
-not certify full menu/icon geometry and input browser defaults, the managed-agent overview,
+not certify full menu/icon geometry or computed browser styles, the managed-agent overview,
 template gallery, or current web layout. Those need separate scoped evidence.
 The parent supplies overview above this toolbar and templates after the list
 (G[42128696,42134925), A[7310427,7313130)); omitting them is a recorded partial
