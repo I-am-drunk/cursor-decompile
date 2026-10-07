@@ -44,17 +44,18 @@ matching `.glass-*` selectors in the separate CSS file are not needed as proxies
 | DL14 | Row menu: `Edit Details`, `Duplicate`, `Copy as JSON`, then a separate Delete section when deletion callback exists (desktop supplies it). There is no Pause menu item here. Trigger label `More actions`; menu label `Row actions`. | A[7293637,7294150), A[7263085,7264334), G[42134369,42134925) |
 | DL15 | Loaded-empty is a **standalone card without table header**, title then description then create button. Search-empty contains only `No Results Found`. | A[7297984,7299500) |
 | DL16 | Non-search empty title: `No Automations Yet`. Rollout-on description equals DL03. `New Automation` is rounded, medium, outlined; only shown when creation is available and not explicitly hidden. | G[42131467,42131730), A[7281107,7281399), A[7297984,7299500) |
+| DL17 | Footer range is `first–last of total`; page count is `current / total`. Numbers use locale formatting. Controls are labeled `Previous page` and `Next page`, disabled at the ends or while loading. | A[7073346,7076450) |
 
 ## Layout values
 
 These are declared values, not browser measurements. Spacing/radius variables
 resolve from pinned root defaults at G[15048500,15052500). Preserve `rem`:
 the effective root font and inherited font family are unobserved.
-CSS selectors below are exact locators in G. A ranges bind them to elements;
+CSS selectors below are exact locators in G. Binding ranges connect them to elements;
 loaded-row ownership: A[7299719,7302525); shell: A[7310427,7313130);
 empty card: A[7297984,7299500).
 
-| ID | Element and declared default | Binding in A | CSS selectors in G |
+| ID | Element and declared default | Style binding | CSS selectors in G |
 |---|---|---|---|
 | DL20 | Content: border-box; width 100%; max-width 60rem; horizontal margins auto; horizontal padding 3rem. | [7309121,7309443) | `.ui-9f619`, `.ui-h8yej3`, `.ui-14jpq49`, `.ui-8x9d4c`, `.ui-ack27t`, `.ui-1hi4g37`, `.ui-l8an7g` |
 | DL21 | Standard content padding top/bottom 4rem. At viewport width ≤639px all four content paddings become 1.5rem. Compact variant changes top to 24px; excluded from this state. | [7309121,7309770) | `.ui-f6mfmo`, `.ui-1q8uoa4`, `.ui-1g325gp`, `.ui-1hr4iz1`, `.ui-1kyyjj0`, `.ui-98fzwu`, `.ui-1avjwpx` |
@@ -72,12 +73,20 @@ empty card: A[7297984,7299500).
 | DL33 | Empty card: same border/radius/background as DL25; 32px vertical and 16px horizontal padding; centered text. It is not nested inside the loaded table container. | [7276539,7276932) | `.ui-tgesqp`, `.ui-1dbk7ps`, `.ui-10cfkro`, `.ui-193t4r6`, `.ui-2b8uid`; border set as DL25 |
 | DL34 | Empty title: 13px /18px, secondary text. Description: max-width 28rem, margin top 4px, bottom 0, horizontal auto; 13px /18px, tertiary text. Create-button margin top 16px. | [7277016,7277516) | `.ui-4z9k3i`, `.ui-d4r4e8`, `.ui-19aaqeu`, `.ui-1983rqf`, `.ui-1om1abp`, `.ui-at24cr`, `.ui-8x9d4c`, `.ui-ack27t`, `.ui-4b2ntj`, `.ui-1x419k1` |
 | DL35 | Pagination wrapper: top margin 4px; padding 8px vertically and 10px horizontally; 13px /18px. It is a sibling after the loaded table, not a table row. | [7273144,7273302), [7302490,7302812) | `.ui-1om1abp`, `.ui-13ly8rp`, `.ui-1xlntvz`, `.ui-16b7oty`, `.ui-o7x2bt`, `.ui-4z9k3i`, `.ui-d4r4e8` |
+| DL36 | Header root: column flex, start aligned, width 100%, gap 4px, padding 0 vertically and 8px horizontally. Title row: center aligned, gap 12px. Trailing controls: center aligned, gap 8px, shrink 0, margin-left auto. | G[14519380,14524200) | `.ui-78zum5`, `.ui-dt5ytf`, `.ui-1cy8zhl`, `.ui-h8yej3`, `.ui-11twubx`, `.ui-exx8yu`, `.ui-18d9i69`, `.ui-yab65l`, `.ui-1yxiud8`, `.ui-6s0dn4`, `.ui-1oot3zn`, `.ui-ehausa`, `.ui-2lah0s`, `.ui-8x9d4c` |
+| DL37 | Header h1: zero margins, 17px /21px, 0.08px tracking; normal-weight token (fallback 400). Description p: zero margins, 13px /18px, -0.08px tracking. Both allow word breaks. | G[14519380,14524200), G[4323804,4324050) | `.ui-dj266r`, `.ui-1yf7rl7`, `.ui-at24cr`, `.ui-j3b58b`, `.ui-19d36u7`, `.ui-dod15v`, `.ui-k22nv0`, `.ui-20ajya`, `.ui-11wthnw`, `.ui-1ja60sm`, `.ui-vu1jfw`, `.ui-13faqbe`, `.ui-1mzt3pk` |
+| DL38 | Header New Automation: `rounded:true` selects the pill shape; height 28px, radius 9999px, horizontal padding 12px, vertical padding 0, gap 4px, font 13px /18px, -0.08px tracking. No fixed width in this size/shape. | G[42132000,42132790), G[4336278,4343900), G[4323804,4323890) | `.ui-170hpbr`, `.ui-1i4c3av`, `.ui-t1q3vd`, `.ui-8fiw5y`, `.ui-exx8yu`, `.ui-18d9i69`, `.ui-11twubx`, `.ui-11wthnw`, `.ui-1ja60sm`, `.ui-vu1jfw` |
+| DL39 | Empty-card New Automation uses medium pill size: height 24px, horizontal padding 10px; same radius, vertical padding, gap and typography as DL38. | A[7297984,7299500), A[7065179,7067700), A[7068074,7070100), A[235629,235835), A[186620,186716) | `.ui-1e94bgo`, `.ui-1fg0g13`, `.ui-1tajz9i`, `.ui-1i4c3av`, `.ui-exx8yu`, `.ui-18d9i69`, `.ui-11twubx`, `.ui-11wthnw`, `.ui-1ja60sm`, `.ui-vu1jfw` |
+| DL40 | Tabs root uses display:contents. The actual tab list is wrapping inline-flex, center aligned, gap 2px. This differs from its outer wrapper's 1px gap (DL24). Variant is `default`, despite the outer filter-wrapper name. | A[7059100,7063619), A[7310427,7313130) | `.ui-jp7ctv`, `.ui-3nfvp2`, `.ui-6s0dn4`, `.ui-1a02dak`, `.ui-137clkk` |
+| DL41 | Large default tab: inline-flex, center aligned/justified, shrink 0; 9999px radius; padding 5px vertically, 10px horizontally; 13px /18px, -0.08px tracking. Hover and active use tertiary background/primary text. | A[7059860,7064690), A[186620,186716) | `.ui-3nfvp2`, `.ui-6s0dn4`, `.ui-l56j7k`, `.ui-2lah0s`, `.ui-1i4c3av`, `.ui-1to6kjf`, `.ui-5wifs`, `.ui-16b7oty`, `.ui-o7x2bt`, `.ui-11wthnw`, `.ui-1ja60sm`, `.ui-vu1jfw`, `.ui-q24i1q`, `.ui-x05fgs`, `.ui-1qp4pc4`, `.ui-1gfq6vl` |
+| DL42 | Outlined search InputGroup: border-box, width 100% of DL24 wrapper, height 28px, radius 6px, gap 6px, padding 4px vertically and 8px inline. Default border is 1px secondary-stroke; input-field background. | A[7187317,7190921), A[7192150,7194091) | `.ui-9f619`, `.ui-h8yej3`, `.ui-170hpbr`, `.ui-1043rbw`, `.ui-pkkfsy`, `.ui-174jhef`, `.ui-cby3z1`, `.ui-e8kt42`, `.ui-1ftrzfz`, `.ui-n29lvp`, `.ui-1ecvjd7`, `.ui-1cx02xk`, `.ui-l27skc`, `.ui-1gwrjia` |
+| DL43 | Search input: 13px /18px, tracking 0. The outlined branch renders no leading search icon; a trimmed nonempty query adds `Clear search`. That button clears on mouse-down while preserving focus. | A[7185000,7187317), A[7304961,7307000) | `.ui-11wthnw`, `.ui-1ja60sm`, `.ui-12oo3zp` |
 
 ## Remaining evidence
 
 `UNVERIFIED`: authenticated state, account overrides, viewport/scale, effective
 font family/root font, screenshots and interactive execution. This file does
-not certify button/tab/menu primitive geometry, the managed-agent overview,
+not certify full menu/icon geometry and input browser defaults, the managed-agent overview,
 template gallery, or current web layout. Those need separate scoped evidence.
 The parent supplies overview above this toolbar and templates after the list
 (G[42128696,42134925), A[7310427,7313130)); omitting them is a recorded partial

@@ -24,7 +24,7 @@ it does not certify an authenticated UI layout.
 | A07 | Linear trigger kinds include issue created, status changed, and end of cycle | DOCUMENTED | [Linear triggers](https://cursor.com/docs/cloud-agent/automations#linear-triggers) |
 | A08 | Webhook URL and authentication API key are generated after saving | DOCUMENTED | [Webhook triggers](https://cursor.com/docs/cloud-agent/automations#webhook-triggers) |
 | A09 | The 2026-03-05 launch demo depicts list, editor, action/MCP menu, and server rows | DOCUMENTED | [D01–D08 and pinned frames](automations-launch-demo.md); historical media, not current authenticated UI |
-| A10 | Cursor 3.23.12 desktop list controls, columns, actions, empty state and layout | EXTRACTED_UI | [DL01–DL35](automations-desktop-list.md); pinned raw artifacts, not authenticated or current web parity |
+| A10 | Cursor 3.23.12 desktop list controls, columns, actions, empty state and layout | EXTRACTED_UI | [DL01–DL43](automations-desktop-list.md); pinned raw artifacts, not authenticated or current web parity |
 | L01 | Linear supports OAuth2 and PKCE for integrations | DOCUMENTED | [OAuth2](https://linear.app/developers/oauth-2-0-authentication), PKCE |
 | L02 | Linear data-change webhooks support issues and cycles | DOCUMENTED | [Webhooks](https://linear.app/developers/webhooks), supported models; not proof of a dedicated end-of-cycle event |
 | V01 | Current Automations page geometry, fonts, copy, section order, responsive states | UNVERIFIED | no authenticated state capture; A09 only establishes historical appearances; see [capture requirements](../specs/automations-layout.md) |
