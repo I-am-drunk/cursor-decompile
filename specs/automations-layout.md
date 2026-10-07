@@ -31,3 +31,17 @@ and the Automations app URL returned HTTP 403. The public documentation was
 readable. That attempt supplied no authenticated state capture; it does not
 establish current browser availability. Authenticated capture is the next
 C-AUTOMATIONS slice.
+
+On 2026-10-07, T3 preview status/open again reported no connected automation
+host. An unauthenticated request to `https://cursor.com/automations` redirected
+to `authenticator.cursor.sh`, which returned HTTP 403. Neither attempt supplied
+current layout evidence. The public [launch demo](../facts/automations-launch-demo.md)
+now supplies seven pinned historical frames and eight visible facts; its unknown
+build, viewport, and recording scale prevent CSS exactness claims.
+
+Resume this capture with a connected T3 desktop preview and an authenticated
+Cursor account that can open Automations. Record the list first, then one saved
+editor and its `Add Tool or MCP` state, using the metadata above. Compare current
+labels/order with D01–D08 and record differences; do not silently treat the
+2026-03-05 demo as today's product. Sign-in, account permissions, current DOM/
+computed styles, and same-state screenshots remain unmet.
