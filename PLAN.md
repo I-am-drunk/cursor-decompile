@@ -67,7 +67,8 @@ The subsequent [trigger evidence slice](facts/automations-trigger-capture.md),
 captures Add Trigger, Scheduled choices and the existing custom-cron editor,
 with 30 source pins and unchanged disabled/clean fixture state.
 
-The [trigger implementation](facts/automations-trigger-verification.md) now
+[PR #14](https://github.com/I-am-drunk/cursor-decompile/pull/14), the
+[trigger implementation](facts/automations-trigger-verification.md), now
 reproduces the captured menu, custom-cron and dismissal subset: 35 tests,
 992 measured checks (737 preserved + 255 new), 199 source pins.
 Local parser, commit and preset policies are explicitly DESIGN; no scheduler
