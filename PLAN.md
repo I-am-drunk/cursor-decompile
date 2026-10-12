@@ -102,7 +102,8 @@ alternate themes/viewports and independent raster acceptance also remain open.
 
 ## Settings navigation/account opener — 2026-10-12
 
-The [settings opener](facts/settings-navigation-verification.md) captures
+[PR #18](https://github.com/I-am-drunk/cursor-decompile/pull/18), the
+[settings opener](facts/settings-navigation-verification.md), captures
 entry/navigation, Privacy/Profile, the account menu and overview without
 changing any account settings. The original shell implements observed
 navigation and uses only synthetic identity and read-only controls.

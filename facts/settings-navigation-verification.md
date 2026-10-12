@@ -1,6 +1,7 @@
 # Settings navigation opener verification — 2026-10-12
 
-The [read-only capture](settings-navigation-capture.md) drives an original
+[PR #18](https://github.com/I-am-drunk/cursor-decompile/pull/18) uses the
+[read-only capture](settings-navigation-capture.md) to drive an original
 settings sidebar, account Privacy/Profile panel, account menu and overview
 preview. Start the local server and open
 `/dashboard/settings?fixture=settings-navigation` (also available from the
