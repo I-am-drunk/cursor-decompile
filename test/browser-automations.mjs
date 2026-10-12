@@ -1,6 +1,6 @@
 // Optional browser gate. Reuses an installed Playwright; no product dependency.
 import assert from 'node:assert/strict';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, rm, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -16,9 +16,11 @@ const base=`http://127.0.0.1:${server.address().port}`;
 let browser;
 try {
  browser=await chromium.launch({executablePath:process.env.BROWSER_EXECUTABLE,headless:true,args:['--no-sandbox']});
- const page=await browser.newPage({viewport:{width:1270,height:764}}),errors=[];
+ const page=await browser.newPage({viewport:{width:1270,height:764},deviceScaleFactor:2}),errors=[];
+ const captures=new URL('../corpus/copy-first/',import.meta.url);await mkdir(captures,{recursive:true});
+ const capture=name=>page.screenshot({path:new URL(name+'.png',captures).pathname});
  page.on('pageerror',e=>errors.push(e.message));
- for(const path of ['/codebases','/codebase','/chat','/search']){
+ for(const path of ['/codebases','/codebase','/chat','/search','/agents','/editor','/dashboard','/dashboard/settings']){
   const r=await page.request.get(base+path);assert.equal(r.status(),404);assert.match(await r.text(),/Page not found/);
  }
  await page.goto(base+'/login');
@@ -27,35 +29,44 @@ try {
  await page.goto(base+'/automations/'+automation.id);
  await page.click('[data-act=tr-add]');await page.click('[data-act=sc-scheduled]');
  await page.click('[data-act="sc-preset:2"]');
- await page.locator('[name=sc-time]').fill('10:25');await page.locator('[name=sc-day]').selectOption('2');
- await page.click('[aria-label="Select timezone"]');await page.fill('[name=sc-search]','Tokyo');await page.click('[data-act="sc-zone-pick:Asia/Tokyo"]');
+ await page.click('[aria-label="Select hour"]');await page.click('[data-act="sc-pick:10"]');
+ await page.click('[aria-label="Minute within hour"]');assert.equal(await page.locator('.sc-options button').count(),12);await capture('minutes');await page.click('[data-act="sc-pick:25"]');
+ await page.click('[aria-label="Select weekday"]');await page.click('[data-act="sc-pick:2"]');
+ await page.click('[aria-label="Select timezone"]');await page.fill('[name=sc-search]','Tokyo');await capture('timezone');await page.click('[data-act="sc-zone-pick:Asia/Tokyo"]');
  await page.click('[data-act=save]');await page.waitForFunction(()=>document.querySelector('[data-act=save]')?.disabled);
- await page.reload();assert.equal(await page.locator('[name=sc-time]').inputValue(),'10:25');
- assert.match(await page.locator('.sc-zone').textContent(),/Asia\/Tokyo/);
+ await page.reload();assert.match(await page.locator('[aria-label="Select hour"]').textContent(),/10/);assert.match(await page.locator('[aria-label="Minute within hour"]').textContent(),/25/);
+ assert.match(await page.locator('.sc-zone').textContent(),/Japan Standard Time - Tokyo/);
  const saved=await store.read();assert.equal(saved.automations[0].triggers[0].value,'25 10 * * 2');
+ await capture('weekly');
  await page.click('[data-act=collapse]');
+ await capture('compact');
+ assert.equal(await page.locator('a[aria-label=Automations]').evaluate(e=>e.getBoundingClientRect().width),26);
+ assert.equal(await page.locator('a[aria-label=Automations] svg').evaluate(e=>e.getBoundingClientRect().width),14);
+ await page.locator('a[aria-label=Automations]').focus();
+ assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
  assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
  assert.equal(await page.locator('a[aria-label=Automations] svg').evaluate(e=>getComputedStyle(e).visibility),'visible');
  await page.mouse.move(500,400);await page.locator('a[aria-label=Automations]').hover();
- assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),280);
+ assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
  await page.mouse.move(500,400);assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
- await page.locator('a[aria-label=Automations]').dispatchEvent('dragover');assert.equal(await page.locator('.drag-hover').count(),1);
+ await page.locator('a[aria-label=Automations]').dispatchEvent('dragover');assert.equal(await page.locator('.drag-hover').count(),0);assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
  await page.locator('a[aria-label=Automations]').dispatchEvent('drop');assert.equal(await page.locator('.drag-hover').count(),0);
  await page.click('[data-act^="sc-open:"]');await page.click('[data-act="sc-preset:3"]');
  assert.equal(await page.locator('.sc-custom').evaluate(e=>e.getBoundingClientRect().width),340);
- await page.fill('[name=sc-cron]','bad');await page.click('[data-act=sc-apply]');assert.equal(await page.locator('.sc-error').count(),1);
+ await page.fill('[name=sc-cron]','bad');assert.match(await page.locator('.sc-error').textContent(),/Expected 5-7 fields/);await capture('custom-invalid');await page.click('[data-act=sc-apply]');assert.equal(await page.locator('.sc-error').count(),1);
  await page.keyboard.press('Escape');assert.equal(await page.locator('.sc-custom').count(),1);
+ await page.locator('.ed-section h3').first().click();assert.equal(await page.locator('.sc-custom').count(),1);
  await page.fill('[name=sc-cron]','0 9 * * 1-5');await page.click('[data-act=sc-apply]');assert.equal(await page.locator('.sc-custom').count(),0);
  await page.click('[data-act=save]');await page.waitForFunction(()=>document.querySelector('[data-act=save]')?.disabled);
- await page.locator('a[aria-label="Run History"]').click();assert.match(page.url(),/automations\/runs/);
+ await page.locator('a[aria-label=Automations]').click();await page.getByRole('link',{name:'All Runs'}).click();assert.match(page.url(),/automations\/runs/);
  assert.equal(await page.locator('body.collapsed').count(),1);
- assert.equal(await page.locator('a[aria-label="Run History"]').getAttribute('aria-current'),'page');
+ assert.equal(await page.locator('a[aria-label="Automations"]').getAttribute('aria-current'),'page');
  await page.keyboard.press('Escape');await page.mouse.move(500,400);
  await page.setViewportSize({width:390,height:844});
  assert.equal(await page.locator('a[aria-label=Automations] svg').evaluate(e=>getComputedStyle(e).visibility),'visible');
  await page.locator('a[aria-label=Automations]').click();assert.match(page.url(),/\/automations$/);
  assert.deepEqual(errors,[]);
- console.log('Browser checks passed: persistence, presets, custom cron, timezone, compact navigation, hover/drag, mobile icons and 404s.');
+ console.log('Browser checks passed: persistence, presets, custom cron, timezone, compact clicks without hover/drag expansion, mobile icons and 404s.');
 } finally {
  await browser?.close();await new Promise(resolve=>server.close(resolve));await rm(dir,{recursive:true,force:true});
 }

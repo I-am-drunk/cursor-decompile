@@ -77,3 +77,12 @@ timezones, with minute-precision metadata persistence.
 [Source mapping and validation](docs/verification/automations-carve.md).
 Captured evidence is unchanged; full raster parity is not claimed.
 Settings, Linear connection and server execution remain their own lanes.
+
+## Automations copy-first correction — PR #27
+
+Removed unsupported shell reveal/motion and extra rail destinations; carved
+non-automation dashboard routes to HTML 404s. Schedule uses separate Devin
+hour/minute choices, labeled timezone search and raw cron editor, retaining
+Cursor validation behavior. [Complete change/source audit](docs/verification/automations-carve.md).
+Historical passing tests do not establish new raster parity; limitations remain
+explicit. Peer COMMENT review is required before merge.
