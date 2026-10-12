@@ -6,6 +6,7 @@ export const icon = (name: string): string => {
   const paths: Record<string, string> = {
     search: '<circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 4 4"/>',
     clock: '<circle cx="8" cy="8" r="6"/><path d="M8 4v4H5"/>',
+    warning: '<path d="M8 2 15 14H1ZM8 6v4M8 12v.2"/>',
     plug: '<path d="M5 2v4m6-4v4M4 6h8v3a4 4 0 0 1-8 0ZM8 13v3"/>',
     chevron: '<path d="m3 6 5 5 5-5"/>',
     filter: '<path d="M2 4h12M4 8h8M6 12h4"/>',

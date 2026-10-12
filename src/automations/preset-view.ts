@@ -17,7 +17,7 @@ export function presetRow(t:Trigger,fixture:boolean,preview?:string):string {
     ${btn(icon('close'),`remove-trigger:${t.id}`,'icon','aria-label="Remove trigger"')}</div>`;
 }
 export function presetWarning():string {
-  return `<div class="pr-warning" data-evidence="pr-warning"><span aria-hidden="true">ⓘ</span><span data-evidence="pr-warning-label">Only the first cron trigger will be used</span></div>`;
+  return `<div class="pr-warning" data-evidence="pr-warning"><span aria-hidden="true">${icon('warning')}</span><span data-evidence="pr-warning-label">Only the first cron trigger will be used</span></div>`;
 }
 export function presetMenu(kind:'time'|'day'):string {
   const items=kind==='time'?hours:weekdays;

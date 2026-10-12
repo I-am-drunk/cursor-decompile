@@ -46,6 +46,7 @@ export function compare(facts, actual) {
     const styleKeys=f.value.text!==null?['font-size','line-height']:['border-radius'];
     if(presetState&&(target==='pr-warning-label'||(target==='pv-hint'&&/Expected|is required/.test(f.value.text??''))))
       styleKeys.push('color');
+    if(presetState&&target==='ed-save')styleKeys.push('background-color','color');
     for (const key of styleKeys) {
       checks++;
       if (measured.style[key]!==f.value.style[key]) mismatches.push(`${f.id}.${key}: ${measured.style[key]} != ${f.value.style[key]}`);
