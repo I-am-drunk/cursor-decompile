@@ -190,3 +190,29 @@ icons, native focus treatments or unobserved runtime semantics.
 the previous 992 plus 744 for this slice. It also verifies **360 source pins**,
 including live input values, validity and presence/absence of disabled state.
 Default `npm run check` remains network/account-free.
+
+### Linear and unconnected MCP comparisons
+
+Open a fresh local tab at
+`/automations/editor-fixture?fixture=saved-editor&controls=connections`
+at **1270 × 764 CSS px, DPR 2**. Wait until the requested state has rendered.
+Export with **Alt+Shift+E** into `artifacts/<state>-measurements.json`.
+
+| State | Action |
+|---|---|
+| `connection-baseline` | Fresh, unchanged fixture |
+| `linear-menu` | Add Trigger; Down five times; Right |
+| `linear-issue-menu` | Right again on Issue... |
+| `linear-created` | Select Created |
+| `linear-status` | Fresh fixture; Linear → Issue... → Status changed |
+| `linear-cycle` | Fresh fixture; Linear → End of cycle |
+| `mcp-unconfigured` | From the cycle state: Add Tool or MCP → MCP Server |
+| `mcp-linear-search` | New Connection; search Linear |
+| `mcp-linear-unconnected` | Open the Linear card; do not Add Plugin |
+| `mcp-linear-expanded` | Show More |
+| `mcp-returned` | Back, preserving the Linear query |
+
+This adds **421** checks: **2,157** across 48 states, plus **456** raw-source
+pins. No reference authorization, installation, save or execution is needed.
+The local Connect/Add Plugin controls deliberately make no such request.
+Visual reference metadata does not certify this local implementation.

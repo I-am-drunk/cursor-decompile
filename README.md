@@ -83,3 +83,13 @@ Its fixture lives at
 Local schedule metadata persists without executing anything. Displayed reference
 dates, local serialization and full runtime scheduling are distinct concerns;
 this build still provides no scheduler or connected provider authorization.
+
+The [Linear/unconnected slice](facts/automations-linear-verification.md)
+adds nested Linear trigger menus, Requires connection rows and warnings,
+and the Linear MCP pre-install disclosure. Preview at
+`/automations/editor-fixture?fixture=saved-editor&controls=connections`.
+Connect and Add Plugin explain that authorization/installation is unavailable;
+they do not contact a provider. The 48-state measured subset passes, not
+whole-product pixel parity. Screenshot-only run-filter variants still need
+acceptance before closing the captured-state backlog. C-SETTINGS is queued
+to open with read-only settings entry/navigation and one unconnected provider panel.

@@ -1,5 +1,7 @@
 # Linear / unconnected configuration capture — 2026-10-12
 
+Follow-up: [original implementation and verification](automations-linear-verification.md).
+
 OBSERVED through Computer Use in authenticated Twilight, on the existing
 disabled private fixture. Linear trigger selections changed unsaved drafts only.
 No Connect, Add Plugin, Save, Test, activation or authorization was submitted.
