@@ -67,3 +67,13 @@ P2 login [#21](https://github.com/I-am-drunk/cursor-decompile/pull/21),
 P3 inference [#22](https://github.com/I-am-drunk/cursor-decompile/pull/22) merged.
 P4 MCP [#23](https://github.com/I-am-drunk/cursor-decompile/pull/23) completes
 this ordered product series, not whole-reference parity.
+
+## Agent B — automations carve and polish
+
+Automations/Run History shell, compact SVGs, hover/drag cleanup, removed
+Chat/Search/billing surfaces and HTML not-found routes implemented.
+New and saved editors use Devin-style preset rows, custom cron and searchable
+timezones, with minute-precision metadata persistence.
+[Source mapping and validation](docs/verification/automations-carve.md).
+Captured evidence is unchanged; full raster parity is not claimed.
+Settings, Linear connection and server execution remain their own lanes.

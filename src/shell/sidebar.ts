@@ -3,6 +3,7 @@ export function installSidebar(root: Document = document): () => void {
   const controller = new AbortController(), options = { signal: controller.signal };
   let collapsed = false, dismissed = false;
   const sidebar = () => root.querySelector<HTMLElement>('.shell-sidebar');
+  const clearDrag = () => root.querySelectorAll('.drag-hover').forEach(e=>e.classList.remove('drag-hover'));
   const sync = () => {
     root.body.classList.toggle('collapsed', collapsed);
     root.querySelector('[data-act="collapse"]')?.setAttribute('aria-expanded', String(!collapsed));
@@ -23,14 +24,16 @@ export function installSidebar(root: Document = document): () => void {
   }, options);
   root.addEventListener('focusin', e => { root.body.classList.toggle('rail-focus', inside(e.target) && !(e.target as Element).closest('[data-act="collapse"]')); }, options);
   root.addEventListener('focusout', e => { if (!inside(e.relatedTarget)) root.body.classList.remove('rail-focus'); }, options);
-  root.addEventListener('dragover', e => { if (collapsed && inside(e.target)) root.body.classList.add('rail-revealed'); }, options);
-  root.addEventListener('dragleave', e => { if (!inside(e.relatedTarget)) root.body.classList.remove('rail-revealed'); }, options);
-  root.addEventListener('dragend', () => root.body.classList.remove('rail-revealed'), options);
+  root.addEventListener('dragover', e => { clearDrag(); if (inside(e.target)) {if(collapsed)root.body.classList.add('rail-revealed');(e.target as Element).closest('.destination')?.classList.add('drag-hover');} }, options);
+  root.addEventListener('dragleave', e => { if (!inside(e.relatedTarget)) {clearDrag();root.body.classList.remove('rail-revealed');} }, options);
+  const endDrag=()=>{clearDrag();root.body.classList.remove('rail-revealed');};
+  root.addEventListener('dragend', endDrag, options);
+  root.addEventListener('drop', endDrag, options);
   root.addEventListener('keydown', e => {
     if ((e.metaKey || e.ctrlKey) && e.altKey && e.code === 'KeyB') {
-      e.preventDefault(); collapsed = !collapsed; sync();
+      e.preventDefault(); collapsed = !collapsed; dismissed=collapsed;root.body.classList.remove('rail-revealed','rail-focus');sync();
     }
-    if (e.key === 'Escape') { dismissed = true; root.body.classList.remove('rail-revealed','rail-focus'); }
+    if (e.key === 'Escape') { dismissed = true; clearDrag();root.body.classList.remove('rail-revealed','rail-focus'); }
   }, options);
   return () => controller.abort();
 }

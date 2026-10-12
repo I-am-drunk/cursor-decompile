@@ -1,17 +1,13 @@
-/* 280/44 and easing observed; 180ms motion is DESIGN, see ui-facts.json. */
-.shell-sidebar{--expanded:280px;--rail:44px;--motion:180ms;--ease:cubic-bezier(.22,1,.36,1);width:var(--expanded);border:0;z-index:3;transition:width var(--motion) var(--ease)}
-.sidebar-surface{position:absolute;inset:0 auto 0 0;width:var(--expanded);display:flex;flex-direction:column;background:#f5f5f5;border-right:1px solid var(--line);overflow:hidden;transition:width var(--motion) var(--ease),box-shadow var(--motion)}
+/* Captured 280/44px widths. Unverified motion removed. */
+.shell-sidebar{--expanded:280px;--rail:44px;width:var(--expanded);border:0;z-index:3}
+.sidebar-surface{position:absolute;inset:0 auto 0 0;width:var(--expanded);display:flex;flex-direction:column;background:#f5f5f5;border-right:1px solid var(--line);overflow:hidden}
 .shell-sidebar .brand{padding:0 10px;gap:12px;white-space:nowrap}.shell-sidebar .brand strong{font-size:14px;font-weight:500}.shell-sidebar .brand .icon{flex-shrink:0}
 .shell-sidebar .side-nav{padding:0 6px}.shell-sidebar .destination{position:relative;display:flex;align-items:center;gap:10px;height:32px;min-height:32px;padding:0 8px;white-space:nowrap;border-radius:6px}
-.shell-sidebar .destination:hover{background:#e8e8e8}.shell-sidebar .side-label{transition:opacity var(--motion) var(--ease);white-space:nowrap}.shell-sidebar .no-agents{min-height:24px}
-.shell-sidebar .account{padding:8px 6px;display:flex;flex-direction:column;gap:4px}.shell-sidebar .rail-icon{display:flex;flex-shrink:0;transition:opacity var(--motion)}.shell-sidebar .full-icon{position:absolute;left:8px;display:flex;opacity:1;transition:opacity var(--motion)}
-.shell-sidebar .full-icon~.side-label{margin-left:0}.shell-sidebar .destination:has(.full-icon) .rail-icon{opacity:0}
-body.collapsed .shell-sidebar{width:var(--rail)}body.collapsed .sidebar-surface{width:var(--rail)}body.collapsed .shell-sidebar .side-label{opacity:0;pointer-events:none}
-body.collapsed .shell-sidebar .full-icon{opacity:0}body.collapsed .shell-sidebar .rail-icon{opacity:1}
+.shell-sidebar .destination:hover,.shell-sidebar .destination.drag-hover{background:#e8e8e8}.shell-sidebar .destination:focus-visible{outline:2px solid #257d81;outline-offset:-2px}.shell-sidebar .destination:active{background:#ddd}
+.shell-sidebar .side-label{white-space:nowrap}.shell-sidebar .account{margin-top:auto;padding:8px 6px;display:flex;flex-direction:column;gap:4px}
+.shell-sidebar .rail-icon{display:flex;flex:0 0 16px;width:16px;height:16px}.shell-sidebar .rail-icon svg{display:block;width:16px;height:16px}
+body.collapsed .shell-sidebar,body.collapsed .sidebar-surface{width:var(--rail)}body.collapsed .shell-sidebar .side-label{visibility:hidden;pointer-events:none}
 body.collapsed.rail-revealed .sidebar-surface,body.collapsed.rail-focus .sidebar-surface{width:var(--expanded);box-shadow:12px 0 24px #0001}
-body.collapsed.rail-revealed .shell-sidebar .side-label,body.collapsed.rail-focus .sidebar-surface .side-label{opacity:1;pointer-events:auto}
-body.collapsed.rail-revealed .full-icon{opacity:1}body.collapsed.rail-revealed .destination:has(.full-icon) .rail-icon{opacity:0}
-@media(max-width:639px){.shell-sidebar{display:flex;--expanded:min(280px,80vw);width:var(--rail)}.sidebar-surface{width:var(--rail)}.shell-sidebar .side-label{opacity:0}.sidebar-surface:focus-within{width:var(--expanded)}.sidebar-surface:focus-within .side-label{opacity:1}}
-@media(prefers-reduced-motion:reduce){.shell-sidebar,.sidebar-surface,.shell-sidebar .side-label,.shell-sidebar .rail-icon,.shell-sidebar .full-icon{transition:none}}
-body.collapsed .shell-sidebar .destination:has(.full-icon) .rail-icon{opacity:1}
-body.collapsed.rail-revealed .shell-sidebar .destination:has(.full-icon) .rail-icon{opacity:0}
+body.collapsed.rail-revealed .shell-sidebar .side-label,body.collapsed.rail-focus .shell-sidebar .side-label{visibility:visible;pointer-events:auto}
+@media(max-width:639px){.shell-sidebar{display:flex;--expanded:min(280px,80vw);width:var(--rail)}.sidebar-surface{width:var(--rail)}.shell-sidebar .side-label{visibility:hidden}.sidebar-surface:focus-within,body.rail-revealed .sidebar-surface{width:var(--expanded)}.sidebar-surface:focus-within .side-label,body.rail-revealed .side-label{visibility:visible}}
+@media(prefers-reduced-motion:reduce){.shell-sidebar,.sidebar-surface{scroll-behavior:auto}}

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { draft } from '../src/automations/model.ts';
-import { editor, gate, list, runs, shell } from '../src/automations/view.ts';
+import { editor, notFound, list, runs, shell } from '../src/automations/view.ts';
 test('views escape user content and expose actual empty/loading-free structure',()=>{
   const a={...draft(),id:'one',name:'<script>alert(1)</script>',prompt:'</textarea><script>bad</script>'};
   assert.doesNotMatch(list([a],'mine','',1),/<script>/);
@@ -11,8 +11,8 @@ test('views escape user content and expose actual empty/loading-free structure',
   assert.match(list([a],'mine','nomatch',1),/No Results Found/);
   assert.match(runs([],'team','','',false),/No Runs Yet/);
   assert.match(runs([],'team','','',false),/data-evidence="runs-card"/);
-  assert.match(gate(),/Upgrade to unlock Automations/);
-  assert.match(shell(gate()),/Local preview/);
+  assert.match(notFound(),/Page not found/);
+  assert.match(shell(notFound()),/Local preview/);
   const unsafe={...a,triggers:[{id:'"><img src=x>',kind:'Schedule' as const,event:'Cron',value:'0 9 * * *'}]};
   assert.doesNotMatch(editor(unsafe,'Model',[]),/<img/);
   assert.match(editor(unsafe,'Model',[]),/&quot;&gt;&lt;img/);

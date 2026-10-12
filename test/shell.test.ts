@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { shell, list } from '../src/automations/view.ts';
-test('neutral shell keeps all five destinations in both icon representations', () => {
+test('automation shell keeps visible icons and only product destinations', () => {
   const html=shell('');
-  for(const label of ['New chat','Automations','Search','Settings','Profile']) assert.ok(html.includes(`aria-label="${label}"`));
-  assert.equal((html.match(/class="full-icon"/g)||[]).length,5);
-  assert.doesNotMatch(html+list([],'mine','',1),/Codebase|Cursor/);
+  for(const label of ['Automations','Run History','Settings','Accounts']) assert.ok(html.includes(`aria-label="${label}"`));
+  assert.equal((html.match(/class="rail-icon"/g)||[]).length,5);
+  assert.doesNotMatch(html+list([],'mine','',1),/Codebase|Cursor|New chat|href="\/search"/);
   assert.match(html,/href="\/settings"/);
 });
 test('shell facts pin redacted capture measurements and disclose unmeasured timing',async()=>{

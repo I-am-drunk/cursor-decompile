@@ -1,3 +1,4 @@
+import { scheduleRow } from './schedule-view.ts';
 import type { Automation } from './model.ts';
 import type { EditorModel, McpConfig, McpProvider } from './editor-state.ts';
 import { modelSuffix } from './editor-state.ts';
@@ -6,7 +7,7 @@ import { presetRow, presetWarning } from './preset-view.ts';
 import { connectionWarning, linearRow } from './connection-view.ts';
 export function editorToolbar(a:Automation,dirty:boolean):string {
   return `<div class="ed-toolbar">${btn('Save','save','ed-save',`${dirty?'':'disabled'} data-evidence="ed-save"`)}
-    ${btn(`▷ Test`,'test','outline','data-evidence="ed-test"')}
+    ${a.id?btn(`▷ Test`,'test','outline','data-evidence="ed-test"'):''}
     ${btn(icon('menu'),`row:${a.id}`,'icon','aria-label="More actions"')}</div>`;
 }
 export function savedEditor(a:Automation,model:string,errors:string[],titleEditing=false,fixture=false,preview?:{id:string;value:string}):string {
@@ -25,7 +26,7 @@ export function savedEditor(a:Automation,model:string,errors:string[],titleEditi
       ${btn('Settings','ed-settings','','role="tab" aria-selected="true"')}${btn('Run History',`ed-runs:${a.id}`,'','role="tab" aria-selected="false"')}</div></div>
     <div class="ed-body">${errors.length?`<div class="validation" role="alert">${errors.map(esc).join('<br>')}</div>`:''}
     <section class="ed-section ed-triggers"><h3 data-evidence="ed-trigger-title">Triggers</h3><div class="ed-card" data-evidence="ed-trigger-card">
-      ${a.triggers.map(t=>t.kind==='Linear'?linearRow(t):t.schedule?presetRow(t,fixture,preview?.id===t.id?preview.value:undefined):`<div class="ed-trigger-row tr-row" data-evidence="tr-existing-row"><span class="tr-clock">${icon('clock')}</span><div class="ed-trigger-main"><span class="${t.kind==='Schedule'?'tr-schedule-label':''}" data-evidence="tr-existing-label">${t.kind==='Schedule'?'Custom schedule':esc(t.kind)}</span>
+      ${a.triggers.map(t=>!fixture&&t.kind==='Schedule'?scheduleRow(t):t.kind==='Linear'?linearRow(t):t.schedule?presetRow(t,fixture,preview?.id===t.id?preview.value:undefined):`<div class="ed-trigger-row tr-row" data-evidence="tr-existing-row"><span class="tr-clock">${icon('clock')}</span><div class="ed-trigger-main"><span class="${t.kind==='Schedule'?'tr-schedule-label':''}" data-evidence="tr-existing-label">${t.kind==='Schedule'?'Custom schedule':esc(t.kind)}</span>
       ${btn(`<span data-evidence="tr-existing-cron-label">${esc(t.value)}</span>${icon('chevron')}`,`${t.kind==='Schedule'?'tr-cron':'trigger'}:${t.id}`,'ed-cron',`aria-haspopup="menu" aria-expanded="false" data-evidence="tr-existing-cron" ${t.value==='0 0 1 1 *'?'data-reference-cron':''}`)}<span class="muted">${fixture&&t.value==='0 0 1 1 *'?'Next run Thu, Dec 31, 7:00 p.m. EST':esc(t.event)}</span></div>
       ${btn(icon('close'),`remove-trigger:${t.id}`,'icon','aria-label="Remove trigger"')}</div>`).join('')}
       <div class="ed-add-wrap">${btn(`${icon('plus')}<span data-evidence="tr-add-label">Add Trigger</span>`,'tr-add','ed-add','role="combobox" aria-label="Add Trigger" aria-haspopup="dialog" aria-expanded="false" data-evidence="ed-add-trigger"')}</div></div><div class="ed-caption ${multiple||requiresConnection?'has-warning':''}">${requiresConnection?presetWarning(connectionWarning):multiple?presetWarning():''}</div></section>
@@ -58,7 +59,7 @@ export function browseMcp(providers:McpProvider[],query:string):string {
     <div class="ed-browse-scroll" data-evidence="eb-scroll"><div class="ed-provider-grid">${shown.map(p=>
       `<button class="ed-provider ${p.name==='Custom MCP'?'custom':''}" data-act="${p.name==='Custom MCP'?'ed-custom':'ed-provider:'+p.id}" ${p.name==='Custom MCP'?'data-evidence="eb-custom"':['provider-1','provider-2'].includes(p.id)?`data-evidence="eb-${p.id}"`:p.name==='Linear'?'data-evidence="lc-provider"':''}>
         <span class="provider-icon" aria-hidden="true">${p.name==='Custom MCP'?'+':esc(p.name.slice(0,1))}</span>
-        <span class="provider-copy"><span>${esc(p.name)}</span><span>${esc(p.description.replace(/\bCursor\b/g,'Workspace'))}</span></span>${p.name==='Custom MCP'?'':'<span>›</span>'}
+        <span class="provider-copy"><span>${esc(p.name)}</span><span>${esc(p.description.replace(/\bcursor\.com\b/gi,'the provider website').replace(/\bCursor\b/gi,'Workspace'))}</span></span>${p.name==='Custom MCP'?'':'<span>›</span>'}
       </button>`).join('')}${shown.length?'':'<p>No results found</p>'}</div></div></div></dialog>`;
 }
 const mcpInput=(name:string,value:string,placeholder:string,attrs='')=>
