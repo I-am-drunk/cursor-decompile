@@ -34,3 +34,18 @@ test('editor states resolve unique fact IDs to their DOM targets',()=>{
   assert.throws(()=>compare([f],{...s,url:'http://localhost/automations/other?fixture=saved-editor'}));
   assert.equal(compare([f],{...s,elements:[]}).mismatches.length,1);
 });
+test('trigger comparison rejects changed values, enabled state and unclosed overlays',()=>{
+  const viewport={width:100,height:100,devicePixelRatio:1};
+  const f={id:'trigger:disabled',target:'ed-save',captureState:'trigger-dismissed',
+    attribute:'disabled',value:'',source:{jsonPath:[]},viewport};
+  const s={url:'http://localhost/automations/editor-fixture?fixture=saved-editor&controls=triggers',
+    captureState:'trigger-dismissed',viewport,focus:'tr-existing-cron',
+    elements:[{id:'ed-save',attributes:{disabled:''}}]};
+  assert.deepEqual(compare([f],s).mismatches,[]);
+  assert.match(compare([f],{...s,elements:[{id:'ed-save',attributes:{}}]}).mismatches.join(),/state differs/);
+  assert.match(compare([f],{...s,elements:[...s.elements,{id:'tr-menu'}]}).mismatches.join(),/dismissed/);
+  assert.match(compare([f],{...s,focus:null}).mismatches.join(),/focus/);
+  assert.throws(()=>compare([f],{...s,url:s.url.replace('&controls=triggers','')}));
+  const v={...f,id:'cron',captureState:'schedule-picker',target:'tr-cron-input',attribute:undefined,inputValue:true,value:'0 0 1 1 *'};
+  assert.match(compare([v],{...s,captureState:'schedule-picker',elements:[{id:v.target,value:'changed'}]}).mismatches.join(),/state differs/);
+});

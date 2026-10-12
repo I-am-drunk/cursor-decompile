@@ -306,8 +306,8 @@ async function boot() {
   }
 }
 async function exportMeasurements() {
-  const captureState=triggerUi.panel||params().get('controls')==='triggers'?triggerUi.captureState():
-    editUi.panel?editUi.captureState():editorFixture()?'saved-editor':
+  const captureState=triggerUi.panel?triggerUi.captureState():editUi.panel?editUi.captureState():
+    params().get('controls')==='triggers'?triggerUi.captureState():editorFixture()?'saved-editor':
     modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
   if(!triggerUi.panel&&!editUi.panel&&modal!=='run'&&modal!=='run-menu') closeModal();
   await new Promise<void>(r=>requestAnimationFrame(()=>r()));
