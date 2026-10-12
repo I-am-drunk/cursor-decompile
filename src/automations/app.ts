@@ -2,7 +2,7 @@ import { ScheduleController } from './schedule-controller.ts';
 import { installSidebar } from '../shell/sidebar.ts';
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
-import { btn, dialog, editor, esc, field, gate, chatGate, notFound, icon, link, list, runs, runSummary, shell } from './view.ts';
+import { btn, dialog, esc, field, gate, chatGate, notFound, icon, link, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
 import { TriggerController } from './trigger-controller.ts';

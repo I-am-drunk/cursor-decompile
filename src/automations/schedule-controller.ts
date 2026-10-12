@@ -66,5 +66,10 @@ export class ScheduleController {
   return false;
  }
  blockInvalidDismissal():boolean {if(this.panel!=='custom')return false;this.error=cronError(this.value)||(!timeZoneValid(this.zone)?'Select a valid timezone.':'');if(!this.error)return false;this.render();return true;}
- pointer(target:Node){if(this.panel&&!this.host.overlays.contains(target)&&!this.anchor?.contains(target)&&!this.blockInvalidDismissal())this.close();}
+ pointer(target:Node){
+  if(!this.panel||this.host.overlays.contains(target)||this.anchor?.contains(target))return;
+  // Returning from timezone selection must preserve the custom draft's validation.
+  if(this.returnPanel==='custom'){this.returnPanel='';this.panel='custom';}
+  if(!this.blockInvalidDismissal())this.close();
+ }
 }
