@@ -10,8 +10,12 @@ export function compare(facts, actual) {
   const presetState=['preset-baseline','hourly-added','daily-added','daily-time','daily-selected','weekly-added','weekly-days','weekly-selected','weekly-time','custom-added','custom-popup','cron-invalid','cron-range','cron-empty','invalid-escape','invalid-outside','custom-restored','unsaved-dialog'].includes(actual.captureState)?actual.captureState:null;
   const connectionState=['connection-baseline','linear-menu','linear-issue-menu','linear-created','linear-status','linear-cycle','mcp-unconfigured','mcp-linear-search','mcp-linear-unconnected','mcp-linear-expanded','mcp-returned'].includes(actual.captureState)?actual.captureState:null;
   const filterState=['runs-baseline','runs-filter','runs-status','runs-running','runs-multiple-status','runs-filtered-empty','runs-cleared'].includes(actual.captureState)?actual.captureState:null;
-  assert.ok(filterState || connectionState || presetState || triggerState || editorState || isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
-  if(editorState||triggerState||presetState||connectionState){
+  const settingsState=['settings-account','settings-overview','settings-user-menu','settings-returned','settings-dismissed'].includes(actual.captureState)?actual.captureState:null;
+  assert.ok(settingsState || filterState || connectionState || presetState || triggerState || editorState || isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
+  if(settingsState){
+    assert.equal(url.pathname,settingsState==='settings-overview'?'/dashboard':'/dashboard/settings','Wrong settings panel');
+    assert.equal(url.searchParams.get('fixture'),'settings-navigation','Expected explicit settings fixture');
+  } else if(editorState||triggerState||presetState||connectionState){
     assert.equal(url.pathname,'/automations/editor-fixture');assert.equal(url.searchParams.get('fixture'),'saved-editor');
     if(triggerState)assert.equal(url.searchParams.get('controls'),'triggers');
     if(presetState)assert.equal(url.searchParams.get('controls'),'presets');
@@ -26,7 +30,7 @@ export function compare(facts, actual) {
     assert.ok(!url.searchParams.get('fixture') && !url.searchParams.get('status'),'Expected unfiltered non-fixture runs');
     assert.ok(!url.searchParams.get('scope') || url.searchParams.get('scope')==='team','Expected Team runs');
   }
-  const state=filterState||connectionState||presetState||triggerState||editorState||rowState;
+  const state=settingsState||filterState||connectionState||presetState||triggerState||editorState||rowState;
   const chosen=facts.filter(f=>(f.source?.element!==undefined||f.attribute||f.inputValue||f.attributePresent) &&
     (state ? f.captureState===state : !f.captureState && (isRuns ? !f.id.startsWith('gate-') : f.id.startsWith('gate-'))));
   const mismatches=[]; let checks=0;
@@ -47,12 +51,13 @@ export function compare(facts, actual) {
     if(['pr-discard','pr-keep','pr-save'].includes(target))dimensions=['y','height'];
     if(['lc-required','lp-name','lp-publisher'].includes(target))dimensions=['x','y','height'];
     if(['lp-more','lp-back','lp-add'].includes(target))dimensions=['y','height'];
+    dimensions=f.dimensions??dimensions;
     for (const key of dimensions) {
       checks++;
       if (!Number.isFinite(measured.rect[key]) || Math.abs(measured.rect[key]-f.value.rect[key])>.75)
         mismatches.push(`${f.id}.${key}: ${measured.rect[key]} != ${f.value.rect[key]}`);
     }
-    const styleKeys=f.value.text!==null?['font-size','line-height']:['border-radius'];
+    const styleKeys=f.styleKeys??(f.value.text!==null?['font-size','line-height']:['border-radius']);
     if(presetState&&(target==='pr-warning-label'||(target==='pv-hint'&&/Expected|is required/.test(f.value.text??''))))
       styleKeys.push('color');
     if(presetState&&target==='ed-save')styleKeys.push('background-color','color');
@@ -76,6 +81,15 @@ export function compare(facts, actual) {
     checks++;
     if(actual.focus!=='tr-existing-cron')mismatches.push('Dismissal must restore focus to the cron control');
   }
+  if(settingsState==='settings-dismissed'){
+    checks+=2;
+    if(actual.elements.some(e=>e.id==='st-menu'))mismatches.push('User menu must be dismissed');
+    if(actual.focus!=='st-user')mismatches.push('Dismissal must restore user-menu focus');
+  }
+  if(settingsState==='settings-returned'){
+    checks++;
+    if(actual.focus!=='st-settings')mismatches.push('Keyboard navigation must focus Settings');
+  }
   return {checks,mismatches};
 }
 if (process.argv[1] && import.meta.url===pathToFileURL(resolve(process.argv[1])).href) {
@@ -83,6 +97,7 @@ if (process.argv[1] && import.meta.url===pathToFileURL(resolve(process.argv[1]))
   const actual=JSON.parse(await readFile(process.argv[2],'utf8'));
   const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json','connection-facts.json','closure-facts.json'].map(async file=>
     JSON.parse(await readFile(`src/automations/${file}`,'utf8'))))).flat();
+  facts.push(...JSON.parse(await readFile('src/settings/ui-facts.json','utf8')));
   const {buildHash}=await import('../src/server.ts');
   assert.equal(actual.buildHash,await buildHash(),'Stale snapshot: recapture the current build');
   const result=compare(facts,actual);

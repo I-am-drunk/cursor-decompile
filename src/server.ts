@@ -9,6 +9,9 @@ import { parseAutomation } from './automations/model.ts';
 import { RequestError, Store } from './store.ts';
 const root = new URL('./', import.meta.url);
 const files: Record<string, [string, string]> = {
+  '/settings-app.ts': ['settings/settings-app.ts','application/javascript'],
+  '/settings-view.ts': ['settings/settings-view.ts','application/javascript'],
+  '/settings.css': ['settings/settings.css','text/css'],
   '/app.ts': ['automations/app.ts', 'application/javascript'],
   '/model.ts': ['automations/model.ts', 'application/javascript'],
   '/view.ts': ['automations/view.ts', 'application/javascript'],
@@ -36,6 +39,8 @@ const files: Record<string, [string, string]> = {
 };
 export async function buildHash() {
   const hash = createHash('sha256');
+  hash.update(await readFile(new URL('index.html',root)));
+  hash.update(await readFile(new URL('settings/index.html',root)));
   for (const [path] of Object.values(files)) hash.update(await readFile(new URL(path, root)));
   return hash.digest('hex');
 }
@@ -93,6 +98,10 @@ export function createApp(store: Store) {
       if (match?.[2] && req.method === 'POST') return json(res, 200, await store.start(match[1]!));
       if (path.startsWith('/api/')) throw new RequestError(404, 'Unknown endpoint.');
       if (req.method !== 'GET' && req.method !== 'HEAD') throw new RequestError(405, 'Method not allowed.');
+      if(['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending'].includes(path)){
+        res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
+        return res.end(await readFile(new URL('settings/index.html',root)));
+      }
       const file = files[path];
       if (file) {
         let content = await readFile(new URL(file[0], root), 'utf8');

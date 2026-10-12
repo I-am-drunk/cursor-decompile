@@ -13,6 +13,12 @@ test('HTTP server serves original UI and protects mutation and private files',as
   t.after(async()=>{await new Promise<void>(r=>server.close(()=>r()));await rm(dir,{recursive:true,force:true});});
   const origin=`http://127.0.0.1:${(server.address() as AddressInfo).port}`;
   const send=(path:string,options?:RequestInit)=>fetch(origin+path,options);
+  for(const path of ['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending']){
+    const settings=await send(path);assert.equal(settings.status,200);assert.match(await settings.text(),/settings-app.ts/);
+  }
+  assert.equal((await send('/dashboard/unknown')).status,404);
+  assert.equal((await send('/api/settings',{method:'POST',headers:{'x-local-request':'1'},body:'{}'})).status,404);
+  assert.equal((await send('/reference/settings/navigation-2026-10-12/settings-account.json')).status,404);
   const page=await send('/automations/new'); assert.equal(page.status,200);
   assert.match(page.headers.get('content-security-policy')!,/frame-ancestors 'none'/);
   assert.match(await page.text(),/\/app.ts/);
