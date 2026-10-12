@@ -12,6 +12,8 @@ test('MCP URL/command form and JSON round-trip without losing secret values',()=
     validateMcp(c);assert.deepEqual(parseMcp(serializeMcp(c)),c);
   }
   for(const bad of ['{}','{"mcpServers":{"a":{},"b":{}}}','{"mcpServers":{"a":{"url":"x","command":"y"}}}',
+    '{"mcpServers":{"a":{"url":"https://example.com","env":{"TOKEN":"must-not-drop"}}}}',
+    '{"mcpServers":{"a":{"command":"x","headers":{"Authorization":"must-not-drop"}}}}',
     '{"mcpServers":{"a":{"command":"x","args":[1]}}}','{"mcpServers":{"a":{"url":"x","auth":{}}}}'])
     assert.throws(()=>parseMcp(bad));
   assert.throws(()=>validateMcp({...blankMcp(),name:'a',url:'javascript:alert(1)'}));

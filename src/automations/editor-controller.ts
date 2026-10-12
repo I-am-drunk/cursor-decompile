@@ -113,7 +113,11 @@ export class EditorController {
   }
   input(target:HTMLInputElement):boolean {
     if(!this.panel)return false;
-    if(target.name==='provider-search'||target.name==='ed-model-search'){this.query=target.value;this.render();return true;}
+    if(target.name==='provider-search'||target.name==='ed-model-search'){
+      this.query=target.value;
+      if(target.name==='ed-model-search')this.optionsFor='';
+      this.render();return true;
+    }
     if(this.panel==='custom'){this.collect();return true;}return false;
   }
   key(event:KeyboardEvent):boolean {

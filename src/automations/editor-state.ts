@@ -32,6 +32,9 @@ export function parseMcp(text: string): McpConfig {
   if(!record(value)) throw Error('Invalid MCP configuration.');
   if(Object.keys(value).some(k=>!['url','command','args','headers','env'].includes(k)) ||
     ('url' in value && 'command' in value)) throw Error('Unsupported or ambiguous MCP configuration fields.');
+  if(('url' in value && ('args' in value || 'env' in value)) ||
+    ('command' in value && 'headers' in value))
+    throw Error('Configuration fields do not match the selected transport.');
   const c={...blankMcp(),name};
   if(typeof value.command==='string') {c.type='command';c.command=value.command;}
   else if(typeof value.url==='string') c.url=value.url;
