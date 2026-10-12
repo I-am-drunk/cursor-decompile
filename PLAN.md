@@ -5,7 +5,7 @@ one visible state or interaction per PR; claim the exact slice on #1.
 
 | Order | Lane | Surface / first slice | Acceptance evidence |
 |---|---|---|---|
-| 1 | C-AUTOMATIONS | next: plan-enabled populated list and row navigation; local foundation complete in [#10](https://github.com/I-am-drunk/cursor-decompile/pull/10) | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
+| 1 | C-AUTOMATIONS | next: saved-editor/MCP controls using newly reachable captures; foundation [#10](https://github.com/I-am-drunk/cursor-decompile/pull/10) and failed-run rows [#11](https://github.com/I-am-drunk/cursor-decompile/pull/11) complete | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
 | 2 | C-SETTINGS | settings navigation, account/team, models, integrations, MCP | navigation and one panel at a time; measured UI facts |
 | 3 | C-SHELL | window, sidebar, command palette, navigation | route/state/keyboard captures |
 | 4 | C-AGENTS | agent list, conversation, tool results, review, projects | loading/empty/populated/error states and interactions |
@@ -33,12 +33,21 @@ The [verification report](facts/automations-verification.md) records 18 passing
 tests and 101 measured checks for the upsell and empty Run History states.
 
 This completes the **foundation slice**, not C-AUTOMATIONS exact parity.
-Gated current editor/list states, full feature variants, live MCP/execution,
+Unmatched current editor/list states, full feature variants, live MCP/execution,
 font/icon raster parity and independent parity acceptance remain UNVERIFIED.
 The hosted workflow remains a template because publishing it requires
 additional GitHub permissions.
 
-Next claim: capture a **plan-enabled populated list** with version/state,
-viewport, screenshot and computed styles; reconcile its rows and opening an
-automation with the local implementation. Follow with a separately claimed
-saved-editor/MCP slice. Do not promote source extraction into observed parity.
+## Completed API/row slice — 2026-10-12
+
+[PR #11](https://github.com/I-am-drunk/cursor-decompile/pull/11) establishes
+that this account can create disabled definitions through the API. The
+main list still shows an upsell; corrected test execution creates a real
+plan-restricted failed run. Its row, menu, summary and navigation are now
+measured, while main-list row corrections remain bundle-extracted.
+
+The saved editor is reachable by ID, and additional editor/MCP/model
+screenshots are captured. Next claim: reproduce **one saved-editor control
+state**, then its per-automation MCP flow. A plan-enabled populated main list
+and successful/running executions remain separate evidence gaps. Do not
+promote extracted or reference-derived fixture behavior into observed parity.

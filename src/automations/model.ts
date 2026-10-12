@@ -6,12 +6,14 @@ export interface Tool { id: string; kind: 'MCP' | 'Memories' | 'Slack'; name: st
 export interface Automation {
   id: string; revision: number; name: string; prompt: string; enabled: boolean;
   scope: 'mine' | 'team'; model: string; repositories: string[];
-  triggers: Trigger[]; tools: Tool[]; createdAt: string;
+  triggers: Trigger[]; tools: Tool[]; createdAt: string; ownerName?: string;
 }
 export interface Run {
   id: string; automationId: string; name: string;
   status: 'running' | 'succeeded' | 'failed' | 'skipped';
   createdAt: string; output: string; model: string; fixture?: boolean;
+  completedAt?: string; tools?: string[]; testRun?: boolean;
+  failure?: { code: string; title: string; message: string; ctaLabel?: string };
 }
 export interface State { automations: Automation[]; runs: Run[] }
 export const emptyState = (): State => ({ automations: [], runs: [] });
@@ -58,6 +60,8 @@ export function validCron(value: string): boolean {
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 const text = (v: unknown): v is string => typeof v === 'string' && v.length <= 32000;
 export function parseAutomation(v: unknown): Automation {
+  if (object(v) && v.ownerName !== undefined && !text(v.ownerName))
+    throw new Error('Invalid automation owner.');
   if (!object(v) || !['id','name','prompt','model','createdAt'].every(k => text(v[k])) ||
       typeof v.enabled !== 'boolean' || !['mine','team'].includes(String(v.scope)) ||
       !Number.isSafeInteger(v.revision) || Number(v.revision) < 0 ||

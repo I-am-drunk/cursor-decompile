@@ -55,3 +55,12 @@ T3 connectivity is not required to reproduce that workflow. A plan-enabled
 reference account is still needed for current list/editor/MCP screenshots.
 The local implementation and passing subset checks do not waive those gaps
 or the independent peer acceptance requirement.
+
+A same-day [API/row follow-up](../facts/automations-api-rows.md) established
+that disabled creation is allowed on this Free account, while execution
+returns a plan-restricted failed run. Its table, row menu and Run summary
+are now observed and measured. View Automation opens the saved editor even
+though the main `/automations` page remains gated. Therefore a gated main
+list must not be cited as proof that every saved-editor route is gated.
+Saved-editor/menu screenshots are available for the next separate parity
+slice; successful/running execution and the main populated list remain open.

@@ -1,4 +1,5 @@
 import type { Automation, Run } from './model.ts';
+import { runDuration, runTime, shortAge } from './row-data.ts';
 export const esc = (value: unknown): string => String(value ?? '').replace(/[&<>"']/g,
   c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 export const icon = (name: string): string => {
@@ -11,6 +12,8 @@ export const icon = (name: string): string => {
     code: '<path d="m5 4-4 4 4 4m6-8 4 4-4 4M9 2 7 14"/>',
     check: '<path d="m3 8 3 3 7-7"/>', close: '<path d="m4 4 8 8M12 4l-8 8"/>',
     sidebar: '<rect x="2" y="3" width="12" height="10" rx="1"/><path d="M6 3v10"/>',
+    eye: '<path d="M1 8q7-10 14 0-7 10-14 0Z"/><circle cx="8" cy="8" r="2"/>',
+    edit: '<path d="M8 3H2v11h11V8M7 9l1-3 5-5 2 2-5 5-3 1Z"/>',
   };
   return `<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3">${paths[name] ?? paths.bot}</svg>`;
 };
@@ -47,8 +50,8 @@ export function tabs(scope: string, action = 'scope'): string {
   return `<div class="tabs" role="tablist" aria-label="${action === 'scope' ? 'Automation filters' : 'Run ownership'}">
     ${['mine','team'].map(s => btn(s === 'mine' ? 'Mine' : 'Team', `${action}:${s}`, '', `role="tab" aria-selected="${scope === s}"`)).join('')}</div>`;
 }
-export function list(rows: Automation[], scope: string, query: string, page: number): string {
-  const filtered = rows.filter(a => (scope === 'team' || a.scope === 'mine') && a.name.toLowerCase().includes(query.trim().toLowerCase()))
+export function list(rows: Automation[], scope: string, query: string, page: number, modelNames: Record<string,string> = {}): string {
+  const filtered = rows.filter(a => (scope === 'team' || a.scope === 'mine') && `${a.name} ${a.ownerName??'You'}`.toLowerCase().includes(query.trim().toLowerCase()))
     .sort((a,b) => Number(b.enabled) - Number(a.enabled));
   const count = Math.max(1, Math.ceil(filtered.length / 10)), current = Math.min(page, count);
   const visible = filtered.slice((current - 1) * 10, current * 10);
@@ -56,18 +59,20 @@ export function list(rows: Automation[], scope: string, query: string, page: num
     <p>Automate repetitive tasks with always-on agents and configure Cursor's built-in agents for your team.</p></header>
     <div class="toolbar">${tabs(scope)}<div class="actions">${link(`All Runs ${icon('arrow')}`,'/automations/runs','button')}
     <input name="list-search" aria-label="Search automations" placeholder="Search..." value="${esc(query)}"></div></div>
-    ${listBody(visible, query, filtered.length, current, count)}</div>`;
+    ${listBody(visible, query, filtered.length, current, count, modelNames)}</div>`;
 }
-function listBody(rows: Automation[], query: string, total: number, page: number, pages: number): string {
+function listBody(rows: Automation[], query: string, total: number, page: number, pages: number, modelNames: Record<string,string>): string {
   if (!rows.length) return `<div class="empty card"><h3>${query ? 'No Results Found' : 'No Automations Yet'}</h3>
     ${query ? '' : `<p>Automate repetitive tasks with always-on agents and configure Cursor's built-in agents for your team.</p>
     ${link('New Automation','/automations/new','button outline')}`}</div>`;
   return `<div class="list-table card" role="table" aria-label="Automations"><div class="table-row table-header" role="row">
-    ${['Name','Created By','Status','Tools',''].map(v => `<span role="columnheader">${v}</span>`).join('')}</div>
-    ${rows.map(a => `<div class="table-row" role="row">${link(`<span role="cell">${esc(a.name)}</span><span role="cell">You</span>
-      <span role="cell" class="status ${a.enabled ? 'active' : ''}">${icon(a.enabled ? 'check' : 'close')}${a.enabled ? 'Active' : 'Inactive'}</span>
-      <span role="cell">${esc(a.tools.map(t=>t.kind).filter((v,i,s)=>s.indexOf(v)===i).join(', ') || '-')}</span>`,
-      `/automations/${a.id}`,'row-link')}<span role="cell">${btn(icon('menu'),`row:${a.id}`,'icon','aria-label="More actions"')}</span></div>`).join('')}</div>
+    ${['Name','Model','Created By','Status','Tools',''].map((v,i) => `<span class="list-col-${i}" role="columnheader">${v}</span>`).join('')}</div>
+    ${rows.map(a => `<div class="table-row" role="row">${link(`<span role="cell" class="list-col-0">${esc(a.name||'Untitled')}</span>
+      <span role="cell" class="list-col-1">${esc(modelNames[a.model]??a.model??'-')}</span>
+      <span role="cell" class="list-col-2 owner-meta"><span>${esc(a.ownerName??'You')}</span><span class="muted">${shortAge(a.createdAt)}</span></span>
+      <span role="cell" class="list-col-3 status ${a.enabled ? 'active' : ''}">${icon(a.enabled ? 'check' : 'close')}${a.enabled ? 'Active' : 'Inactive'}</span>
+      <span role="cell" class="list-col-4">${esc(a.tools.map(t=>t.kind).filter((v,i,s)=>s.indexOf(v)===i).join(', ') || '-')}</span>`,
+      `/automations/${a.id}`,'row-link')}<span role="cell" class="list-col-5">${btn(icon('menu'),`row:${a.id}`,'icon','aria-label="More actions"')}</span></div>`).join('')}</div>
     ${pages > 1 ? `<footer class="pagination"><span>${(page-1)*10+1}–${Math.min(page*10,total)} of ${total}</span>
     <div>${btn('‹','prev','icon',page===1?'disabled aria-label="Previous page"':'aria-label="Previous page"')} ${page} / ${pages}
     ${btn('›','next','icon',page===pages?'disabled aria-label="Next page"':'aria-label="Next page"')}</div></footer>` : ''}`;
@@ -92,10 +97,10 @@ export function editor(a: Automation, modelName: string, errors: string[]): stri
       ${btn(`${icon('plus')} Add Tool or MCP`,'tool:new','plain add-row')}</div></section>
     <p class="implementation-note">Local implementation · editor geometry is extracted/UNVERIFIED. Connections and execution require an adapter.</p></div>`;
 }
-export function runs(rows: Run[], scope: string, query: string, status: string, searchOpen: boolean): string {
+export function runs(rows: Run[], scope: string, query: string, status: string, searchOpen: boolean, modelNames: Record<string,string> = {}, now = Date.now()): string {
   const visible = rows.filter(r => (!status || r.status === status) && r.name.toLowerCase().includes(query.toLowerCase()));
   const counts = ([['succeeded',1],['failed',1],['succeeded',7],['failed',7]] as const)
-    .map(([s,days]) => rows.filter(r => r.status===s && Date.parse(r.createdAt)>=Date.now()-days*86400000).length);
+    .map(([s,days]) => rows.filter(r => r.status===s && Date.parse(r.createdAt)>=now-days*86400000).length);
   return `<div class="page runs"><header data-evidence="runs-header"><h1 data-evidence="runs-title">Run History</h1></header>
     <div class="runs-body"><div class="toolbar" data-evidence="runs-toolbar">${tabs(scope,'run-scope')}
     <div class="actions">${searchOpen ? `<input name="run-search" placeholder="Search runs..." aria-label="Search runs" value="${esc(query)}">` :
@@ -103,12 +108,48 @@ export function runs(rows: Run[], scope: string, query: string, status: string, 
       ${btn(icon('filter'),'filters',`icon ${status?'selected':''}`,'aria-label="Filter runs" data-evidence="runs-filter"')}</div></div>
     <div class="stats" data-evidence="runs-stats">${['Successful · 24h','Failed · 24h','Success 7d','Failed 7d'].map((s,i) =>
       `<div class="stat card" data-evidence="stat-${i}"><div>${s}</div><strong>${counts[i]}</strong></div>`).join('')}</div>
-    <div class="runs-table card" data-evidence="runs-card"><div role="table" aria-label="Run history" data-evidence="runs-table">
-      ${!visible.length ? `<div class="runs-empty"><h3 data-evidence="runs-empty">${query||status?'No Results Found':'No Runs Yet'}</h3></div>` :
-        `<div class="run-row table-header" role="row"><span>Automation</span><span>Status</span><span>Started</span></div>${visible.map(r =>
-          `<button class="run-row" data-act="run:${esc(r.id)}"><span>${esc(r.name)}${r.fixture?' · Fixture':''}</span><span class="status ${esc(r.status)}">${esc(r.status)}</span><span>${new Date(r.createdAt).toLocaleString()}</span></button>`).join('')}`}
-    </div></div></div></div>`;
+    <div class="runs-table card" data-evidence="${visible.length?'rw-card':'runs-card'}"><div role="table" aria-label="Run history" data-evidence="${visible.length?'rw-table':'runs-table'}">
+      ${!visible.length ? `<div class="runs-empty"><h3 data-evidence="runs-empty">${query||status?'No Results Found':'No Runs Yet'}</h3></div>` : runTable(visible,modelNames,now)}
+    </div></div></div>${rows.some(r=>r.fixture)?'<p class="implementation-note">Reference-derived or synthetic fixture — not a live local execution.</p>':''}</div>`;
 }
 export const dialog = (title: string, content: string, footer = '') =>
   `<dialog aria-labelledby="dialog-title"><div class="dialog-header"><h2 id="dialog-title">${esc(title)}</h2>
   ${btn(icon('close'),'dismiss','icon','aria-label="Close dialog"')}</div>${content}${footer ? `<footer>${footer}</footer>` : ''}</dialog>`;
+function runTable(rows: Run[], modelNames: Record<string,string>, now: number): string {
+  const headers=['Automation','Model','Triggered','Tools','Status','Duration',''];
+  const header=headers.map((h,i)=>`<div role="columnheader" class="run-col-${i}" data-evidence="rw-head-${i}"><span>${h}</span></div>`).join('');
+  const body=rows.map((r,index)=>{
+    const evidence=(key:string)=>index===0?`data-evidence="${key}"`:'';
+    const cells=[
+      `<span class="truncate" title="${esc(r.name)}">${esc(r.name)}</span>`,
+      `<span class="run-secondary">${esc(modelNames[r.model]??r.model)}</span>`,
+      `<span class="run-secondary">${esc(runTime(r.createdAt))}</span>`,
+      `<span>${esc(r.tools?.join(', ')||'—')}</span>`,
+      `<span class="run-status ${esc(r.status)}" ${evidence('rw-status')}>${esc(r.status[0]!.toUpperCase()+r.status.slice(1))}</span>`,
+      `<span class="run-secondary">${esc(runDuration(r,now))}</span>`,
+      btn(icon('menu'),`run-menu:${r.id}`,'icon run-more',`aria-label="More actions" ${evidence('rw-more')}`),
+    ].map((html,i)=>`<div role="cell" class="run-col-${i}" ${evidence(`rw-cell-${i}`)}>${html}</div>`).join('');
+    return `<div class="run-grid run-data" role="row" tabindex="0" aria-label="${esc(r.name)}" data-act="run:${esc(r.id)}" ${evidence('rw-row')}>${cells}</div>`;
+  }).join('');
+  return `<div class="run-table-inner"><div class="run-grid run-head" role="row" data-evidence="rw-header">${header}</div><div role="rowgroup">${body}</div></div>`;
+}
+export function runSummary(run: Run): string {
+  const failure=run.failure;
+  const cta=failure?.code==='CLOUD_AGENT_PLAN_RESTRICTED' && failure.ctaLabel ? `<a href="https://cursor.com/pricing" target="_blank" rel="noopener noreferrer" data-evidence="sum-cta">${esc(failure.ctaLabel)}</a>` : '';
+  const problem=failure ? `<div class="summary-failure" data-evidence="sum-failure">
+    <span class="summary-icon error-icon" aria-hidden="true">⊗</span><div class="summary-error-text">
+    <span class="summary-error-title" data-evidence="sum-failure-title">${esc(failure.title)}</span>
+    <span class="summary-error-message" data-evidence="sum-failure-message">${esc(failure.message)}</span>${cta}</div></div>` : '';
+  return `<dialog class="run-summary" aria-labelledby="summary-title" data-evidence="sum-dialog">
+    <header class="summary-heading" data-evidence="sum-header"><h2 id="summary-title" data-evidence="sum-title">Run summary</h2></header>
+    <div class="summary-body" data-evidence="sum-body"><div class="summary-card" data-evidence="sum-card">
+      <div class="summary-trigger" data-evidence="sum-trigger">
+        <h3>Trigger <span> · ${esc(runTime(run.createdAt,true))}</span></h3>
+        <div class="summary-event"><span class="summary-icon" aria-hidden="true">▷</span><span>${run.testRun?'Test run':'Run'}</span></div>
+      </div>${problem}${run.output?`<pre>${esc(run.output)}</pre>`:''}
+    </div></div>
+    <footer class="summary-footer" data-evidence="sum-footer">
+      ${btn('Close','dismiss','outline','data-evidence="sum-close"')}
+      ${btn('View Automation',`view-automation:${run.automationId}`,'summary-view','data-evidence="sum-view"')}
+    </footer></dialog>`;
+}

@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
-const facts=JSON.parse(await readFile('src/automations/ui-facts.json','utf8'));
+const facts=(await Promise.all(['ui-facts.json','row-facts.json'].map(async name=>
+  JSON.parse(await readFile(`src/automations/${name}`,'utf8'))))).flat();
 const root=process.argv[2], ids=new Set();
 let verified=0;
 for (const f of facts) {
@@ -29,6 +30,10 @@ for (const f of facts) {
     const models=JSON.parse(bytes).models.slice(0,13).map(m=>({id:m.name,name:m.clientDisplayName}));
     assert.deepEqual(f.value,models);
     assert.deepEqual(JSON.parse(await readFile('src/automations/catalog.json','utf8')),models);
+  } else if (f.source.jsonPath) {
+    let data=JSON.parse(bytes);
+    if(f.source.responsePath) data=JSON.parse(f.source.responsePath.reduce((v,key)=>v[key],data));
+    assert.deepEqual(f.source.jsonPath.reduce((v,key)=>v[key],data),f.value,`${f.id}: response mismatch`);
   } else assert.fail(`${f.id}: unsupported locator`);
   verified++;
 }

@@ -4,7 +4,8 @@
 |---|---|---|
 | C-RESET | plan and sibling contract merged in [#4](https://github.com/I-am-drunk/cursor-decompile/pull/4) | follow the next C-AUTOMATIONS parity slice |
 | C-TOOLS | raw reader merged in [#5](https://github.com/I-am-drunk/cursor-decompile/pull/5); 8 regression tests | use [read.mjs](pipeline/README.md) for inspection; it certifies no UI facts |
-| C-AUTOMATIONS | **Local foundation slice complete** in [#10](https://github.com/I-am-drunk/cursor-decompile/pull/10): [capture](facts/automations-web-capture.md), runnable original UI, persistence and CI template; [18 tests + 101 measured checks](facts/automations-verification.md) pass | plan-enabled populated-list capture and exact row/navigation parity; gated editor states, live execution/auth, omitted variants and full visual parity remain UNVERIFIED |
+| C-AUTOMATIONS | **Local foundation complete** in [#10](https://github.com/I-am-drunk/cursor-decompile/pull/10): runnable original UI, persistence and CI template | full parity remains open; the main list is gated, but a saved editor is reachable after API creation |
+| C-AUTOMATIONS rows | **Slice complete** in [#11](https://github.com/I-am-drunk/cursor-decompile/pull/11): [creation eligibility, real failed-run row/menu/summary](facts/automations-api-rows.md); 23 tests and 303 measured checks pass | saved-editor/MCP control parity from new captures; successful/running execution and observed main-list parity still require suitable reference access |
 | C-SETTINGS | planned | capture settings navigation and provider controls |
 | C-WHOLE-UI | planned | follow PLAN.md surface slices |
 | Historical #2 / #3 | closed as superseded by #4/#5; original branches and reviews retained | consult [findings](docs/archive/2026-10-04.md) before changing readers |

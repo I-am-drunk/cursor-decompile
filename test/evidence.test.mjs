@@ -18,3 +18,11 @@ test('comparison rejects geometry, missing elements, style and viewport drift',(
   actual=snapshot(); actual.viewport={...viewport,width:200};
   assert.throws(()=>compare([fact],actual),/viewport/);
 });
+test('new row-state comparisons require explicit reference fixtures and the matching state',()=>{
+  const f={...fact,id:'rw-row',captureState:'failed-run-list'};
+  const s={...snapshot(),captureState:'failed-run-list',url:'http://localhost/automations/runs?fixture=observed-failure',
+    elements:[{...snapshot().elements[0],id:'rw-row'}]};
+  assert.deepEqual(compare([f],s).mismatches,[]);
+  assert.throws(()=>compare([f],{...s,url:'http://localhost/automations/runs'}),/fixture/);
+  assert.throws(()=>compare([f],{...s,captureState:'failed-run-summary'}),/No measured facts/);
+});

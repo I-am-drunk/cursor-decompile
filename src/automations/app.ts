@@ -1,12 +1,14 @@
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
-import { btn, dialog, editor, esc, field, gate, link, list, runs, shell } from './view.ts';
+import { btn, dialog, editor, esc, field, gate, icon, link, list, runs, runSummary, shell } from './view.ts';
+import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 let state: State = emptyState(), form: Automation = draft(), models: {id:string;name:string}[] = [];
 let dirty = false, scope = 'mine', page = 1, query = '', runQuery = '', searchOpen = false;
 let errors: string[] = [], pendingPath = '', editId = '', modal = '', busy = false, returnFocus: HTMLElement | null = null;
 const app = document.querySelector<HTMLDivElement>('#app')!, overlays = document.querySelector<HTMLDivElement>('#overlays')!;
 const params = () => new URLSearchParams(location.search);
 const routeId = () => location.pathname.split('/')[2] ?? '';
+const referenceFixture = () => params().get('fixture') === 'observed-failure';
 function toast(message: string) { document.querySelector('#toast')!.textContent = message; }
 async function api<T>(path: string, method = 'GET', data?: unknown): Promise<T> {
   const response = await fetch(path, { method, headers: { 'Content-Type': 'application/json', 'X-Local-Request':'1' },
@@ -20,22 +22,33 @@ function openModal(kind: string, id = '') {
   modal = kind; editId = id; renderModal();
 }
 function closeModal() { modal = ''; overlays.innerHTML = ''; returnFocus?.focus(); }
+function activateDialog() {
+  const d=overlays.querySelector('dialog')!;
+  d.addEventListener('cancel',e=>{e.preventDefault();closeModal();pendingPath='';});
+  d.showModal();
+}
 function render() {
   const focused = document.activeElement as HTMLInputElement;
   const name = focused?.name, selection = focused?.selectionStart;
   const id = routeId(), isRuns = id === 'runs';
+  const names=Object.fromEntries(models.map(m=>[m.id,m.name]));
   let content: string;
   if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
   else if (params().get('state') === 'error') content = `<div class="page" role="alert">Could not load automations. ${btn('Retry','retry','outline')}</div>`;
   else if (params().get('state') === 'upgrade') content = gate();
-  else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen);
+  else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen,names,referenceFixture()?referenceTime:Date.now());
   else if (id) content = editor(form, models.find(m=>m.id===form.model)?.name ?? form.model, errors);
-  else content = list(state.automations, scope, query, page);
+  else content = list(state.automations, scope, query, page,names);
   app.innerHTML = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '');
+  if (referenceFixture() && id==='evidence-automation') {
+    app.querySelectorAll<HTMLInputElement>('.editor input,.editor textarea,.editor button,.editor select').forEach(e=>{e.disabled=true;});
+    app.querySelector('.implementation-note')!.textContent='Read-only reference-derived fixture. No live account or local definition is changed.';
+  }
   if (name) { const next = app.querySelector<HTMLInputElement>(`[name="${name}"]`); next?.focus();
     if (selection !== null && next && ['text','search'].includes(next.type)) next.setSelectionRange(selection,selection); }
 }
 function runRows(): Run[] {
+  if (referenceFixture()) return [referenceRun()];
   if (params().get('fixture') === 'runs') return (['running','succeeded','failed','skipped'] as const).map((status,i)=>({
     id:`fixture-${i}`,automationId:'fixture',name:`Example ${status} run`,status,
     createdAt:new Date(Date.now()-i*3600000).toISOString(),output:'Synthetic UI fixture. No agent was executed.',model:'composer-2.5',fixture:true,
@@ -46,7 +59,7 @@ function runRows(): Run[] {
 function loadRoute() {
   const id = routeId();
   if (id && id !== 'runs' && id !== 'new') {
-    const found = state.automations.find(a=>a.id===id);
+    const found = referenceFixture() && id==='evidence-automation' ? referenceAutomation() : state.automations.find(a=>a.id===id);
     if (!found) { toast('Automation not found.'); history.replaceState(null,'','/automations'); }
     else form = structuredClone(found);
   } else if (id === 'new') form = draft();
@@ -71,6 +84,21 @@ async function save() {
 const value = (name: string) => (overlays.querySelector<HTMLInputElement>(`[name="${name}"]`)?.value ?? '');
 const options = (values: readonly string[], selected: string) => values.map(v=>`<option ${v===selected?'selected':''}>${esc(v)}</option>`).join('');
 function renderModal() {
+  if (modal==='run') {
+    const run=runRows().find(r=>r.id===editId);
+    if (!run) {closeModal();toast('Run not found.');return;}
+    overlays.innerHTML=runSummary(run);activateDialog();return;
+  }
+  if (modal==='run-menu') {
+    const run=runRows().find(r=>r.id===editId); if (!run) return;
+    overlays.innerHTML=`<div class="run-menu" role="menu" aria-label="Row actions" tabindex="-1" data-evidence="rm-menu"><div class="run-menu-items">
+      ${btn(`<span class="menu-icon">${icon('eye')}</span><span data-evidence="rm-view-label">View details</span>`,`run:${run.id}`,'','role="menuitem" data-evidence="rm-view"')}
+      ${btn(`<span class="menu-icon">${icon('edit')}</span><span data-evidence="rm-edit-label">Edit Automation</span>`,`view-automation:${run.automationId}`,'','role="menuitem" data-evidence="rm-edit"')}</div></div>`;
+    const menu=overlays.firstElementChild as HTMLElement, rect=returnFocus!.getBoundingClientRect();
+    menu.style.left=`${Math.max(12,Math.min(rect.left,innerWidth-menu.offsetWidth-12))}px`;
+    menu.style.top=`${Math.min(rect.bottom+4,innerHeight-menu.offsetHeight-8)}px`;
+    menu.focus();return;
+  }
   let html = '', title = '', footer = '';
   const apply = (action: string) => btn('Cancel','dismiss','outline')+btn('Done',action,'primary');
   if (modal === 'trigger') {
@@ -104,26 +132,22 @@ function renderModal() {
     title = 'Filter by'; html = `<div class="menu"><h3>Status</h3>${['running','failed','succeeded','skipped'].map(s=>
       btn(s[0]!.toUpperCase()+s.slice(1),`status:${s}`,params().get('status')===s?'selected':'')).join('')}
       <hr>${btn('Clear all filters','status:')}</div><p>Automation filtering is available from its editor's Run History link. Trigger/tool filters remain UNVERIFIED.</p>`;
-  } else if (modal === 'run') {
-    const r = runRows().find(r=>r.id===editId);
-    title = r?.name ?? 'Run not found'; html = r ? `<p>Status: ${esc(r.status)} · ${esc(r.model)}</p><pre>${esc(r.output)}</pre>` : '';
   } else if (modal === 'unsaved') {
     title = 'Unsaved Changes'; html = '<p>Save or discard changes before continuing.</p>';
     footer = btn('Keep Editing','dismiss','outline')+btn('Discard','discard','outline')+btn('Save','save','primary');
   } else {
     title = modal === 'upgrade' ? 'Local preview — no checkout' : 'Original local implementation';
     html = `<p>No Cursor account, billing, MCP or agent execution is connected. Definitions are saved on this machine.</p>
-      <p>Observed: upgrade gate and empty Run History. Extracted: editor/list labels and declared styles.
-      Other layouts, filters and fixture runs are not certified parity.</p><div class="menu">
+      <p>Observed: upgrade gate, Run History and a real plan-restricted failed-run summary.
+      Automation-list rows remain extracted, not screenshot-certified.</p><div class="menu">
       ${link('Local automation list','/automations','button')}${link('Captured upgrade state','/automations?state=upgrade','button')}
       ${link('Observed empty Run History','/automations/runs','button')}${link('Synthetic run states','/automations/runs?fixture=runs','button')}
+      ${link('Reference-derived failed run','/automations/runs?fixture=observed-failure','button')}
       ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
       ${btn('Export layout measurements','export')}</div>`;
   }
   overlays.innerHTML = dialog(title,html,footer);
-  const d = overlays.querySelector('dialog')!;
-  d.addEventListener('cancel',e=>{e.preventDefault(); closeModal(); pendingPath='';});
-  d.showModal();
+  activateDialog();
 }
 async function action(command: string) {
   const [kind, id = ''] = command.split(':');
@@ -131,10 +155,11 @@ async function action(command: string) {
   else if (kind === 'collapse') document.body.classList.toggle('collapsed');
   else if (kind === 'export') await exportMeasurements();
   else if (['about','upgrade','models','repos','filters','unsaved'].includes(kind!)) openModal(kind!);
-  else if (['trigger','tool','row','run','delete'].includes(kind!)) openModal(kind!,id);
+  else if (['trigger','tool','row','run','run-menu','delete'].includes(kind!)) openModal(kind!,id);
   else if (kind === 'scope') { scope=id; page=1; render(); }
   else if (kind === 'prev' || kind === 'next') { page=Math.max(1,page+(kind==='next'?1:-1)); render(); }
   else if (kind === 'edit') navigate(`/automations/${id}`);
+  else if (kind === 'view-automation') navigate(`/automations/${id}${referenceFixture()?'?fixture=observed-failure':''}`);
   else if (kind === 'save') await save();
   else if (kind === 'discard') { const path=pendingPath; pendingPath=''; navigate(path,true); }
   else if (kind === 'retry') navigate('/automations',true);
@@ -208,9 +233,26 @@ window.addEventListener('popstate',()=>{
   } else loadRoute();
 });
 document.addEventListener('keydown',e=>{
+  if (e.altKey && e.shiftKey && e.code==='KeyE') {e.preventDefault();void exportMeasurements();return;}
+  const target=e.target as HTMLElement;
+  if (target.matches('.run-data') && (e.key==='Enter'||e.key===' ')) {
+    e.preventDefault();void action(target.dataset.act!);return;
+  }
+  if (modal==='run-menu') {
+    if(e.key==='Escape'){e.preventDefault();closeModal();return;}
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+      e.preventDefault();const buttons=[...overlays.querySelectorAll<HTMLButtonElement>('button')];
+      const current=buttons.indexOf(document.activeElement as HTMLButtonElement);
+      const next=current<0?(e.key==='ArrowDown'?0:buttons.length-1):(current+(e.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;
+      buttons[next]?.focus();return;
+    }
+  }
   if ((e.metaKey||e.ctrlKey) && e.key==='s' && routeId() && routeId()!=='runs') {
     e.preventDefault(); void save();
   }
+});
+document.addEventListener('pointerdown',e=>{
+  if(modal==='run-menu'&&!overlays.contains(e.target as Node)&&!returnFocus?.contains(e.target as Node)) closeModal();
 });
 async function boot() {
   app.innerHTML=shell('<div class="page" role="status">Loading…</div>');
@@ -222,7 +264,8 @@ async function boot() {
   }
 }
 async function exportMeasurements() {
-  closeModal();
+  const captureState=modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
+  if(modal!=='run'&&modal!=='run-menu') closeModal();
   await new Promise<void>(r=>requestAnimationFrame(()=>r()));
   const build=await api<{hash:string}>('/api/build');
   const elements=[...document.querySelectorAll<HTMLElement>('[data-evidence]')].map(e=>{
@@ -230,11 +273,11 @@ async function exportMeasurements() {
     return {id:e.dataset.evidence,rect:{x:rect.x,y:rect.y,width:rect.width,height:rect.height},
       text:e.textContent,style:Object.fromEntries([...computed,'border-radius','padding','margin'].map(k=>[k,computed.getPropertyValue(k)]))};
   });
-  const measurement={buildHash:build.hash,captureDate:new Date().toISOString(),url:location.href,
+  const measurement={buildHash:build.hash,captureState,captureDate:new Date().toISOString(),url:location.href,
     viewport:{width:innerWidth,height:innerHeight,devicePixelRatio},elements};
   const url=URL.createObjectURL(new Blob([JSON.stringify(measurement,null,2)],{type:'application/json'}));
   const anchor=document.createElement('a'); anchor.href=url;
-  anchor.download=`local-automations-${routeId()==='runs'?'runs':'upgrade'}.json`; anchor.click();
+  anchor.download=`local-automations-${captureState}.json`; anchor.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 document.addEventListener('click',e=>{if ((e.target as Element).closest('[data-act="reload"]')) void boot();});

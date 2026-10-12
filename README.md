@@ -46,11 +46,16 @@ Actual execution/authentication is deliberately unavailable without an
 `ExecutionAdapter` (see `src/store.ts`); no scheduler or fake successful
 execution is supplied. Synthetic run states are explicitly labeled.
 
-Current reference access exposed the upsell and empty Run History, not the
-editor. See [capture scope and gaps](facts/automations-web-capture.md).
+The first capture covered the upsell and empty Run History. A subsequent
+[API/row slice](facts/automations-api-rows.md) added a real failed run and
+reachable saved-editor evidence. The populated main list is still gated.
 The app is an original, partially evidence-backed implementation—not a claim
 of whole-page pixel parity. No captured bundles, fonts, credentials or
 account details are served by the local server.
 
 Private comparison workflow: [pipeline/README.md](pipeline/README.md).
 Results and remaining deviations: [verification report](facts/automations-verification.md).
+
+`/automations/runs?fixture=observed-failure` displays a labeled,
+reference-derived failure fixture without contacting Cursor. Use
+**Alt+Shift+E** to export measurements of the current table, menu or summary.
