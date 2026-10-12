@@ -9,6 +9,8 @@ import { parseAutomation } from './automations/model.ts';
 import { RequestError, Store } from './store.ts';
 const root = new URL('./', import.meta.url);
 const files: Record<string, [string, string]> = {
+  '/shell/sidebar.ts': ['shell/sidebar.ts','application/javascript'],
+  '/sidebar.css': ['shell/sidebar.css','text/css'],
   '/settings-app.ts': ['settings/settings-app.ts','application/javascript'],
   '/settings-view.ts': ['settings/settings-view.ts','application/javascript'],
   '/settings.css': ['settings/settings.css','text/css'],
@@ -98,7 +100,7 @@ export function createApp(store: Store) {
       if (match?.[2] && req.method === 'POST') return json(res, 200, await store.start(match[1]!));
       if (path.startsWith('/api/')) throw new RequestError(404, 'Unknown endpoint.');
       if (req.method !== 'GET' && req.method !== 'HEAD') throw new RequestError(405, 'Method not allowed.');
-      if(['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending'].includes(path)){
+      if(['/settings','/settings/account','/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending'].includes(path)){
         res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(new URL('settings/index.html',root)));
       }
@@ -109,7 +111,7 @@ export function createApp(store: Store) {
         res.writeHead(200, { 'Content-Type': file[1], 'Cache-Control': 'no-store' });
         return res.end(content);
       }
-      if (path === '/' || /^\/automations(?:\/[\w-]+)?$/.test(path)) {
+      if (['/','/chat','/search'].includes(path) || /^\/automations(?:\/[\w-]+)?$/.test(path)) {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
         return res.end(await readFile(new URL('index.html', root)));
       }

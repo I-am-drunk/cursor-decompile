@@ -18,3 +18,11 @@
 Live claims and PRs take precedence over this snapshot. See
 [#1](https://github.com/I-am-drunk/cursor-decompile/issues/1) and the
 [PR queue](https://github.com/I-am-drunk/cursor-decompile/pulls).
+
+## Owner product directive — P0
+
+C-SHELL neutral rail: [capture and verification](facts/shell-verification.md).
+Codebases removed; five accessible destinations, overlay reveal, reduced-motion
+support and settings entry added. Unit/type/evidence gates pass (57 tests).
+Timing/hover fidelity remains explicitly UNVERIFIED; no whole-shell parity claim.
+P1 functional settings, P2 local login, P3 T3 inference and P4 MCP remain pending.

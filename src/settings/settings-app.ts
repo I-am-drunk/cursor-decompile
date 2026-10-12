@@ -3,7 +3,7 @@ const app=document.querySelector<HTMLElement>('#settings-app')!;
 const overlays=document.querySelector<HTMLElement>('#settings-overlays')!;
 const notice=document.querySelector<HTMLElement>('#settings-notice')!;
 let menu=false,returned=false,dismissed=false;
-function render(){app.innerHTML=settingsShell(location.pathname);}
+function render(){app.innerHTML=settingsShell(location.pathname.startsWith('/settings')?'/dashboard/settings':location.pathname);}
 function closeMenu(){if(!menu)return;menu=false;dismissed=true;overlays.innerHTML='';app.querySelector<HTMLButtonElement>('[data-user-menu]')?.focus();}
 function openMenu(){menu=true;dismissed=false;overlays.innerHTML=settingsUserMenu();overlays.querySelector<HTMLElement>('[role=menu]')?.focus();}
 document.addEventListener('click',event=>{

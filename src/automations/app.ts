@@ -1,3 +1,4 @@
+import { installSidebar } from '../shell/sidebar.ts';
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
 import { btn, dialog, editor, esc, field, gate, icon, link, list, runs, runSummary, shell } from './view.ts';
@@ -57,11 +58,14 @@ function render() {
   if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
   else if (params().get('state') === 'error') content = `<div class="page" role="alert">Could not load automations. ${btn('Retry','retry','outline')}</div>`;
   else if (params().get('state') === 'upgrade') content = gate();
+  else if (location.pathname==='/chat') content='<div class="page"><h1>New chat</h1><p>Chat is not connected yet. Configure inference in Settings.</p></div>';
+  else if (location.pathname==='/search') content=list(state.automations, 'team', query, page,names);
   else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen,names,referenceFixture()?referenceTime:Date.now());
   else if (id&&id!=='new') content = savedEditor(form,selectedName,errors,titleEditing,editorFixture(),triggerUi.preview());
   else if (id) content = editor(form, selectedName, errors);
   else content = list(state.automations, scope, query, page,names);
-  app.innerHTML = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '',id&&id!=='new'&&!isRuns?editorToolbar(form,dirty):'');
+  const markup = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '',id&&id!=='new'&&!isRuns?editorToolbar(form,dirty):'');
+  if (app.querySelector('main')) { const template=document.createElement('template');template.innerHTML=markup;app.querySelector('main')!.replaceWith(template.content.querySelector('main')!); } else app.innerHTML=markup;
   if (referenceFixture() && id==='evidence-automation') {
     app.querySelectorAll<HTMLInputElement>('.ed-header input,.ed-body textarea,.ed-header button,.ed-body button,.ed-toolbar button').forEach(e=>{e.disabled=true;});
   }
@@ -143,7 +147,7 @@ function renderModal() {
   } else if (modal === 'models') {
     title = 'Model'; html = `${field('Search models','model-search')}<div class="menu">${models.map(m=>
       btn(esc(m.name),`model:${m.id}`,`model-item ${form.model===m.id?'selected':''}`)).join('')}</div>
-      <p>Captured catalog subset; actual picker visibility and selection persistence on Cursor are UNVERIFIED.</p>`;
+      <p>Captured catalog subset; actual picker visibility and selection persistence on the reference are UNVERIFIED.</p>`;
   } else if (modal === 'repos') {
     title = 'Repositories'; html = `${field('Repositories (comma-separated owner/repository)','repositories',form.repositories.join(', '))}
       <p>Leave blank for no repository. Multiple repositories remain scoped to this automation.</p>`;
@@ -163,7 +167,7 @@ function renderModal() {
     footer = btn('Keep Editing','dismiss','outline')+btn('Discard','discard','outline')+btn('Save','save','primary');
   } else {
     title = modal === 'upgrade' ? 'Local preview — no checkout' : 'Original local implementation';
-    html = `<p>No Cursor account, billing, MCP or agent execution is connected. Definitions are saved on this machine.</p>
+    html = `<p>No remote account, billing, MCP or agent execution is connected. Definitions are saved on this machine.</p>
       <p>Observed: upgrade gate, Run History and a real plan-restricted failed-run summary.
       Automation-list rows remain extracted, not screenshot-certified.</p><div class="menu">
       ${link('My Settings — read-only preview','/dashboard/settings?fixture=settings-navigation','button')}
@@ -192,7 +196,7 @@ async function action(command: string) {
   if(kind==='ed-settings')return;
   if(kind==='ed-runs'){navigate(`/automations/runs?automation=${form.id}`);return;}
   if (kind === 'dismiss') { pendingPath=''; closeModal(); }
-  else if (kind === 'collapse') document.body.classList.toggle('collapsed');
+  else if (kind === 'collapse') return;
   else if (kind === 'export') await exportMeasurements();
   else if (['about','upgrade','models','repos','filters','unsaved'].includes(kind!)) openModal(kind!);
   else if (['trigger','tool','row','run','run-menu','delete'].includes(kind!)) openModal(kind!,id);
@@ -346,4 +350,5 @@ async function exportMeasurements() {
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 document.addEventListener('click',e=>{if ((e.target as Element).closest('[data-act="reload"]')) void boot();});
+installSidebar();
 void boot();

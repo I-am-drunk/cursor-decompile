@@ -62,7 +62,6 @@ dialog::backdrop{background:#0003}.dialog-header{display:flex;justify-content:sp
 .menu h3{color:var(--muted);font-size:12px;margin:12px 8px 4px}.menu .selected{background:#e5e5e5}.menu hr{border:0;border-top:1px solid var(--line);width:100%}
 pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eee;padding:12px;border-radius:6px;font:12px/18px monospace}.danger{color:#a43232}
 #toast:not(:empty){position:fixed;bottom:20px;right:20px;max-width:380px;border-radius:8px;border:1px solid var(--line);padding:12px 16px;background:#fff;box-shadow:0 4px 20px #0002;z-index:5}
-body.collapsed aside{width:56px}body.collapsed .side-nav,body.collapsed .no-agents,body.collapsed .account,body.collapsed .brand strong,body.collapsed .brand>span,body.collapsed .brand button:last-child{display:none}
 @media(max-width:800px){aside{width:200px}.page{padding-left:24px;padding-right:24px}.stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:639px){aside{display:none}.page{padding:24px}.toolbar{flex-wrap:wrap}.title-row{align-items:flex-start}.editor .title-row{flex-wrap:wrap}.metadata{gap:8px}.run-row{grid-template-columns:1fr 1fr}.run-row>span:last-child{display:none}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
