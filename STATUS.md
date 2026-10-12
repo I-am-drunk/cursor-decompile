@@ -67,3 +67,14 @@ P2 login [#21](https://github.com/I-am-drunk/cursor-decompile/pull/21),
 P3 inference [#22](https://github.com/I-am-drunk/cursor-decompile/pull/22) merged.
 P4 MCP [#23](https://github.com/I-am-drunk/cursor-decompile/pull/23) completes
 this ordered product series, not whole-reference parity.
+
+## P3 protocol correction — 0.0.45
+
+Updated the obsolete 0.0.22 auth/version pin to the supplied 0.0.45 contract:
+form-encoded bootstrap exchange, fresh per-connection WebSocket tickets and
+protocol query; retained required Request headers and per-automation model IDs.
+75 app/reader + 6 MCP tests pass; all 745 private source pins reproduce.
+Live read-only bearer pairing/discovery/reconnect passed through a temporary
+trusted loopback TLS proxy; no remote projects, threads or turns were created.
+[Evidence and boundaries](facts/t3-bridge.md). Live bootstrap/turn acceptance,
+direct HTTP pairing, username-project folders and connector bundles remain open.

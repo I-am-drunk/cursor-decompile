@@ -1,6 +1,6 @@
 import type { ProviderModel } from './provider.ts';
-export const T3_REVISION='b85578aab837c33df5431b5387fffd0021d803a6';
-export const T3_VERSION='0.0.22';
+export const T3_REVISION='6c8fed35dded9ff71c5b46807125457acbb76be6';
+export const T3_VERSION='0.0.45';
 export function parseConfig(input:unknown):{version:string;models:ProviderModel[]}{
  const config=input as {environment?:{serverVersion?:string};providers?:unknown[]};
  if(config?.environment?.serverVersion!==T3_VERSION)throw Error(`Incompatible T3 server version. Supported: ${T3_VERSION} (audit ${T3_REVISION.slice(0,7)}).`);
