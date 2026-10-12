@@ -24,7 +24,7 @@ export function linearPlugin(description:string,expanded=false):string {
     <h2 id="lc-plugin-heading" class="lc-sr-only">Browse MCPs</h2>
     <div class="lc-plugin-header" data-evidence="lp-header"><span class="lc-logo" aria-hidden="true">◈</span>
       <div class="lc-plugin-meta"><p data-evidence="lp-name">Linear</p>
-      <p data-evidence="lp-publisher">Linear · <span>♧ Verified by Cursor</span></p></div></div>
+      <p data-evidence="lp-publisher">Linear · <span>♧ Reference catalogue</span></p></div></div>
     <div class="lc-description ${expanded?'expanded':''}" data-evidence="lp-description">
       <span data-evidence="lp-description-text">${esc(description)}</span>
       ${expanded?'':btn('Show More','ed-linear-more','','data-evidence="lp-more"')}</div>

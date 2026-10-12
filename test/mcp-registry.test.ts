@@ -1,0 +1,33 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { McpRegistry } from '../src/mcp/registry.ts';
+import { RunEngine } from '../src/inference/runtime.ts';
+import { ProviderRegistry } from '../src/inference/provider.ts';
+import { Store } from '../src/store.ts';
+import { draft,parseAutomation } from '../src/automations/model.ts';
+test('registry persists secret-safe CRUD, revisions, scopes and all five connection states',async()=>{
+ const path=join(await mkdtemp(join(tmpdir(),'registry-')),'data'),r=new McpRegistry(path);
+ let entry=await r.save({name:'Server',url:'https://example.com/mcp',credential:'PRIVATE',env:{KEY:'HIDDEN'}});
+ assert.doesNotMatch(JSON.stringify(await r.list()),/PRIVATE|HIDDEN/);assert.deepEqual((await new McpRegistry(path).list())[0]!.envKeys,['KEY']);
+ assert.equal((await r.resolve({name:'server',scope:'user'})).entry!.id,entry.id);
+ assert.equal((await r.resolve({name:'server',serverId:'missing'})).connection.state,'missing');
+ assert.equal((await r.list())[0]!.connection.state,'disconnected');
+ entry=await r.save({...entry,auth:'bearer',credential:''});assert.equal((await r.list())[0]!.connection.state,'needs auth');
+ entry=await r.save({...entry,credential:'PRIVATE'});r.client={probe:async()=>({state:'connected',message:'ok',tools:['read']})};
+ assert.equal((await r.probe(entry.id)).state,'connected');
+ r.client={probe:async()=>({state:'error',message:'failed',tools:[]})};assert.equal((await r.probe(entry.id)).state,'error');
+ await assert.rejects(r.save({...entry,revision:0}),/Reload/);
+ await assert.rejects(r.save({name:'Bad',url:'http://127.0.0.1',auth:'bearer',credential:'no'}),/HTTPS/);
+ await r.remove(entry.id,entry.revision);assert.equal((await r.resolve({name:'server',serverId:entry.id})).connection.state,'missing');
+});
+test('portable MCP bindings validate grants and never silently execute tool-less',async()=>{
+ const store=new Store(join(await mkdtemp(join(tmpdir(),'binding-')),'data'),{start:async()=>{throw Error('must not execute');}});
+ store.adapter=new RunEngine(store,new ProviderRegistry());
+ const definition={...draft(),name:'Bound',prompt:'Read',triggers:[{id:'t',kind:'Schedule' as const,event:'Cron',value:'0 9 * * *'}],tools:[{id:'tool',kind:'MCP' as const,name:'Portable',url:'',serverId:'external-id',allowedTools:[],approval:'ask' as const}]};
+ const saved=await store.save(definition);assert.equal(saved.tools[0]!.serverId,'external-id');
+ await assert.rejects(store.start(saved.id),/MCP invocation/);
+ assert.throws(()=>parseAutomation({...definition,tools:[{...definition.tools[0],allowedTools:42}]}),/grants/);
+});

@@ -4,6 +4,10 @@ cd "$(dirname "$0")/.."
 ./node_modules/.bin/tsc --noEmit
 node --test pipeline/read.test.mjs test/*.test.ts test/*.test.mjs
 node pipeline/check-evidence.mjs
+if [ -f mcp/package.json ]; then
+  test -d mcp/node_modules || { echo "Run npm --prefix mcp ci first." >&2; exit 1; }
+  npm --prefix mcp run check
+fi
 git diff --check
 if [ "${1:-}" = "--reference" ]; then
   node pipeline/check-evidence.mjs "${REFERENCE_DIR:-reference/automations}"

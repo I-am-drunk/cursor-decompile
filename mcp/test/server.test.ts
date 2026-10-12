@@ -1,0 +1,44 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
+import { createMcpServer } from '../server.ts';
+import { service } from './support.ts';
+import type { Automation,Run } from '../../src/automations/model.ts';
+test('official SDK client manages automation lifecycle and resources',async()=>{
+ const management=await service(),server=createMcpServer(management),client=new Client({name:'external-test-client',version:'1'});
+ const [a,b]=InMemoryTransport.createLinkedPair();await server.connect(a);await client.connect(b);
+ const call=async<T>(name:string,args:Record<string,unknown>={}):Promise<T>=>{const r=await client.callTool({name,arguments:args});assert.ok(!r.isError,JSON.stringify(r));return JSON.parse((r.content as {text:string}[])[0]!.text) as T;};
+ try{
+  assert.equal((await client.listTools()).tools.length,24);
+  const models=await call<{id:string}[]>('models_list');assert.equal(models[0]!.id,'fixture-model');
+  let item=await call<Automation>('automations_create',{definition:{name:'Review',prompt:'hold',model:models[0]!.id}});
+  const id=item.id;assert.equal((await call<Automation[]>('automations_list')).length,1);
+  assert.equal((await call<Automation>('automations_get',{id})).name,'Review');
+  item=await call('automations_update',{id,revision:item.revision,patch:{name:'Updated'}});
+  item=await call('triggers_add',{id,revision:item.revision,trigger:{kind:'Schedule',event:'Cron',value:'0 9 * * *'}});
+  item=await call('triggers_update',{id,revision:item.revision,triggerId:item.triggers[0]!.id,trigger:{kind:'Schedule',event:'Cron',value:'0 10 * * *'}});
+  item=await call('automations_enable',{id,revision:item.revision});assert.equal(item.enabled,true);
+  const run=await call<Run>('runs_trigger',{id});assert.equal(run.status,'running');
+  await call('runs_cancel',{id:run.id});
+  for(let i=0;i<30&&(await call<Run>('runs_get',{id:run.id})).status==='running';i++)await new Promise(r=>setTimeout(r,10));
+  assert.equal((await call<Run>('runs_get',{id:run.id})).status,'cancelled');
+  assert.equal((await call<Run[]>('runs_list',{automationId:id})).length,1);
+  assert.match(JSON.stringify(await client.readResource({uri:`workspace://automations/${id}`})),/Updated/);
+  assert.match(JSON.stringify(await client.readResource({uri:`workspace://runs/${run.id}`})),/cancelled/);
+  assert.match(JSON.stringify(await client.readResource({uri:'workspace://models/fixture-model'})),/fixture-model/);
+  assert.equal((await client.listResourceTemplates()).resourceTemplates.length,3);
+  assert.ok((await client.listResources()).resources.length>=3);
+  assert.equal((await client.listPrompts()).prompts[0]!.name,'create-automation');
+  assert.match(JSON.stringify(await client.getPrompt({name:'create-automation',arguments:{task:'Review changes'}})),/never invent/);
+  const copy=await call<Automation>('automations_duplicate',{id});assert.equal(copy.enabled,false);
+  item=await call('automations_disable',{id,revision:item.revision});
+  item=await call('triggers_remove',{id,revision:item.revision,triggerId:item.triggers[0]!.id});
+  assert.equal(item.triggers.length,0);
+  const error=await client.callTool({name:'automations_update',arguments:{id,revision:1,patch:{name:'stale'}}});assert.equal(error.isError,true);
+  const invalid=await client.callTool({name:'automations_create',arguments:{definition:{name:'No model'}}});assert.equal(invalid.isError,true);
+  const settings=await call<{revision:number}>('settings_get');
+  const saved=await call('settings_update',{section:'inference',revision:settings.revision,values:{credential:'PRIVATE-MCP-SECRET'}});assert.ok(!JSON.stringify(saved).includes('PRIVATE-MCP-SECRET'));
+  await call('automations_delete',{id,revision:item.revision});await call('automations_delete',{id:copy.id,revision:copy.revision});assert.deepEqual(await call('automations_list'),[]);
+ }finally{await client.close();await server.close();}
+});

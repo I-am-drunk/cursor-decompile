@@ -1,0 +1,6 @@
+{
+  "name":"workspace-automation-mcp","private":true,"type":"module",
+  "engines":{"node":">=22.18"},
+  "scripts":{"start":"node main.ts","http":"node main.ts --http","check":"../node_modules/.bin/tsc -p tsconfig.json && node --test test/*.test.ts"},
+  "dependencies":{"@modelcontextprotocol/sdk":"1.32.1"}
+}

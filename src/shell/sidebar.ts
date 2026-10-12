@@ -21,7 +21,7 @@ export function installSidebar(root: Document = document): () => void {
       dismissed = false; root.body.classList.remove('rail-revealed');
     }
   }, options);
-  root.addEventListener('focusin', e => { if (inside(e.target) && !(e.target as Element).closest('[data-act="collapse"]')) root.body.classList.add('rail-focus'); }, options);
+  root.addEventListener('focusin', e => { root.body.classList.toggle('rail-focus', inside(e.target) && !(e.target as Element).closest('[data-act="collapse"]')); }, options);
   root.addEventListener('focusout', e => { if (!inside(e.relatedTarget)) root.body.classList.remove('rail-focus'); }, options);
   root.addEventListener('dragover', e => { if (collapsed && inside(e.target)) root.body.classList.add('rail-revealed'); }, options);
   root.addEventListener('dragleave', e => { if (!inside(e.relatedTarget)) root.body.classList.remove('rail-revealed'); }, options);
@@ -30,7 +30,7 @@ export function installSidebar(root: Document = document): () => void {
     if ((e.metaKey || e.ctrlKey) && e.altKey && e.code === 'KeyB') {
       e.preventDefault(); collapsed = !collapsed; sync();
     }
-    if (e.key === 'Escape') { dismissed = true; root.body.classList.remove('rail-revealed'); }
+    if (e.key === 'Escape') { dismissed = true; root.body.classList.remove('rail-revealed','rail-focus'); }
   }, options);
   return () => controller.abort();
 }

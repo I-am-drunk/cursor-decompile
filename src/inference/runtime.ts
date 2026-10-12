@@ -6,7 +6,7 @@ import type { TurnEvent } from './provider.ts';
 export class RunEngine implements ExecutionAdapter {
  store:Store;providers:ProviderRegistry;active=new Map<string,AbortController>();
  constructor(store:Store,providers:ProviderRegistry){this.store=store;this.providers=providers;}
- async start(a:Automation):Promise<Run>{return {id:randomUUID(),automationId:a.id,name:a.name,status:'running',createdAt:new Date().toISOString(),output:'',model:a.model};}
+ async start(a:Automation):Promise<Run>{if(a.tools.some(t=>t.kind==='MCP'))throw Error('MCP invocation in runs is not wired. No run was started.');return {id:randomUUID(),automationId:a.id,name:a.name,status:'running',createdAt:new Date().toISOString(),output:'',model:a.model};}
  afterStart(run:Run,a:Automation){
   const controller=new AbortController();this.active.set(run.id,controller);
   const messages=new Map<string,string>();
