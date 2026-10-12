@@ -6,7 +6,7 @@ import { btn, esc, icon } from './view.ts';
 import { presetRow, presetWarning } from './preset-view.ts';
 import { connectionWarning, linearRow } from './connection-view.ts';
 export function editorToolbar(a:Automation,dirty:boolean):string {
-  return `<div class="ed-toolbar">${btn('Save','save','ed-save',`${dirty?'':'disabled'} data-evidence="ed-save"`)}
+  return `<div class="ed-toolbar">${btn(a.id?'Save':'Create','save','ed-save',`${dirty?'':'disabled'} data-evidence="ed-save"`)}
     ${a.id?btn(`▷ Test`,'test','outline','data-evidence="ed-test"'):''}
     ${btn(icon('menu'),`row:${a.id}`,'icon','aria-label="More actions"')}</div>`;
 }
@@ -59,7 +59,7 @@ export function browseMcp(providers:McpProvider[],query:string):string {
     <div class="ed-browse-scroll" data-evidence="eb-scroll"><div class="ed-provider-grid">${shown.map(p=>
       `<button class="ed-provider ${p.name==='Custom MCP'?'custom':''}" data-act="${p.name==='Custom MCP'?'ed-custom':'ed-provider:'+p.id}" ${p.name==='Custom MCP'?'data-evidence="eb-custom"':['provider-1','provider-2'].includes(p.id)?`data-evidence="eb-${p.id}"`:p.name==='Linear'?'data-evidence="lc-provider"':''}>
         <span class="provider-icon" aria-hidden="true">${p.name==='Custom MCP'?'+':esc(p.name.slice(0,1))}</span>
-        <span class="provider-copy"><span>${esc(p.name)}</span><span>${esc(p.description.replace(/\bcursor\.com\b/gi,'the provider website').replace(/\bCursor\b/gi,'Workspace'))}</span></span>${p.name==='Custom MCP'?'':'<span>›</span>'}
+        <span class="provider-copy"><span>${esc(p.name)}</span><span>${esc(p.description)}</span></span>${p.name==='Custom MCP'?'':'<span>›</span>'}
       </button>`).join('')}${shown.length?'':'<p>No results found</p>'}</div></div></div></dialog>`;
 }
 const mcpInput=(name:string,value:string,placeholder:string,attrs='')=>

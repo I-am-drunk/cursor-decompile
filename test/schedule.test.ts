@@ -33,8 +33,8 @@ test('custom cron, timezone search and schedule controls escape user values',()=
  const trigger=makePreset(3)!;trigger.value='</textarea><script>bad</script>';
  assert.doesNotMatch(customSchedule(trigger.value,'UTC','bad'),/<script>/);
  assert.match(customSchedule('bad','UTC','Invalid cron'),/role="alert"/);
- assert.match(scheduleRow(makePreset(0)!),/aria-label="Minute"/);
- assert.match(scheduleRow(makePreset(2)!),/aria-label="Weekday"/);
+ assert.match(scheduleRow(makePreset(0)!),/aria-label="Minute within hour"/);
+ assert.match(scheduleRow(makePreset(2)!),/aria-label="Select weekday"/);
  assert.match(timezoneMenu('not-a-timezone','UTC'),/No timezones found/);
  assert.match(timezoneMenu('tokyo','UTC'),/Asia\/Tokyo/);
 });

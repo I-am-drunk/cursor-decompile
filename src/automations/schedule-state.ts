@@ -1,3 +1,4 @@
+import { cronFieldError } from './preset-state.ts';
 import { validCron } from './model.ts';
 import type { Trigger, Schedule } from './model.ts';
 export const scheduleLabels = ['Every hour','Every day','Every week','Custom schedule'];
@@ -15,6 +16,7 @@ export function presetCron(schedule:Schedule):string {
 export function updateSchedule(trigger:Trigger,field:string,value:string):boolean {
   const s=scheduleOf(trigger);
   if(field==='time'&&/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value))s.time=value;
+  else if(field==='hour'&&/^\d{1,2}$/.test(value)&&Number(value)<24)s.time=`${value.padStart(2,'0')}:${s.time.slice(3)}`;
   else if(field==='minute'&&/^\d{1,2}$/.test(value)&&Number(value)<60)s.time=`${s.time.slice(0,3)}${value.padStart(2,'0')}`;
   else if(field==='day'&&/^[0-6]$/.test(value))s.day=Number(value);
   else if(field==='zone'&&timeZoneValid(value))s.timeZone=value;
@@ -24,5 +26,5 @@ export function updateSchedule(trigger:Trigger,field:string,value:string):boolea
   return true;
 }
 export function cronError(value:string):string {
-  return validCron(value)?'':'Enter a valid cron expression: 5–7 numeric fields or @daily/@hourly.';
+  return cronFieldError(value)||(validCron(value)?'':'No upcoming runs found');
 }
