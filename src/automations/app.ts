@@ -2,7 +2,7 @@ import { ScheduleController } from './schedule-controller.ts';
 import { installSidebar } from '../shell/sidebar.ts';
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
-import { btn, dialog, esc, field, notFound, icon, link, list, runs, runSummary, shell } from './view.ts';
+import { btn, dialog, esc, field, notFound, icon, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
 import { TriggerController } from './trigger-controller.ts';
@@ -167,26 +167,7 @@ function renderModal() {
     title = 'Filter by'; html = `<div class="menu"><h3>Status</h3>${['running','failed','succeeded','skipped'].map(s=>
       btn(s[0]!.toUpperCase()+s.slice(1),`status:${s}`,params().get('status')===s?'selected':'')).join('')}
       <hr>${btn('Clear all filters','status:')}</div><p>Automation filtering is available from its editor's Run History link. Trigger/tool filters remain UNVERIFIED.</p>`;
-  } else if (modal === 'unsaved') {
-    title = 'Unsaved Changes'; html = '<p>Save or discard changes before continuing.</p>';
-    footer = btn('Keep Editing','dismiss','outline')+btn('Discard','discard','outline')+btn('Save','save','primary');
-  } else {
-    title = 'Local preview';
-    html = `<p>Preview captured automation states. Definitions are saved on this machine.</p>
-      <p>Observed: Run History and a failed-run summary.
-      Automation-list rows remain extracted, not screenshot-certified.</p><div class="menu">
-      ${link('Settings','/settings','button')}
-      ${link('Local automation list','/automations','button')}
-      ${link('Observed empty Run History','/automations/runs','button')}${link('Synthetic run states','/automations/runs?fixture=runs','button')}
-      ${link('Reference-derived failed run','/automations/runs?fixture=observed-failure','button')}
-      ${link('Reference-derived saved editor','/automations/editor-fixture?fixture=saved-editor','button')}
-      ${link('Captured trigger controls','/automations/editor-fixture?fixture=saved-editor&controls=triggers','button')}
-      ${link('Preset and validation captures','/automations/editor-fixture?fixture=saved-editor&controls=presets','button')}
-      ${link('Unconnected Linear and MCP','/automations/editor-fixture?fixture=saved-editor&controls=connections','button')}
-      ${link('Run filter acceptance','/automations/runs?fixture=observed-failure&controls=filters','button')}
-      ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
-      ${btn('Export layout measurements','export')}</div>`;
-  }
+  } else { closeModal(); return; }
   overlays.innerHTML = dialog(title,html,footer);
   activateDialog();
 }
@@ -205,7 +186,7 @@ async function action(command: string) {
   if (kind === 'dismiss') { pendingPath=''; closeModal(); }
   else if (kind === 'collapse') return;
   else if (kind === 'export') await exportMeasurements();
-  else if (['about','models','repos','filters','unsaved'].includes(kind!)) openModal(kind!);
+  else if (['models','repos','filters','unsaved'].includes(kind!)) openModal(kind!);
   else if (['trigger','tool','row','run','run-menu','delete'].includes(kind!)) openModal(kind!,id);
   else if (kind === 'scope') { scope=id; page=1; render(); }
   else if (kind === 'prev' || kind === 'next') { page=Math.max(1,page+(kind==='next'?1:-1)); render(); }

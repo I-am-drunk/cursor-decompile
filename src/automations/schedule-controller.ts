@@ -41,7 +41,6 @@ export class ScheduleController {
  }
  changed(){const command=this.anchor?.dataset.act;this.host.changed();this.close();this.host.render();if(command)[...document.querySelectorAll<HTMLElement>('[data-act]')].find(e=>e.dataset.act===command)?.focus();}
  input(input:HTMLInputElement):boolean {
-  if(input.dataset.schedule){const t=this.host.form().triggers.find(t=>t.id===input.dataset.schedule);if(t&&updateSchedule(t,input.dataset.field!,input.value))this.host.changed();return true;}
   if(input.name==='sc-search'){this.query=input.value;this.render();return true;}
   if(input.name==='sc-cron'){
    this.value=input.value;this.error=cronError(this.value);
@@ -49,7 +48,6 @@ export class ScheduleController {
    const error=this.host.overlays.querySelector<HTMLElement>('.sc-error');if(error){error.textContent=this.error;error.hidden=!this.error;}
    return true;
   }
-  if(input.name==='sc-custom-zone'){this.zone=input.value;this.error='';return true;}
   return false;
  }
  render(){
