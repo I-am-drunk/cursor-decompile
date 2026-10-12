@@ -25,7 +25,7 @@ export function accountPanel():string {
   ${row('Last Name','last','<input aria-label="Last name" value="Preview" readonly data-evidence="st-last">')}
   ${row('Handle','handle',button('Claim handle','claim'))}
   <div class="links" role="group" aria-label="Profile page links">${row('Link 1','link','<input aria-label="Link 1" placeholder="x.com/handle" readonly data-evidence="st-link">')}${row('','add',button('Add link','add-link'))}</div>
-  <div class="setting-row public-row"><div><div ${evidence('public-label')}>Public profile</div><p ${evidence('public-copy')}>When enabled, your cursor.com profile page is visible to anyone with the link.</p></div>${button('<span></span>','public','role="switch" aria-label="Public profile" aria-checked="false"')}</div>
+  <div class="setting-row public-row"><div><div ${evidence('public-label')}>Public profile</div><p ${evidence('public-copy')}>When enabled, your public profile page is visible to anyone with the link.</p></div>${button('<span></span>','public','role="switch" aria-label="Public profile" aria-checked="false"')}</div>
   <footer>${button('Save','save','disabled aria-disabled="true"')}</footer></div>
   <p class="local-note">Read-only local preview. Identity is synthetic; account changes and lower settings panels are unavailable.</p></section>`;
 }
@@ -39,7 +39,7 @@ export function overviewPanel():string {
 export function settingsUserMenu():string {
   return `<div class="user-menu" role="menu" tabindex="-1" aria-label="User menu" ${evidence('menu')}>
     <div class="menu-profile"><div>Local preview</div><small>local@example.invalid</small>${button('✧ &nbsp; Upgrade to Pro','menu-upgrade')}</div><hr>
-    ${menuRow('Download Cursor','download','↓')}${menuRow('Appearance','appearance','◐','System ›')}${menuRow('Help','help','?','›')}<hr>${menuRow('Log Out','logout','⇥')}
+    ${menuRow('Download desktop app','download','↓')}${menuRow('Appearance','appearance','◐','System ›')}${menuRow('Help','help','?','›')}<hr>${menuRow('Log Out','logout','⇥')}
   </div>`;
 }
 function menuRow(label:string,id:string,glyph:string,after=''):string {

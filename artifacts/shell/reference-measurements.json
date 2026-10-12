@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-10-12", "route": "https://cursor.com/automations",
+  "referenceVersion": "web build unknown; stylesheet 29wtpk9gap-0n.css",
+  "screenshotViewport": [1270, 764], "measurementViewport": [936, 764], "devicePixelRatio": 2,
+  "accountState": "signed-in Free, upsell; identity cropped out",
+  "collapsedWidth": 44, "expandedWidth": 280,
+  "clipTimingFunction": "cubic-bezier(0.22, 1, 0.36, 1)",
+  "clickToggle": {"samples": 41, "firstMs": 9, "lastMs": 652, "computedDuration": "0s", "reducedMotion": false},
+  "collapsedDestinations": ["Open sidebar", "New Chat", "Automations", "Codebase"],
+  "dragOver": "No expansion observed; text selection occurred. Pure hover not measurable with this Computer Use interface.",
+  "normalMotionDuration": "UNVERIFIED",
+  "rawLocators": ["corpus/shell-2026-10-12/measurements.txt", "corpus/shell-2026-10-12/timing-result.txt", "corpus/shell-2026-10-12/motion.txt"]
+}
