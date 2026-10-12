@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { SettingsStore } from '../src/settings/store.ts';
 import { liveSettings } from '../src/settings/live-view.ts';
-import { sections } from '../src/settings/schema.ts';
+import { settingsSections } from '../src/settings/routes.ts';
 test('all settings sections persist, redact credentials and reject stale writes',async()=>{
  const file=join(await mkdtemp(join(tmpdir(),'settings-')),'prefs.json'),s=new SettingsStore(file);
  let value=await s.read();
@@ -14,7 +14,7 @@ test('all settings sections persist, redact credentials and reject stale writes'
  assert.deepEqual(await new SettingsStore(file).read(),value);assert.equal(value.revision,5);
  assert.doesNotMatch(JSON.stringify(value),/TOP-SECRET|LINEAR-SECRET/);
  assert.equal(await s.secret('inference'),'TOP-SECRET');assert.equal((await stat(file)).mode&0o777,0o600);
- for(const section of sections)assert.doesNotMatch(liveSettings(value,section),/<script>/);
+ for(const section of settingsSections)assert.doesNotMatch(liveSettings(value,section),/<script>/);
  await assert.rejects(s.update({section:'account',values:{displayName:'stale'},revision:0}),/Reload/);
  const before=await readFile(file,'utf8');
  await assert.rejects(s.update({section:'inference',values:{credential:'REPLACE',unknown:1},revision:5}));
@@ -28,7 +28,7 @@ test('settings HTTP route saves and reloads without exposing credentials',async(
  const address=server.address();assert.ok(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;
  const send=await signIn(base);
  try{
-  assert.equal((await send('/settings/inference')).status,200);
+  assert.equal((await send('/settings/linear')).status,200);
   assert.equal((await send('/settings/live-app.ts')).status,200);
   const result=await send('/api/settings',{method:'PATCH',headers:{'Content-Type':'application/json','X-Local-Request':'1'},body:JSON.stringify({section:'inference',values:{credential:'PRIVATE'},revision:0})});
   assert.equal(result.status,200);assert.doesNotMatch(await result.text(),/PRIVATE/);
