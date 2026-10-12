@@ -17,3 +17,5 @@ main:has(.overview) h1{margin-bottom:20px}.overview-grid{display:grid;grid-templ
 @media(max-width:800px){aside{width:220px}.user{width:203px}.user>span:nth-child(2){width:115px}.sidebar-bottom>button:first-child{width:183px}main{margin-left:220px;padding:32px 24px}.overview-grid{grid-template-columns:1fr}.profile-image{flex-wrap:wrap}.image-row{height:auto}.profile-image small{display:none}.user-menu{left:8px}}
 html{scrollbar-width:thin}.learn button{display:block;position:relative;top:.5px}
 .user-menu{border-radius:6px}.user-menu .menu-profile small{font-size:12px;line-height:16px}.download{border-radius:12px}
+[data-evidence=st-usage-title],.usage>div:last-child{color:oklab(.191251 -7.45058e-9 0/.6)}
+.plan-title small{color:var(--muted)}.progress{background:oklab(.696516 -.0214837 -.0550658/.1)}
