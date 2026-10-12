@@ -10,7 +10,7 @@ export function triggerMenu(query:string,submenu:boolean):string {
       placeholder="Search Triggers..." value="${esc(query)}" data-evidence="tr-search"></div>
     <div id="trigger-options" class="tr-options" role="listbox" aria-label="Triggers" data-evidence="tr-options">
       ${choices.map(name=>`<div role="option" tabindex="-1" aria-selected="false" data-act="tr-provider:${name}"
-        ${name==='Scheduled'?'aria-haspopup="menu" aria-controls="schedule-options"':''}
+        ${name==='Scheduled'?'aria-haspopup="menu" aria-controls="schedule-options"':name==='Linear'?'aria-haspopup="menu"':''}
         class="tr-option" data-evidence="tr-row-${triggerChoices.indexOf(name)}">
         <span class="tr-symbol">${name==='Scheduled'?icon('clock'):name==='Webhook Triggered'?icon('plug'):'◇'}</span>
         <span class="tr-label" data-evidence="tr-label-${triggerChoices.indexOf(name)}">${name}</span>

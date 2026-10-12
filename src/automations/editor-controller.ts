@@ -2,6 +2,7 @@ import type { Automation, Tool } from './model.ts';
 import { blankMcp, parseMcp, serializeMcp, validateMcp } from './editor-state.ts';
 import type { EditorModel, McpConfig, McpProvider } from './editor-state.ts';
 import { browseMcp, mcpForm, modelMenu, toolsMenu } from './editor-view.ts';
+import { linearPlugin } from './connection-view.ts';
 interface Host {
   form:()=>Automation; render:()=>void; changed:()=>void; closeOther:()=>void;
   notify:(message:string)=>void; overlays:HTMLElement;
@@ -11,10 +12,12 @@ export class EditorController {
   host:Host; models:EditorModel[]=[]; providers:McpProvider[]=[];
   panel=''; optionsFor=''; query=''; config=blankMcp(); json=false; text='';
   error=''; jsonHeight=156; editing=''; busy=false; anchor='ed-tools';
+  linearExpanded=false;linearReturned=false;
   constructor(host:Host){this.host=host;}
   close(){this.panel='';this.optionsFor='';this.host.overlays.innerHTML='';
     document.querySelector<HTMLButtonElement>(`[data-act="${this.anchor}"]`)?.focus();}
   open(panel:string){this.host.closeOther();this.panel=panel;this.error='';this.query='';
+    if(panel==='browse')this.linearReturned=false;
     if(panel==='models')this.anchor='ed-models';else if(panel==='tools')this.anchor='ed-tools';this.render();}
   async handle(command:string):Promise<boolean>{
     const [action,id='',value='']=command.split(':');
@@ -24,7 +27,14 @@ export class EditorController {
     if(action==='ed-close'){this.close();return true;}
     if(action==='ed-custom'){this.config=blankMcp();this.editing='';this.json=false;this.open('custom');return true;}
     if(action==='ed-models'){this.optionsFor='';this.open('models');return true;}
-    if(action==='ed-provider'){this.host.notify('Provider authorization is not connected in this local build.');return true;}
+    if(action==='ed-provider'){
+      if(this.providers.find(p=>p.id===id)?.name==='Linear'){this.panel='linear-plugin';this.linearExpanded=false;this.render();}
+      else this.host.notify('Provider authorization is not connected in this local build.');
+      return true;
+    }
+    if(action==='ed-linear-more'){this.linearExpanded=true;this.render();return true;}
+    if(action==='ed-linear-back'){this.panel='browse';this.linearReturned=true;this.render();return true;}
+    if(action==='ed-linear-add'){this.host.notify('Plugin installation and authorization are unavailable in this local build. No changes were made.');return true;}
     if(action==='ed-mcp-type'){this.collect();this.config.type=id==='command'?'command':'url';this.render();return true;}
     if(action==='ed-mcp-json'){
       try{if(this.json){this.config=parseMcp(this.text);this.json=false;}
@@ -87,6 +97,7 @@ export class EditorController {
     const root=this.host.overlays,focused=document.activeElement as HTMLInputElement,name=focused?.name,position=focused?.selectionStart;
     const a=this.host.form(),m=this.models.find(m=>m.id===a.model);
     if(this.panel==='tools'||this.panel==='mcp-menu')root.innerHTML=toolsMenu(a,this.panel==='mcp-menu');
+    else if(this.panel==='linear-plugin')root.innerHTML=linearPlugin(this.providers.find(p=>p.name==='Linear')?.description??'',this.linearExpanded);
     else if(this.panel==='browse')root.innerHTML=browseMcp(this.providers,this.query);
     else if(this.panel==='custom')root.innerHTML=mcpForm(this.config,this.json,this.text,this.error,this.jsonHeight);
     else if(this.panel==='models')root.innerHTML=modelMenu(this.models,a.model,a.modelParameters??(a.model==='composer-2.5'?{fast:'false'}:m?.defaults??{}),this.query,this.optionsFor);
@@ -115,6 +126,7 @@ export class EditorController {
     if(!this.panel)return false;
     if(target.name==='provider-search'||target.name==='ed-model-search'){
       this.query=target.value;
+      if(target.name==='provider-search')this.linearReturned=false;
       if(target.name==='ed-model-search')this.optionsFor='';
       this.render();return true;
     }
@@ -149,5 +161,11 @@ export class EditorController {
     if(this.panel==='custom')return this.json?'mcp-json':this.config.type==='command'?'mcp-command':'mcp-url';
     if(this.panel==='models')return this.optionsFor?'model-options':'model-picker';
     return ({tools:'tools-menu','mcp-menu':'mcp-menu',browse:'mcp-browse'} as Record<string,string>)[this.panel]??'saved-editor';
+  }
+  captureConnectionState():string {
+    if(this.panel==='linear-plugin')return this.linearExpanded?'mcp-linear-expanded':'mcp-linear-unconnected';
+    if(this.panel==='browse')return this.linearReturned?'mcp-returned':'mcp-linear-search';
+    if(this.panel==='mcp-menu')return 'mcp-unconfigured';
+    return this.captureState();
   }
 }
