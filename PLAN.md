@@ -5,7 +5,7 @@ one visible state or interaction per PR; claim the exact slice on #1.
 
 | Order | Lane | Surface / first slice | Acceptance evidence |
 |---|---|---|---|
-| 1 | C-AUTOMATIONS | next: preset schedule and validation/dirty-state capture; Add Trigger/custom-cron and saved-editor/MCP measured subsets verified | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
+| 1 | C-AUTOMATIONS | next: Linear trigger submenu and unconnected configuration capture; preset/validation, Add Trigger and editor/MCP measured subsets verified | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
 | 2 | C-SETTINGS | settings navigation, account/team, models, integrations, MCP | navigation and one panel at a time; measured UI facts |
 | 3 | C-SHELL | window, sidebar, command palette, navigation | route/state/keyboard captures |
 | 4 | C-AGENTS | agent list, conversation, tool results, review, projects | loading/empty/populated/error states and interactions |
@@ -74,9 +74,14 @@ reproduces the captured menu, custom-cron and dismissal subset: 35 tests,
 Local parser, commit and preset policies are explicitly DESIGN; no scheduler
 or authorization/execution integration was added.
 
-Next thin slice: **capture hourly/daily/weekly configuration forms and
-validation/dirty states** in unsaved drafts of the disabled private fixture.
-Discard changes; do not Save, Test, activate or authorize providers.
-Only then replace their DESIGN controls. Event-provider authorization,
-live MCP and execution remain separate adapter work; a plan-enabled populated
-main list remains an access gap.
+The [preset/validation follow-up](facts/automations-preset-verification.md)
+adds hourly/daily/weekly/custom rows, day/time selectors, live validation and
+the unsaved guard. Nineteen private capture triples support eighteen added
+local comparison states: 43 tests, 1,736 measured checks and 360 source pins
+pass, preserving all prior 992 comparisons.
+
+Next thin slice: **capture the Linear trigger submenu and unconnected
+configuration states**, in an unsaved disabled fixture. Do not Save, Test,
+activate or authorize providers. Implement only the observed configuration
+subset afterward. Server-side cron validation, live MCP/execution and
+plan-enabled populated-list parity remain distinct gaps.

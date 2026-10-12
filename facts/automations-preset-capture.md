@@ -31,7 +31,8 @@ Web build unspecified. Hashes below identify the captured reference.
 | `weekly-selected` | `47d953aa80640a2268bd2ffdadd1a0f70c3831241c7eb6ddf89356161dd04a2b` |
 | `weekly-time` | `0cddb18b41a604f740e6b83e2bca41d45075db2d830f87b601cd40ac10964fa0` |
 
-Capture checkpoint only; implementation and same-state local verification follow.
+The [implementation and measured verification](automations-preset-verification.md)
+now follow this capture checkpoint.
 `invalid-escape` and `invalid-outside` retain the invalid popup: neither action
 dismissed it. The out-of-range expression showed a no-upcoming-runs message,
 not a syntax error; this does not establish server acceptance or execution.

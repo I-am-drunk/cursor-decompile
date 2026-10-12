@@ -1,7 +1,7 @@
 # Local Automations verification — 2026-10-12
 
-Latest: the [trigger-control follow-up](automations-trigger-verification.md)
-passes 35 tests, 199 source pins, and 992 measured checks across nineteen states.
+Latest: the [preset/validation follow-up](automations-preset-verification.md)
+passes 43 tests, 360 source pins, and 1,736 measured checks across 37 states.
 The foundation results below are historical, not the current coverage total.
 
 ## Reproduced checks

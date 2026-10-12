@@ -162,3 +162,31 @@ remains account/network-free. The local cron validator, preset defaults and
 Enter-to-stage/Escape-to-discard policy have regression tests but are not
 claims about unobserved reference save behavior. Full preset/provider forms
 and native focus-ring/font/icon raster parity remain outside this subset.
+
+### Preset and live-validation comparisons
+
+Open a fresh tab at
+`/automations/editor-fixture?fixture=saved-editor&controls=presets`
+for each preset group, at **1270 × 764 CSS px, DPR 2**. Do not save or run
+the fixture. Use **Alt+Shift+E**, saving each download as
+`artifacts/<state>-measurements.json`.
+
+| States, in order | Actions |
+|---|---|
+| `preset-baseline`, `hourly-added` | Fresh fixture; Add Trigger → Scheduled → Hourly |
+| `daily-added`, `daily-time`, `daily-selected` | Fresh fixture; add Daily; open 09:00; select 10:00 |
+| `weekly-added`, `weekly-days`, `weekly-selected`, `weekly-time` | Fresh fixture; add Weekly; open Monday; choose Tuesday; open 09:00 |
+| `custom-added`, `custom-popup` | Fresh fixture; add Custom (cron); open its new 0 13 1 * * control |
+| `cron-invalid`, `cron-range`, `cron-empty` | Replace that input with `bad`, then `60 0 * * *`, then empty |
+| `invalid-escape`, `invalid-outside` | Press Escape with empty input; then click the Triggers heading |
+| `custom-restored`, `unsaved-dialog` | Restore `0 13 1 * *`; Escape; click the Automations breadcrumb |
+
+Both invalid-dismissal attempts must leave the popup open. Valid restoration
+closes it. The unsaved guard is captured without invoking Save or Discard.
+Screenshots remain part of visual review; numeric checks do not certify fonts,
+icons, native focus treatments or unobserved runtime semantics.
+
+`sh ci/check-src.sh --reference` now covers **1,736** checks across 37 states:
+the previous 992 plus 744 for this slice. It also verifies **360 source pins**,
+including live input values, validity and presence/absence of disabled state.
+Default `npm run check` remains network/account-free.
