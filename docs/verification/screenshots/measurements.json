@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-12T22:01:16.674Z",
+  "capturedAt": "2026-10-12T22:01:40.759Z",
   "comparisonCount": 157,
   "checks": [
     "index settings-account:st-side rect.x",
@@ -521,7 +521,7 @@
         "height": 44,
         "fontSize": "13px",
         "lineHeight": "18px",
-        "padding": "0px 12px",
+        "padding": "8px 12px 0px",
         "gap": "2px",
         "background": "rgba(0, 0, 0, 0)"
       },
@@ -593,7 +593,7 @@
         "height": 44,
         "fontSize": "13px",
         "lineHeight": "18px",
-        "padding": "0px 12px",
+        "padding": "8px 12px 0px",
         "gap": "2px",
         "background": "rgba(0, 0, 0, 0)"
       },
@@ -655,7 +655,7 @@
         "height": 44,
         "fontSize": "13px",
         "lineHeight": "18px",
-        "padding": "0px",
+        "padding": "8px 0px 0px",
         "gap": "2px",
         "background": "rgba(0, 0, 0, 0)"
       },
