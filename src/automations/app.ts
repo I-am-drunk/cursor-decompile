@@ -136,8 +136,7 @@ function renderModal() {
   }
   let html = '', title = '', footer = '';
   const apply = (action: string) => btn('Cancel','dismiss','outline')+btn('Done',action,'primary');
-  if(modal==='live-trigger'){title='Add Trigger';html=`<div class="menu">${btn('Scheduled','live-schedule')}${btn('Webhook Triggered','live-webhook', '',form.triggers.some(t=>t.kind==='Webhook')?'disabled':'')}</div>`;
-  } else if (modal === 'trigger') {
+  if (modal === 'trigger') {
     const t = form.triggers.find(t=>t.id===editId) ?? {kind:'Schedule',event:'Cron',value:''};
     title = 'Add Trigger'; html = `<label class="field">Trigger<select name="trigger-kind">${options(triggerKinds,t.kind)}</select></label>
       <label class="field">Event<select name="trigger-event">${options(events[t.kind],t.event)}</select></label>
@@ -193,9 +192,7 @@ function renderModal() {
 }
 async function action(command: string) {
   if(scheduleUi.handle(command))return;
-  if(!editorFixture()&&command==='tr-add'){openModal('live-trigger');return;}
-  if(command==='live-schedule'){closeModal();scheduleUi.handle('sc-open:');return;}
-  if(command==='live-webhook'){form.triggers.push({id:crypto.randomUUID(),kind:'Webhook',event:'Webhook Triggered',value:''});dirty=true;closeModal();render();return;}
+  if(!editorFixture()&&command==='tr-add'){scheduleUi.handle('sc-add');return;}
   if(runFilter.handle(command))return;
   if(triggerUi.handle(command))return;
   if(await editUi.handle(command))return;

@@ -1,7 +1,7 @@
 import type { Automation, Trigger } from './model.ts';
 import { makePreset } from './preset-state.ts';
 import { cronError, scheduleKinds, scheduleOf, timeZoneValid, updateSchedule, presetCron } from './schedule-state.ts';
-import { customSchedule, frequencyMenu, timezoneMenu } from './schedule-view.ts';
+import { addTriggerMenu, customSchedule, frequencyMenu, timezoneMenu } from './schedule-view.ts';
 interface Host {form:()=>Automation;render:()=>void;changed:()=>void;closeOther:()=>void;overlays:HTMLElement}
 export class ScheduleController {
  host:Host;panel='';id='';value='';zone='UTC';error='';query='';anchor:HTMLElement|null=null;
@@ -12,7 +12,10 @@ export class ScheduleController {
  handle(command:string):boolean {
   if(!command.startsWith('sc-'))return false;
   const [act,...parts]=command.split(':'),value=parts.join(':');
-  if(act==='sc-open'||act==='sc-custom'||act==='sc-zone'){
+  if(act==='sc-add'){this.id='';this.value='';this.zone=Intl.DateTimeFormat().resolvedOptions().timeZone;this.open('triggers','tr-add');}
+  else if(act==='sc-scheduled'){this.panel='presets';this.render();}
+  else if(act==='sc-webhook'){if(!this.host.form().triggers.some(t=>t.kind==='Webhook')){this.host.form().triggers.push({id:crypto.randomUUID(),kind:'Webhook',event:'Webhook Triggered',value:''});this.changed();}}
+  else if(act==='sc-open'||act==='sc-custom'||act==='sc-zone'){
    this.id=value;const t=this.current();this.value=t?.value??'';this.zone=t?scheduleOf(t).timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone;
    this.open(act==='sc-open'?'presets':act==='sc-custom'?'custom':'zone',command);
   }else if(act==='sc-preset'){
@@ -38,7 +41,7 @@ export class ScheduleController {
   return false;
  }
  render(){
-  const root=this.host.overlays;root.innerHTML=this.panel==='presets'?frequencyMenu(this.current()):this.panel==='zone'?timezoneMenu(this.query,this.current()?scheduleOf(this.current()!).timeZone:this.zone):customSchedule(this.value,this.zone,this.error);
+  const root=this.host.overlays;root.innerHTML=this.panel==='triggers'?addTriggerMenu(this.host.form().triggers.some(t=>t.kind==='Webhook')):this.panel==='presets'?frequencyMenu(this.current()):this.panel==='zone'?timezoneMenu(this.query,this.current()?scheduleOf(this.current()!).timeZone:this.zone):customSchedule(this.value,this.zone,this.error);
   const pop=root.firstElementChild as HTMLElement,r=this.anchor?.getBoundingClientRect();if(r){pop.style.left=`${Math.max(8,Math.min(r.left,innerWidth-pop.offsetWidth-8))}px`;pop.style.top=`${r.bottom+pop.offsetHeight+4>innerHeight?Math.max(8,r.top-pop.offsetHeight-4):r.bottom+4}px`;}
   const focus=root.querySelector<HTMLInputElement>(this.panel==='custom'?'textarea':this.panel==='zone'?'input':'button');focus?.focus();if(this.panel==='zone')focus?.setSelectionRange(this.query.length,this.query.length);
  }

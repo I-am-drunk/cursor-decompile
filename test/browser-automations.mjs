@@ -25,7 +25,7 @@ try {
  const signed=await page.request.post(base+'/api/auth/register',{headers:{'X-Local-Request':'1'},data:{email:'qa@example.invalid',password:'qa-local-passphrase'}});
  assert.equal(signed.status(),200);
  await page.goto(base+'/automations/'+automation.id);
- await page.click('[data-act=tr-add]');await page.click('[data-act=live-schedule]');
+ await page.click('[data-act=tr-add]');await page.click('[data-act=sc-scheduled]');
  await page.click('[data-act="sc-preset:2"]');
  await page.locator('[name=sc-time]').fill('10:25');await page.locator('[name=sc-day]').selectOption('2');
  await page.click('[aria-label="Select timezone"]');await page.fill('[name=sc-search]','Tokyo');await page.click('[data-act="sc-zone-pick:Asia/Tokyo"]');

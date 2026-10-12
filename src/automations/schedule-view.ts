@@ -27,3 +27,9 @@ export function customSchedule(value:string,zone:string,error:string):string {
  <datalist id="sc-zones">${['UTC',...Intl.supportedValuesOf('timeZone')].map(z=>`<option value="${esc(z)}"></option>`).join('')}</datalist>
  ${error?`<p class="sc-error" role="alert">${esc(error)}</p>`:''}<footer>${btn('Cancel','sc-cancel')}${btn('Apply','sc-apply','primary')}</footer></div>`;
 }
+
+export function addTriggerMenu(hasWebhook:boolean):string {
+ return `<div class="tr-pop sc-pop sc-presets" role="dialog" aria-label="Add Trigger">
+ ${btn(`${icon('clock')}<span>Scheduled</span>›`,'sc-scheduled')}
+ ${btn(`${icon('plug')}<span>Webhook Triggered</span>`,'sc-webhook','',hasWebhook?'disabled':'')}</div>`;
+}
