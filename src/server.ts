@@ -1,3 +1,4 @@
+import { AuthStore, cookieToken, sessionCookie } from './auth/store.ts';
 import { SettingsStore } from './settings/store.ts';
 import { createServer } from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
@@ -10,6 +11,8 @@ import { parseAutomation } from './automations/model.ts';
 import { RequestError, Store } from './store.ts';
 const root = new URL('./', import.meta.url);
 const files: Record<string, [string, string]> = {
+  '/auth/login.ts':['auth/login.ts','application/javascript'],
+  '/login.css':['auth/login.css','text/css'],
   '/settings/live-app.ts':['settings/live-app.ts','application/javascript'],
   '/settings/live-view.ts':['settings/live-view.ts','application/javascript'],
   '/settings/schema.ts':['settings/schema.ts','application/javascript'],
@@ -67,9 +70,11 @@ async function body(req: IncomingMessage): Promise<unknown> {
   try { return JSON.parse(Buffer.concat(chunks).toString()); }
   catch { throw new RequestError(400, 'Expected JSON.'); }
 }
-export interface AppOptions { settings?:SettingsStore }
+export interface AppOptions { settings?:SettingsStore; auth?:AuthStore }
 export function createApp(store: Store, options:AppOptions={}) {
   const settings=options.settings??new SettingsStore(store.file+'.settings');
+  const auth=options.auth??new AuthStore(store.file+'.auth');
+  const attempts=new Map<string,{count:number;until:number}>();
   return createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
@@ -80,6 +85,29 @@ export function createApp(store: Store, options:AppOptions={}) {
       if (!['GET', 'HEAD'].includes(req.method ?? '') &&
           (req.headers['x-local-request'] !== '1' || (req.headers.origin && req.headers.origin !== origin)))
         throw new RequestError(403, 'Same-origin local request required.');
+      const token=cookieToken(req.headers.cookie??''), identity=await auth.identify(token);
+      if(path==='/api/auth/status'&&req.method==='GET')return json(res,200,{configured:await auth.configured(),identity});
+      if(['/api/auth/login','/api/auth/register'].includes(path)&&req.method==='POST'){
+        const key=req.socket.remoteAddress??'local',now=Date.now();
+        if(attempts.size>1000)attempts.clear();
+        let limit=attempts.get(key);if(!limit||limit.until<now){limit={count:0,until:now+60000};attempts.set(key,limit);}
+        if(++limit.count>10)throw new RequestError(429,'Too many attempts. Try again in a minute.');
+        const input=await body(req) as {email?:unknown;password?:unknown};
+        if(!input||typeof input.email!=='string'||typeof input.password!=='string')throw new RequestError(400,'Email and password required.');
+        const signed=path.endsWith('/register')?await auth.register(input.email,input.password):await auth.login(input.email,input.password);
+        attempts.delete(key);res.setHeader('Set-Cookie',sessionCookie(signed.token));return json(res,200,{identity:signed.identity});
+      }
+      if(path==='/login'&&req.method==='GET'){
+        res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
+        return res.end(await readFile(new URL('auth/login.html',root)));
+      }
+      if(!identity&&!files[path]){
+        if(path.startsWith('/api/'))throw new RequestError(401,'Sign in required.');
+        res.writeHead(303,{Location:'/login','Cache-Control':'no-store'});return res.end();
+      }
+      if(path==='/api/auth/logout'&&req.method==='POST'){
+        await auth.logout(token);res.setHeader('Set-Cookie',sessionCookie(''));return json(res,200,{signedOut:true});
+      }
       if(path==='/api/settings'&&req.method==='GET')return json(res,200,await settings.read());
       if(path==='/api/settings'&&req.method==='PATCH')return json(res,200,await settings.update(await body(req)));
       if (path === '/api/state' && req.method === 'GET') return json(res, 200, await store.read());
@@ -101,7 +129,7 @@ export function createApp(store: Store, options:AppOptions={}) {
         let input: unknown;
         try { input = parseAutomation(await body(req)); }
         catch (e) { if (e instanceof RequestError) throw e; throw new RequestError(400, 'Invalid automation payload.'); }
-        return json(res, 200, await store.save(input));
+        return json(res, 200, await store.save({...input as object,userId:identity!.id}));
       }
       const match = /^\/api\/automations\/([\w-]+)(\/runs)?$/.exec(path);
       if (match && req.method === 'DELETE' && !match[2]) {
