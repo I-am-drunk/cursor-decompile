@@ -20,6 +20,7 @@ test('HTTP server serves original UI and protects mutation and private files',as
   const send=await signIn(origin);
   for(const path of ['/settings','/settings/linear','/settings/mcp','/settings/accounts','/settings/general']){
     const settings=await send(path);assert.equal(settings.status,200);assert.match(await settings.text(),/live-app.ts/);
+  }
   for(const path of ['/codebase','/codebases','/search']) {
     const page=await send(path);assert.equal(page.status,404);assert.match(await page.text(),/Back to Automations/);
   }

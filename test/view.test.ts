@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { draft } from '../src/automations/model.ts';
-import { editor, notFound, list, runs, shell } from '../src/automations/view.ts';
+import { editor, gate, notFound, list, runs, shell } from '../src/automations/view.ts';
 test('views escape user content and expose actual empty/loading-free structure',()=>{
   const a={...draft(),id:'one',name:'<script>alert(1)</script>',prompt:'</textarea><script>bad</script>'};
   assert.doesNotMatch(list([a],'mine','',1),/<script>/);

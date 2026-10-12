@@ -188,7 +188,6 @@ function renderModal() {
       ${link('Run filter acceptance','/automations/runs?fixture=observed-failure&controls=filters','button')}
       ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
       ${btn('Export layout measurements','export')}</div>`;
-  }
   } else { closeModal(); return; }
   overlays.innerHTML = dialog(title,html,footer);
   activateDialog();
