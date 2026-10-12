@@ -13,9 +13,16 @@ test('HTTP server serves original UI and protects mutation and private files',as
   await new Promise<void>(r=>server.listen(0,'127.0.0.1',r));
   t.after(async()=>{await new Promise<void>(r=>server.close(()=>r()));await rm(dir,{recursive:true,force:true});});
   const origin=`http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+  for(const path of ['/codebase','/codebases','/chat','/search','/agents','/editor']) {
+    const page=await fetch(origin+path,{redirect:'manual'});
+    assert.equal(page.status,404);assert.match(await page.text(),/Page not found/);
+  }
   const send=await signIn(origin);
+  for(const path of ['/codebase','/codebases','/chat','/search']) {
+    const page=await send(path);assert.equal(page.status,404);assert.match(await page.text(),/Back to Automations/);
+  }
   for(const path of ['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending']){
-    const settings=await send(path);assert.equal(settings.status,200);assert.match(await settings.text(),/settings-app.ts/);
+    const settings=await send(path);assert.equal(settings.status,404);assert.match(await settings.text(),/Page not found/);
   }
   assert.equal((await send('/dashboard/unknown')).status,404);
   assert.equal((await send('/api/settings',{method:'POST',headers:{'x-local-request':'1'},body:'{}'})).status,404);

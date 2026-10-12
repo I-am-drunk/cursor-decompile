@@ -32,24 +32,16 @@ export const field = (label: string, name: string, value = '', attrs = '') =>
   `<label class="field">${label}<input name="${name}" value="${esc(value)}" ${attrs}></label>`;
 export function shell(content: string, crumb = '', toolbar = ''): string {
   const destination=(name: string, glyph: string, path: string) =>
-    `<a href="${path}" aria-label="${name}" title="${name}" class="destination ${name==='Automations'?'selected':''}"><span class="rail-icon">${icon(glyph)}</span><span class="full-icon">${icon(glyph)}</span><span class="side-label">${name}</span></a>`;
+    `<a href="${path}" ${path.startsWith('/automations')?'data-nav':''} aria-label="${name}" title="${name}" class="destination ${name===(crumb==='Run History'?'Run History':'Automations')?'selected':''}"><span class="rail-icon">${icon(glyph)}</span><span class="side-label">${name}</span></a>`;
   return `<aside data-evidence="sidebar" class="shell-sidebar" aria-label="Main navigation"><div class="sidebar-surface">
-    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Toggle sidebar" aria-expanded="true"')}<strong class="side-label">Workspace</strong></div>
-    <nav class="side-nav">${destination('New chat','edit','/chat')}${destination('Automations','bot','/automations')}${destination('Search','search','/search')}</nav>
-    <div class="no-agents side-label">No Agents Yet</div><div class="account">
-      ${destination('Settings','gear','/settings')}${destination('Profile','person','/settings/account')}
-      ${btn('<span class="rail-icon">'+icon('menu')+'</span><span class="side-label">Local preview</span>', 'about', 'destination', 'aria-label="Local preview" title="Local preview"')}</div>
+    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Collapse sidebar" aria-expanded="true"')}</div>
+    <nav class="side-nav">${destination('Automations','bot','/automations')}</nav>
   </div></aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
     <div class="scroll-pane">${content}</div></main>`;
 }
 
-export function gate(): string {
-  return `<div class="page gate"><header><h1 data-evidence="gate-title">Automations</h1></header>
-    <section class="upsell" data-evidence="gate-card"><div class="upsell-inner">
-      <div><h3 data-evidence="gate-heading">Upgrade to unlock Automations</h3>
-      <p data-evidence="gate-description">Upgrade for Automations, unlimited completions, MAX Mode, and more</p></div>
-      ${btn('Upgrade to Pro', 'upgrade', 'primary', 'data-evidence="gate-button"')}
-    </div></section></div>`;
+export function notFound(): string {
+  return `<div class="page"><h1>Page not found</h1><p>This page is no longer available.</p>${link('Back to Automations','/automations','button outline')}</div>`;
 }
 export function tabs(scope: string, action = 'scope'): string {
   return `<div class="tabs" role="tablist" aria-label="${action === 'scope' ? 'Automation filters' : 'Run ownership'}">
@@ -142,7 +134,7 @@ function runTable(rows: Run[], modelNames: Record<string,string>, now: number): 
 }
 export function runSummary(run: Run): string {
   const failure=run.failure;
-  const cta=failure?.code==='CLOUD_AGENT_PLAN_RESTRICTED' && failure.ctaLabel ? `<a href="https://cursor.com/pricing" target="_blank" rel="noopener noreferrer" data-evidence="sum-cta">${esc(failure.ctaLabel)}</a>` : '';
+  const cta='';
   const problem=failure ? `<div class="summary-failure" data-evidence="sum-failure">
     <span class="summary-icon error-icon" aria-hidden="true">⊗</span><div class="summary-error-text">
     <span class="summary-error-title" data-evidence="sum-failure-title">${esc(failure.title)}</span>

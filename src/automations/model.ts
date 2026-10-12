@@ -96,11 +96,13 @@ export function parseAutomation(v: unknown): Automation {
   for(const t of a.triggers)if(t.schedule!==undefined){
     const s=t.schedule;
     if(t.kind!=='Schedule'||!object(s)||!['hourly','daily','weekly','custom'].includes(s.kind)||
-      !hoursValid(s.time)||!Number.isInteger(s.day)||s.day<0||s.day>6||!text(s.timeZone))
+      !hoursValid(s.time)||!Number.isInteger(s.day)||s.day<0||s.day>6||!text(s.timeZone)||!validTimeZone(s.timeZone))
       throw new Error('Invalid schedule metadata.');
   }
   if ([a.triggers, a.tools].some(items => new Set(items.map(t => t.id)).size !== items.length))
     throw new Error('Duplicate configuration IDs.');
   return structuredClone(a);
 }
-const hoursValid=(v:unknown):v is string=>typeof v==='string'&&/^(?:[01]\d|2[0-3]):00$/.test(v);
+const hoursValid=(v:unknown):v is string=>typeof v==='string'&&/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(v);
+
+function validTimeZone(zone:string):boolean {try {new Intl.DateTimeFormat('en',{timeZone:zone});return !!zone;}catch{return false;}}
