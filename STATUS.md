@@ -78,3 +78,22 @@ the disconnected chat gate links to Linear connection.
 search/connected-chat captures and a real Linear account/chat backend are
 missing; the strict repository-wide branding scan also remains nonzero.
 Search/Connect remain disabled. No connected-chat or whole-page parity claim.
+
+## Agent B — automations carve and polish
+
+Automations/Run History shell, compact SVGs, hover/drag cleanup, removed
+Chat/Search/billing surfaces and HTML not-found routes implemented.
+New and saved editors use Devin-style preset rows, custom cron and searchable
+timezones, with minute-precision metadata persistence.
+[Source mapping and validation](docs/verification/automations-carve.md).
+Captured evidence is unchanged; full raster parity is not claimed.
+Settings, Linear connection and server execution remain their own lanes.
+
+## Automations copy-first correction — PR #27
+
+Removed unsupported shell reveal/motion and extra rail destinations; carved
+non-automation dashboard routes to HTML 404s. Schedule uses separate Devin
+hour/minute choices, labeled timezone search and raw cron editor, retaining
+Cursor validation behavior. [Complete change/source audit](docs/verification/automations-carve.md).
+Historical passing tests do not establish new raster parity; limitations remain
+explicit. Peer COMMENT review is required before merge.

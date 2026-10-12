@@ -1,7 +1,8 @@
+import { ScheduleController } from './schedule-controller.ts';
 import { installSidebar } from '../shell/sidebar.ts';
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
-import { btn, dialog, editor, esc, field, gate, chatGate, icon, link, list, runs, runSummary, shell } from './view.ts';
+import { btn, dialog, editor, esc, field, gate, chatGate, notFound, icon, link, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
 import { TriggerController } from './trigger-controller.ts';
@@ -12,7 +13,7 @@ import { modelSuffix, savedEditorFixture } from './editor-state.ts';
 import type { EditorModel, McpProvider } from './editor-state.ts';
 let state: State = emptyState(), form: Automation = draft(), models: {id:string;name:string}[] = [];
 let dirty = false, scope = 'mine', page = 1, query = '', runQuery = '', searchOpen = false;
-let titleEditing=false;
+let titleEditing=false, missingRoute=false;
 let errors: string[] = [], pendingPath = '', editId = '', modal = '', busy = false, returnFocus: HTMLElement | null = null;
 const app = document.querySelector<HTMLDivElement>('#app')!, overlays = document.querySelector<HTMLDivElement>('#overlays')!;
 const params = () => new URLSearchParams(location.search);
@@ -28,6 +29,7 @@ async function api<T>(path: string, method = 'GET', data?: unknown): Promise<T> 
   return result as T;
 }
 function openModal(kind: string, id = '') {
+  scheduleUi.close();
   runFilter.close();
   triggerUi.close();
   if(editUi.panel)editUi.close();
@@ -35,10 +37,12 @@ function openModal(kind: string, id = '') {
   modal = kind; editId = id; renderModal();
 }
 function closeModal() { modal = ''; overlays.innerHTML = ''; returnFocus?.focus(); }
+const scheduleUi=new ScheduleController({form:()=>form,render,changed:()=>{dirty=true;app.querySelector('[data-act=save]')?.removeAttribute('disabled');},
+  closeOther:()=>{runFilter.close();triggerUi.close();editUi.close();closeModal();},overlays});
 const editUi=new EditorController({form:()=>form,render,changed:()=>{dirty=true;},
-  closeOther:()=>{runFilter.close();triggerUi.close();closeModal();},notify:toast,overlays,api});
+  closeOther:()=>{scheduleUi.close();runFilter.close();triggerUi.close();closeModal();},notify:toast,overlays,api});
 const triggerUi=new TriggerController({form:()=>form,render,changed:()=>{dirty=true;},
-  closeOther:()=>{runFilter.close();editUi.close();closeModal();},notify:toast,overlays,fixture:editorFixture});
+  closeOther:()=>{scheduleUi.close();runFilter.close();editUi.close();closeModal();},notify:toast,overlays,fixture:editorFixture});
 const runFilter=new RunFilterController({value:()=>params().get('status')??'',render,overlays,
   closeOther:()=>{triggerUi.close();editUi.close();closeModal();},notify:toast,
   setValue:values=>{const url=new URL(location.href);if(values.length)url.searchParams.set('status',values.join(','));else url.searchParams.delete('status');history.replaceState(null,'',url);}});
@@ -53,18 +57,20 @@ function render() {
   const id = routeId(), isRuns = id === 'runs';
   const names=Object.fromEntries(models.map(m=>[m.id,m.name]));
   const selected=editUi.models.find(m=>m.id===form.model);
-  const selectedName=selected?`${selected.name} ${modelSuffix(selected,form.modelParameters??(form.model==='composer-2.5'?{fast:'false'}:selected.defaults))}`.trim():names[form.model]??form.model;
+  const selectedName=selected?`${selected.name} ${modelSuffix(selected,form.modelParameters??(form.model==='composer-2.5'?{fast:'false'}:selected.defaults))}`.trim():names[form.model]??(form.model||'Select model');
   let content: string;
   if (location.pathname === '/chat') content = chatGate();
   else if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
   else if (params().get('state') === 'error') content = `<div class="page" role="alert">Could not load automations. ${btn('Retry','retry','outline')}</div>`;
   else if (params().get('state') === 'upgrade') content = gate();
+  else if (missingRoute) content=notFound();
   else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen,names,referenceFixture()?referenceTime:Date.now());
   else if (id&&id!=='new') content = savedEditor(form,selectedName,errors,titleEditing,editorFixture(),triggerUi.preview());
-  else if (id) content = editor(form, selectedName, errors);
+  else if (id) content = savedEditor(form,selectedName,errors,true,false);
   else content = list(state.automations, scope, query, page,names);
-  const markup = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '',id&&id!=='new'&&!isRuns?editorToolbar(form,dirty):'');
+  const markup = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '',id&&!isRuns&&!missingRoute?editorToolbar(form,dirty):'');
   if (app.querySelector('main')) { const template=document.createElement('template');template.innerHTML=markup;app.querySelector('main')!.replaceWith(template.content.querySelector('main')!); } else app.innerHTML=markup;
+  app.querySelectorAll<HTMLAnchorElement>('.side-nav a').forEach(a=>{const active=a.pathname==='/automations';a.classList.toggle('selected',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   if (referenceFixture() && id==='evidence-automation') {
     app.querySelectorAll<HTMLInputElement>('.ed-header input,.ed-body textarea,.ed-header button,.ed-body button,.ed-toolbar button').forEach(e=>{e.disabled=true;});
   }
@@ -81,13 +87,15 @@ function runRows(): Run[] {
   return state.runs.filter(r=>!id||r.automationId===id);
 }
 function loadRoute() {
+  scheduleUi.close();
   runFilter.reset();
   triggerUi.reset();
   const id = routeId();
+  missingRoute=!/^\/automations(?:\/[\w-]+)?$/.test(location.pathname)&&location.pathname!=='/';
   if (id && id !== 'runs' && id !== 'new') {
     const found = editorFixture() && id==='editor-fixture' ? savedEditorFixture() :
       referenceFixture() && id==='evidence-automation' ? referenceAutomation() : state.automations.find(a=>a.id===id);
-    if (!found) { toast('Automation not found.'); history.replaceState(null,'','/automations'); }
+    if (!found) missingRoute=true;
     else form = structuredClone(found);
   } else if (id === 'new') form = {...draft(),model:''};
   errors = []; dirty = false; titleEditing=false; render();
@@ -164,7 +172,7 @@ function renderModal() {
   } else if (modal === 'unsaved') {
     title = 'Unsaved Changes'; html = '<p>Save or discard changes before continuing.</p>';
     footer = btn('Keep Editing','dismiss','outline')+btn('Discard','discard','outline')+btn('Save','save','primary');
-  } else {
+  } else if (modal) {
     title = modal === 'upgrade' ? 'Local preview — no checkout' : 'Original local implementation';
     html = `<p>No remote account, billing, MCP or agent execution is connected. Definitions are saved on this machine.</p>
       <p>Observed: upgrade gate, Run History and a real plan-restricted failed-run summary.
@@ -181,10 +189,13 @@ function renderModal() {
       ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
       ${btn('Export layout measurements','export')}</div>`;
   }
+  } else { closeModal(); return; }
   overlays.innerHTML = dialog(title,html,footer);
   activateDialog();
 }
 async function action(command: string) {
+  if(scheduleUi.handle(command))return;
+  if(!editorFixture()&&command==='tr-add'){scheduleUi.handle('sc-add');return;}
   if(runFilter.handle(command))return;
   if(triggerUi.handle(command))return;
   if(await editUi.handle(command))return;
@@ -197,7 +208,7 @@ async function action(command: string) {
   if (kind === 'dismiss') { pendingPath=''; closeModal(); }
   else if (kind === 'collapse') return;
   else if (kind === 'export') await exportMeasurements();
-  else if (['about','upgrade','models','repos','filters','unsaved'].includes(kind!)) openModal(kind!);
+  else if (['models','repos','filters','unsaved'].includes(kind!)) openModal(kind!);
   else if (['trigger','tool','row','run','run-menu','delete'].includes(kind!)) openModal(kind!,id);
   else if (kind === 'scope') { scope=id; page=1; render(); }
   else if (kind === 'prev' || kind === 'next') { page=Math.max(1,page+(kind==='next'?1:-1)); render(); }
@@ -255,6 +266,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('input',e=>{
   const input=e.target as HTMLInputElement;
+  if(scheduleUi.input(input))return;
   if(triggerUi.input(input))return;
   if(editUi.input(input))return;
   if (input.name === 'list-search') { query=input.value; page=1; render(); return; }
@@ -286,6 +298,7 @@ window.addEventListener('popstate',()=>{
 });
 document.addEventListener('keydown',e=>{
   if (e.altKey && e.shiftKey && e.code==='KeyE') {e.preventDefault();void exportMeasurements();return;}
+  if(scheduleUi.key(e))return;
   if(runFilter.key(e))return;
   if(triggerUi.key(e))return;
   if(editUi.key(e))return;
@@ -308,6 +321,7 @@ document.addEventListener('keydown',e=>{
   }
 });
 document.addEventListener('pointerdown',e=>{
+  scheduleUi.pointer(e.target as Node);
   runFilter.pointer(e.target as Node);
   triggerUi.pointer(e.target as Node);
   editUi.pointer(e.target as Node);

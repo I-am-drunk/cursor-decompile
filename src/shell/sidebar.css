@@ -18,3 +18,6 @@ body.collapsed.rail-revealed .shell-sidebar .destination:has(.full-icon) .rail-i
 
 /* Header controls follow the captured top-right alignment. */
 .shell-sidebar .brand{justify-content:flex-end}
+
+/* Header controls follow the captured top-right alignment. */
+.shell-sidebar .brand{justify-content:flex-end}

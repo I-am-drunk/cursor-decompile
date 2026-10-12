@@ -1,0 +1,40 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { Store } from '../src/store.ts';
+import { draft, parseAutomation } from '../src/automations/model.ts';
+import { makePreset } from '../src/automations/preset-state.ts';
+import { updateSchedule, scheduleOf, cronError } from '../src/automations/schedule-state.ts';
+import { customSchedule, scheduleRow, timezoneMenu } from '../src/automations/schedule-view.ts';
+test('minute-level presets and IANA timezones survive save/reload without activation',async t=>{
+ const dir=await mkdtemp(join(tmpdir(),'schedule-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+ const trigger=makePreset(2)!,other=makePreset(1)!,original=structuredClone(other);
+ assert.ok(updateSchedule(trigger,'time','10:25'));assert.ok(updateSchedule(trigger,'day','2'));
+ assert.ok(updateSchedule(trigger,'zone','Asia/Tokyo'));assert.equal(trigger.value,'25 10 * * 2');
+ const a={...draft(),name:'Weekly check',triggers:[trigger,other]},store=new Store(join(dir,'state.json'));
+ const saved=await store.save(parseAutomation(a)),state=await new Store(store.file).read();
+ assert.deepEqual(state.automations,[saved]);assert.deepEqual(state.automations[0]!.triggers[1],original);
+ assert.equal(state.automations[0]!.triggers[0]!.schedule!.timeZone,'Asia/Tokyo');
+ assert.equal(saved.enabled,false);assert.deepEqual(state.runs,[]);
+});
+test('invalid times and zones cannot silently alter persisted schedule metadata',()=>{
+ const trigger=makePreset(0)!;assert.ok(updateSchedule(trigger,'minute','59'));assert.equal(trigger.value,'59 * * * *');
+ const before=structuredClone(trigger);
+ for(const [field,value] of [['minute','60'],['time','25:00'],['day','7'],['zone','Mars/Olympus_Mons']])assert.equal(updateSchedule(trigger,field!,value!),false);
+ assert.deepEqual(trigger,before);
+ assert.throws(()=>parseAutomation({...draft(),triggers:[{...trigger,schedule:{...trigger.schedule!,timeZone:'invalid'}}]}),/schedule metadata/);
+ const legacy={id:'legacy',kind:'Schedule' as const,event:'Cron',value:'0 9 * * *'};
+ assert.equal(scheduleOf(legacy).timeZone,'UTC');assert.equal(legacy.value,'0 9 * * *');
+});
+test('custom cron, timezone search and schedule controls escape user values',()=>{
+ assert.ok(cronError('60 * * * *'));assert.equal(cronError('0 9 * * 1-5'),'');assert.equal(cronError('@daily'),'');
+ const trigger=makePreset(3)!;trigger.value='</textarea><script>bad</script>';
+ assert.doesNotMatch(customSchedule(trigger.value,'UTC','bad'),/<script>/);
+ assert.match(customSchedule('bad','UTC','Invalid cron'),/role="alert"/);
+ assert.match(scheduleRow(makePreset(0)!),/aria-label="Minute within hour"/);
+ assert.match(scheduleRow(makePreset(2)!),/aria-label="Select weekday"/);
+ assert.match(timezoneMenu('not-a-timezone','UTC'),/No timezones found/);
+ assert.match(timezoneMenu('tokyo','UTC'),/Asia\/Tokyo/);
+});

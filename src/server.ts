@@ -16,6 +16,10 @@ import { parseAutomation } from './automations/model.ts';
 import { RequestError, Store } from './store.ts';
 const root = new URL('./', import.meta.url);
 const files: Record<string, [string, string]> = {
+  '/schedule.css':['automations/schedule.css','text/css'],
+  '/schedule-state.ts':['automations/schedule-state.ts','application/javascript'],
+  '/schedule-view.ts':['automations/schedule-view.ts','application/javascript'],
+  '/schedule-controller.ts':['automations/schedule-controller.ts','application/javascript'],
   '/mcp/settings-ui.ts':['mcp/settings-ui.ts','application/javascript'],
   '/auth/login.ts':['auth/login.ts','application/javascript'],
   '/login.css':['auth/login.css','text/css'],
@@ -107,6 +111,12 @@ export function createApp(store: Store, options:AppOptions={}) {
         res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(new URL('auth/login.html',root)));
       }
+      if(req.method==='GET'&&!files[path]&&!path.startsWith('/api/')&&
+          !['/','/login'].includes(path)&&!/^\/settings(?:\/|$)/.test(path)&&
+          !/^\/automations(?:\/[\w-]+)?$/.test(path)){
+        res.writeHead(404,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
+        return res.end(await readFile(new URL('not-found.html',root)));
+      }
       if(!identity&&!files[path]){
         if(path.startsWith('/api/'))throw new RequestError(401,'Sign in required.');
         res.writeHead(303,{Location:'/login','Cache-Control':'no-store'});return res.end();
@@ -173,6 +183,7 @@ export function createApp(store: Store, options:AppOptions={}) {
         res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(new URL('settings/live.html',root)));
       }
+
       const file = files[path];
       if (file) {
         let content = await readFile(new URL(file[0], root), 'utf8');
@@ -180,9 +191,13 @@ export function createApp(store: Store, options:AppOptions={}) {
         res.writeHead(200, { 'Content-Type': file[1], 'Cache-Control': 'no-store' });
         return res.end(content);
       }
-      if (['/','/chat'].includes(path) || /^\/automations(?:\/[\w-]+)?$/.test(path)) {
+      if (['/', '/chat'].includes(path) || /^\/automations(?:\/[\w-]+)?$/.test(path)) {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
         return res.end(await readFile(new URL('index.html', root)));
+      }
+      if(!path.startsWith('/api/')) {
+        res.writeHead(404, {'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
+        return res.end(await readFile(new URL('not-found.html',root)));
       }
       throw new RequestError(404, 'Not found.');
     } catch (e) {

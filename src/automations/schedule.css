@@ -1,0 +1,16 @@
+/* Cursor row/menu geometry; Devin §12.6–12.7 controls and raw editor layout.
+   Source mapping: docs/verification/automations-carve.md. */
+.sc-row{height:auto;min-height:40px}.sc-row>.tr-clock{width:20px;flex-shrink:0;display:flex;justify-content:center}.sc-row>.tr-clock svg{width:14px;height:14px}
+.sc-phrase{display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap;min-width:0}.sc-time{display:flex;align-items:center;gap:4px}
+.sc-chip{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 5px;border-radius:4px;background:#eaeaea;white-space:nowrap}
+.sc-chip svg{width:14px;height:14px}.sc-cron{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.sc-zone{width:300px;max-width:100%;justify-content:space-between}.sc-zone>span{overflow:hidden;text-overflow:ellipsis}
+.sc-row>.icon{opacity:0}.sc-row:hover>.icon,.sc-row:focus-within>.icon{opacity:1}
+.sc-timezones{width:320px;max-width:calc(100vw - 16px);overflow:hidden}
+.sc-search{padding:8px 12px;border-bottom:1px solid var(--line)}.sc-search input{width:100%;padding:0;border:0;background:transparent}
+.sc-zone-list{max-height:280px;overflow:auto;padding:4px}.sc-zone-list button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:6px 8px;border-radius:6px}
+.sc-zone-list button span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sc-zone-list p{padding:12px 8px;text-align:center}
+.sc-custom{width:340px;max-width:calc(100vw - 16px);padding:12px}
+.sc-custom label{display:block;margin-bottom:6px;font-size:12px;font-weight:500}.sc-custom textarea{width:100%;font-family:monospace;border:1px solid var(--line);border-radius:6px;background:var(--card);padding:8px}
+.sc-custom p{font-size:12px;line-height:16px;margin-top:8px}.sc-custom .sc-zone{margin-top:16px}.sc-custom .sc-error{color:rgb(190,23,68)}
+.sc-custom footer{display:flex;flex-direction:column;gap:8px;margin-top:16px}.sc-custom footer button{width:100%}
