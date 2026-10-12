@@ -156,6 +156,7 @@ export function runSummary(run: Run): string {
       </div>${problem}${run.output?`<pre>${esc(run.output)}</pre>`:''}
     </div></div>
     <footer class="summary-footer" data-evidence="sum-footer">
+      ${run.status==='running'?btn('Cancel run',`cancel-run:${run.id}`,'outline'):''}
       ${btn('Close','dismiss','outline','data-evidence="sum-close"')}
       ${btn('View Automation',`view-automation:${run.automationId}`,'summary-view','data-evidence="sum-view"')}
     </footer></dialog>`;

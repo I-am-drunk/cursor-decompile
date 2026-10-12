@@ -41,3 +41,11 @@ Signed-out gate, one local account, scrypt password store, hashed expiring
 session cookies, server revocation and settings identity/sign-out implemented.
 [Security boundary, checks and UNVERIFIED scope](facts/account-login.md).
 61 tests pass. Loopback-only deployment; multi-user ACL/TLS/reset not claimed.
+
+## P3 T3 inference
+
+Pinned actual T3 auth/RPC bridge, instance/model/project discovery, per-automation
+selection and on-disk streamed/cancellable transcripts are implemented.
+[Protocol evidence and honest gaps](facts/t3-bridge.md). 69 tests pass, including
+replay without duplicate start and visible incompatibility/expiry failures.
+Live deployment compatibility remains UNVERIFIED without a supplied environment.

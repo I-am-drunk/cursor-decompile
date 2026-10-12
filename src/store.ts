@@ -6,7 +6,7 @@ import type { Automation, Run, State } from './automations/model.ts';
 import { parseMcp, validateMcp } from './automations/editor-state.ts';
 import type { McpConfig } from './automations/editor-state.ts';
 interface PrivateState extends State { configurations?: Record<string,McpConfig> }
-export interface ExecutionAdapter { start(definition: Automation): Promise<Run> }
+export interface ExecutionAdapter { start(definition: Automation): Promise<Run>; afterStart?(run:Run,definition:Automation):void; cancel?(run:Run):Promise<void> }
 export class RequestError extends Error {
   status: number;
   constructor(status: number, message: string) { super(message); this.status = status; }
@@ -73,6 +73,13 @@ export class Store {
       state.automations = state.automations.filter(a => a.id !== id);
     });
   }
+  async cancel(id:string){
+    const run=(await this.read()).runs.find(r=>r.id===id);
+    if(!run)throw new RequestError(404,'Run not found.');
+    if(run.status!=='running')throw new RequestError(409,'Run is not running.');
+    if(!this.adapter?.cancel)throw new RequestError(501,'Cancellation not supported.');
+    await this.adapter.cancel(run);
+  }
   async start(id: string): Promise<Run> {
     if (!this.adapter) throw new RequestError(501, 'Execution adapter not connected. No run was started.');
     const a = (await this.read()).automations.find(a => a.id === id);
@@ -81,6 +88,7 @@ export class Store {
     if (errors.length) throw new RequestError(400, errors.join(' '));
     const run = await this.adapter.start(structuredClone(a));
     await this.change(s => { s.runs.push(run); });
+    this.adapter.afterStart?.(run,structuredClone(a));
     return run;
   }
 }

@@ -6,7 +6,7 @@ interface PrivateSettings { value:Settings; secrets:Record<string,string> }
 export class SettingsStore {
   disk:JsonFile<PrivateSettings>;
   constructor(file:string){this.disk=new JsonFile(file,()=>({value:defaultSettings(),secrets:{}}));}
-  async read():Promise<Settings>{return (await this.disk.read()).value;}
+  async read():Promise<Settings>{const value=(await this.disk.read()).value;value.inference={...defaultSettings().inference,...value.inference};return value;}
   async secret(name:string):Promise<string>{return (await this.disk.read()).secrets[name]??'';}
   async setSecret(name:string,value:string){await this.disk.change(s=>{if(value)s.secrets[name]=value;else delete s.secrets[name];});}
   async update(input:unknown):Promise<Settings>{
@@ -14,6 +14,7 @@ export class SettingsStore {
     const p=input as Record<string,unknown>;
     if(typeof p.section!=='string'||!sections.includes(p.section as Section)||!p.values||typeof p.values!=='object'||Array.isArray(p.values))throw new RequestError(400,'Unknown settings section.');
     return this.disk.change(s=>{
+      s.value.inference={...defaultSettings().inference,...s.value.inference};
       if(p.revision!==s.value.revision)throw new RequestError(409,'Settings changed. Reload before saving.');
       const section=p.section as Section, values=p.values as Record<string,unknown>, next=structuredClone(s.value);
       const target=next[section] as unknown as Record<string,unknown>;
@@ -35,6 +36,7 @@ export class SettingsStore {
   }
 }
 function validate(s:Settings){
+  if(!['bootstrap','bearer'].includes(s.inference.credentialKind))throw new RequestError(400,'Unknown credential kind.');
   if(!['system','light','dark'].includes(s.account.theme)||!s.account.displayName.trim())throw new RequestError(400,'Invalid account preferences.');
   try{new Intl.DateTimeFormat('en',{timeZone:s.automations.timezone});}catch{throw new RequestError(400,'Unknown timezone.');}
   for(const [value,min,max] of [[s.automations.retentionDays,1,3650],[s.automations.concurrency,1,32]])

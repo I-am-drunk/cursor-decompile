@@ -12,7 +12,7 @@ export interface Automation {
 }
 export interface Run {
   id: string; automationId: string; name: string;
-  status: 'running' | 'succeeded' | 'failed' | 'skipped';
+  status: 'running' | 'succeeded' | 'failed' | 'skipped' | 'cancelled';
   createdAt: string; output: string; model: string; fixture?: boolean;
   completedAt?: string; tools?: string[]; testRun?: boolean;
   failure?: { code: string; title: string; message: string; ctaLabel?: string };
