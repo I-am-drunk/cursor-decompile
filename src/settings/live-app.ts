@@ -1,3 +1,4 @@
+import { mountInference } from '../inference/settings-ui.ts';
 import { liveSettings } from './live-view.ts';
 import { sections } from './schema.ts';
 import type { Settings, Section } from './schema.ts';
@@ -6,9 +7,9 @@ let state:Settings, busy=false;
 const current=():Section=>{const name=location.pathname.split('/')[2];return sections.includes(name as Section)?name as Section:'account';};
 export async function settingsApi<T>(path:string,method='GET',data?:unknown):Promise<T>{
   const response=await fetch(path,{method,headers:{'Content-Type':'application/json','X-Local-Request':'1'},...(data===undefined?{}:{body:JSON.stringify(data)})});
-  const result=await response.json();if(!response.ok)throw Error(result.error??'Request failed.');return result as T;
+  const result=await response.json();if(!response.ok)throw Error(result.error??result.message??'Request failed.');return result as T;
 }
-function render(){root.innerHTML=liveSettings(state,current());void showIdentity();}
+function render(){root.innerHTML=liveSettings(state,current());void showIdentity();if(current()==='inference')void mountInference(document.querySelector('#inference-status')!,settingsApi,state.inference.projectId).catch(e=>{notice.textContent=e.message;});}
 async function showIdentity(){
  const status=await settingsApi<{identity:{email:string;id:string}|null}>('/api/auth/status');
  const target=document.querySelector('#identity');if(!target)return;
@@ -28,6 +29,7 @@ root.addEventListener('submit',e=>{
   for(const el of (e.target as HTMLFormElement).querySelectorAll<HTMLInputElement>('input[type=checkbox]'))values[el.name]=el.checked;
   if(section==='mcp')values.allowedHosts=String(values.allowedHosts).split(',').map(v=>v.trim()).filter(Boolean);
   if(section==='automations'){values.retentionDays=Number(values.retentionDays);values.concurrency=Number(values.concurrency);}
+  if(section==='inference'){if(values.url===state.inference.url)delete values.url;if(values.credentialKind===state.inference.credentialKind)delete values.credentialKind;}
   busy=true;notice.textContent='Saving…';
   void settingsApi<Settings>('/api/settings','PATCH',{section,values,revision:state.revision}).then(result=>{state=result;render();notice.textContent='Saved to disk.';}).catch(e=>{notice.textContent=e.message;}).finally(()=>{busy=false;});
 });

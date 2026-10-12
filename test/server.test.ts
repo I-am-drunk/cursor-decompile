@@ -39,7 +39,7 @@ test('HTTP server serves original UI and protects mutation and private files',as
   assert.equal((await send('/api/automations',{method:'POST',headers,body:' '.repeat(66000)})).status,413);
   const saved=await send('/api/automations',{method:'POST',headers,body:JSON.stringify({...draft(),name:'Local'})});
   assert.equal(saved.status,200); const item=await saved.json(); assert.ok(item.id);
-  assert.equal((await send(`/api/automations/${item.id}/runs`,{method:'POST',headers,body:'{}'})).status,501);
+  assert.equal((await send(`/api/automations/${item.id}/runs`,{method:'POST',headers,body:'{}'})).status,400);
   assert.equal((await (await send('/api/state')).json()).automations.length,1);
   assert.equal((await send(`/api/automations/${item.id}?revision=99`,{method:'DELETE',headers})).status,409);
   assert.equal((await send(`/api/automations/${item.id}?revision=1`,{method:'DELETE',headers})).status,200);

@@ -90,7 +90,7 @@ function loadRoute() {
       referenceFixture() && id==='evidence-automation' ? referenceAutomation() : state.automations.find(a=>a.id===id);
     if (!found) { toast('Automation not found.'); history.replaceState(null,'','/automations'); }
     else form = structuredClone(found);
-  } else if (id === 'new') form = draft();
+  } else if (id === 'new') form = {...draft(),model:''};
   errors = []; dirty = false; titleEditing=false; render();
 }
 function navigate(path: string, force = false) {
@@ -238,6 +238,7 @@ async function action(command: string) {
     const a=state.automations.find(a=>a.id===id); if (!a) return;
     await api(`/api/automations/${id}?revision=${a.revision}`,'DELETE');
     state.automations=state.automations.filter(a=>a.id!==id); closeModal(); render();
+  } else if(kind==='cancel-run'){await api(`/api/runs/${id}/cancel`,'POST',{});toast('Cancellation requested.');
   } else if (kind === 'test') {
     if (dirty) { toast('Save changes before testing.'); return; }
     await api(`/api/automations/${form.id}/runs`,'POST',{});
@@ -316,9 +317,9 @@ document.addEventListener('pointerdown',e=>{
 async function boot() {
   app.innerHTML=shell('<div class="page" role="status">Loading…</div>');
   try {
-    const loaded=await Promise.all([api<State>('/api/state'),api<typeof models>('/catalog.json'),
+    const loaded=await Promise.all([api<State>('/api/state'),api<typeof models>(editorFixture()||referenceFixture()?'/catalog.json':'/api/models'),
       api<EditorModel[]>('/editor-models.json'),api<McpProvider[]>('/mcp-catalog.json')]);
-    [state,models]=loaded;editUi.models=loaded[2];editUi.providers=loaded[3];
+    [state,models]=loaded;editUi.models=editorFixture()?loaded[2]:models.map(m=>({...m,defaults:{},parameters:[]}));editUi.providers=loaded[3];
     loadRoute();
   } catch(e) {
     app.innerHTML=shell(`<div class="page" role="alert">${esc((e as Error).message)} ${btn('Retry','reload','outline')}</div>`);
@@ -352,3 +353,5 @@ async function exportMeasurements() {
 document.addEventListener('click',e=>{if ((e.target as Element).closest('[data-act="reload"]')) void boot();});
 installSidebar();
 void boot();
+
+setInterval(()=>{if(location.pathname==='/automations/runs'&&!referenceFixture()&&!params().has('fixture'))void api<State>('/api/state').then(s=>{state=s;render();if(modal==='run')renderModal();}).catch(()=>{});},1500);

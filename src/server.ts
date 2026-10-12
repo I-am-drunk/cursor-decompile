@@ -1,3 +1,6 @@
+import { T3Bridge } from './inference/t3.ts';
+import { RunEngine } from './inference/runtime.ts';
+import { ProviderRegistry } from './inference/provider.ts';
 import { AuthStore, cookieToken, sessionCookie } from './auth/store.ts';
 import { SettingsStore } from './settings/store.ts';
 import { createServer } from 'node:http';
@@ -11,6 +14,7 @@ import { parseAutomation } from './automations/model.ts';
 import { RequestError, Store } from './store.ts';
 const root = new URL('./', import.meta.url);
 const files: Record<string, [string, string]> = {
+  '/inference/settings-ui.ts':['inference/settings-ui.ts','application/javascript'],
   '/auth/login.ts':['auth/login.ts','application/javascript'],
   '/login.css':['auth/login.css','text/css'],
   '/settings/live-app.ts':['settings/live-app.ts','application/javascript'],
@@ -70,10 +74,12 @@ async function body(req: IncomingMessage): Promise<unknown> {
   try { return JSON.parse(Buffer.concat(chunks).toString()); }
   catch { throw new RequestError(400, 'Expected JSON.'); }
 }
-export interface AppOptions { settings?:SettingsStore; auth?:AuthStore }
+export interface AppOptions { settings?:SettingsStore; auth?:AuthStore; inference?:T3Bridge }
 export function createApp(store: Store, options:AppOptions={}) {
   const settings=options.settings??new SettingsStore(store.file+'.settings');
   const auth=options.auth??new AuthStore(store.file+'.auth');
+  const inference=options.inference??new T3Bridge(settings),providers=new ProviderRegistry();providers.add(inference);
+  store.adapter??=new RunEngine(store,providers);
   const attempts=new Map<string,{count:number;until:number}>();
   return createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -108,8 +114,22 @@ export function createApp(store: Store, options:AppOptions={}) {
       if(path==='/api/auth/logout'&&req.method==='POST'){
         await auth.logout(token);res.setHeader('Set-Cookie',sessionCookie(''));return json(res,200,{signedOut:true});
       }
+      if(path==='/api/inference'&&req.method==='GET')return json(res,200,{...inference.state,projects:inference.projects});
+      if(path==='/api/inference/pair'&&req.method==='POST'){
+        try{await inference.pair();}catch{return json(res,502,inference.state);}return json(res,200,{...inference.state,projects:inference.projects});
+      }
+      if(path==='/api/inference/disconnect'&&req.method==='POST'){await inference.disconnect();return json(res,200,inference.state);}
+      if(path==='/api/models'&&req.method==='GET')return json(res,200,await providers.models());
+      const cancel=/^\/api\/runs\/([\w-]+)\/cancel$/.exec(path);
+      if(cancel&&req.method==='POST'){await store.cancel(cancel[1]!);return json(res,202,{cancellationRequested:true});}
       if(path==='/api/settings'&&req.method==='GET')return json(res,200,await settings.read());
-      if(path==='/api/settings'&&req.method==='PATCH')return json(res,200,await settings.update(await body(req)));
+      if(path==='/api/settings'&&req.method==='PATCH'){
+        const input=await body(req) as {section?:string;values?:Record<string,unknown>};
+        if(input?.section==='inference'&&(await store.read()).runs.some(r=>r.status==='running'))throw new RequestError(409,'Finish or cancel active runs before changing inference.');
+        const result=await settings.update(input);
+        if(input?.section==='inference'&&['url','credential','credentialKind'].some(k=>input.values&&k in input.values))await inference.disconnect();
+        return json(res,200,result);
+      }
       if (path === '/api/state' && req.method === 'GET') return json(res, 200, await store.read());
       if (path === '/api/build' && req.method === 'GET') return json(res, 200, { hash: await buildHash() });
       if(path.startsWith('/api/configurations')) {
