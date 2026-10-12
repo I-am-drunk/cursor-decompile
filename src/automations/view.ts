@@ -34,15 +34,18 @@ export function shell(content: string, crumb = '', toolbar = ''): string {
   const destination=(name: string, glyph: string, path: string) =>
     `<a href="${path}" aria-label="${name}" title="${name}" class="destination ${name==='Automations'?'selected':''}"><span class="rail-icon">${icon(glyph)}</span><span class="full-icon">${icon(glyph)}</span><span class="side-label">${name}</span></a>`;
   return `<aside data-evidence="sidebar" class="shell-sidebar" aria-label="Main navigation"><div class="sidebar-surface">
-    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Toggle sidebar" aria-expanded="true"')}<strong class="side-label">Workspace</strong></div>
-    <nav class="side-nav">${destination('New chat','edit','/chat')}${destination('Automations','bot','/automations')}${destination('Search','search','/search')}</nav>
+    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Toggle sidebar" aria-expanded="true"')}${btn(icon('search'), 'sidebar-search', 'icon side-label', 'aria-label="Search" disabled')}</div>
+    <nav class="side-nav">${destination('New Chat','edit','/chat')}${destination('Automations','bot','/automations')}</nav>
     <div class="no-agents side-label">No Agents Yet</div><div class="account">
-      ${destination('Settings','gear','/settings')}${destination('Profile','person','/settings/accounts')}
-      ${btn('<span class="rail-icon">'+icon('menu')+'</span><span class="side-label">Local preview</span>', 'about', 'destination', 'aria-label="Local preview" title="Local preview"')}</div>
-  </div></aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
+      ${destination('Settings','gear','/settings')}
+  </div></div></aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
     <div class="scroll-pane">${content}</div></main>`;
 }
 
+// Owner-required disconnected state; never infer a connection from saved intent.
+export function chatGate(): string {
+  return '<div class="chat-gate"><h1><a href="/settings/linear">Connect to <span>Linear</span></a></h1></div>';
+}
 export function gate(): string {
   return `<div class="page gate"><header><h1 data-evidence="gate-title">Automations</h1></header>
     <section class="upsell" data-evidence="gate-card"><div class="upsell-inner">

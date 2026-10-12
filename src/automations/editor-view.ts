@@ -34,7 +34,7 @@ export function savedEditor(a:Automation,model:string,errors:string[],titleEditi
       <div class="ed-prompt-footer" data-evidence="ed-prompt-footer">${btn(`${esc(model)} ⌄`,'ed-models','ed-model','data-evidence="ed-model"')}</div></div><div class="ed-caption"></div></section>
     <section class="ed-section"><h3 data-evidence="ed-tools-title">Tools</h3><div class="ed-card ed-tools" data-evidence="ed-tools-card">
       ${a.tools.map(t=>`<div class="ed-tool-row">${btn(esc(t.name),`ed-tool:${t.id}`,'grow')}${btn(icon('close'),`remove-tool:${t.id}`,'icon','aria-label="Remove tool"')}</div>`).join('')}
-      ${btn(`${icon('plus')}<span>Add Tool or MCP</span>`,'ed-tools','ed-add','data-evidence="ed-add-tools"')}</div><div class="ed-caption">${!fixture&&a.id?`<a href="/settings/mcp?automation=${encodeURIComponent(a.id)}">Manage registry and per-automation MCP grants</a>`:''}</div></section></div>`;
+      ${btn(`${icon('plus')}<span>Add Tool or MCP</span>`,'ed-tools','ed-add','data-evidence="ed-add-tools"')}</div><div class="ed-caption"></div></section></div>`;
 }
 export function toolsMenu(a:Automation,submenu=false):string {
   const groups=[['Built-in',['Memories']],['MCP',['MCP Server']],['Slack',['Send to Slack','Read Public Slack Channels']],

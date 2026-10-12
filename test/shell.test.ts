@@ -2,13 +2,16 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { shell, list } from '../src/automations/view.ts';
-test('neutral shell keeps all five destinations in both icon representations', () => {
+import { shell, list, chatGate } from '../src/automations/view.ts';
+test('shell keeps captured header search and removes invented destinations', () => {
   const html=shell('');
-  for(const label of ['New chat','Automations','Search','Settings','Profile']) assert.ok(html.includes(`aria-label="${label}"`));
-  assert.equal((html.match(/class="full-icon"/g)||[]).length,5);
+  for(const label of ['New Chat','Automations','Search','Settings']) assert.ok(html.includes(`aria-label="${label}"`));
+  assert.equal((html.match(/class="full-icon"/g)||[]).length,3);
   assert.doesNotMatch(html+list([],'mine','',1),/Codebase|Cursor/);
   assert.match(html,/href="\/settings"/);
+  assert.doesNotMatch(html, /Profile|href="\/search"|Local preview/);
+  assert.match(chatGate(), /href="\/settings\/linear"/);
+  assert.match(chatGate(), /Connect to <span>Linear<\/span>/);
 });
 test('shell facts pin redacted capture measurements and disclose unmeasured timing',async()=>{
   const facts=JSON.parse(await readFile('src/shell/ui-facts.json','utf8'));

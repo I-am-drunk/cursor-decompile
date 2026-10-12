@@ -82,3 +82,6 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eee;padding:12px;bor
 .run-menu-items{padding:6px 0}.run-menu button{display:flex;align-items:center;width:100%;height:30px;padding:0 14px;border-radius:0;text-align:left;white-space:nowrap;gap:0;letter-spacing:inherit}
 .run-menu .menu-icon{width:24px;flex-shrink:0;display:flex;align-items:center}.menu-icon svg{width:14px;height:14px}
 .run-menu button>span:last-child{flex:1;min-width:0}.run-menu button:focus-visible{outline:0;background:rgba(20,20,20,.08)}
+
+/* Centered empty state; title typography is inherited from the captured h1. */
+.chat-gate{height:100%;display:grid;place-items:center}.chat-gate span{color:#055180;text-decoration:underline}

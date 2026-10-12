@@ -1,7 +1,7 @@
 import { installSidebar } from '../shell/sidebar.ts';
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
-import { btn, dialog, editor, esc, field, gate, icon, link, list, runs, runSummary, shell } from './view.ts';
+import { btn, dialog, editor, esc, field, gate, chatGate, icon, link, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
 import { TriggerController } from './trigger-controller.ts';
@@ -55,11 +55,10 @@ function render() {
   const selected=editUi.models.find(m=>m.id===form.model);
   const selectedName=selected?`${selected.name} ${modelSuffix(selected,form.modelParameters??(form.model==='composer-2.5'?{fast:'false'}:selected.defaults))}`.trim():names[form.model]??form.model;
   let content: string;
-  if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
+  if (location.pathname === '/chat') content = chatGate();
+  else if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
   else if (params().get('state') === 'error') content = `<div class="page" role="alert">Could not load automations. ${btn('Retry','retry','outline')}</div>`;
   else if (params().get('state') === 'upgrade') content = gate();
-  else if (location.pathname==='/chat') content='<div class="page"><h1>New chat</h1><p>Chat is not connected yet. Configure inference in Settings.</p></div>';
-  else if (location.pathname==='/search') content=list(state.automations, 'team', query, page,names);
   else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen,names,referenceFixture()?referenceTime:Date.now());
   else if (id&&id!=='new') content = savedEditor(form,selectedName,errors,titleEditing,editorFixture(),triggerUi.preview());
   else if (id) content = editor(form, selectedName, errors);

@@ -15,3 +15,6 @@ body.collapsed.rail-revealed .full-icon{opacity:1}body.collapsed.rail-revealed .
 @media(prefers-reduced-motion:reduce){.shell-sidebar,.sidebar-surface,.shell-sidebar .side-label,.shell-sidebar .rail-icon,.shell-sidebar .full-icon{transition:none}}
 body.collapsed .shell-sidebar .destination:has(.full-icon) .rail-icon{opacity:1}
 body.collapsed.rail-revealed .shell-sidebar .destination:has(.full-icon) .rail-icon{opacity:0}
+
+/* Header controls follow the captured top-right alignment. */
+.shell-sidebar .brand{justify-content:flex-end}
