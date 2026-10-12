@@ -12,6 +12,7 @@ const files: Record<string, [string, string]> = {
   '/app.ts': ['automations/app.ts', 'application/javascript'],
   '/model.ts': ['automations/model.ts', 'application/javascript'],
   '/view.ts': ['automations/view.ts', 'application/javascript'],
+  '/row-data.ts': ['automations/row-data.ts', 'application/javascript'],
   '/catalog.json': ['automations/catalog.json', 'application/json'],
   '/style.css': ['automations/style.css', 'text/css'],
 };

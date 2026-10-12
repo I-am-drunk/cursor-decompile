@@ -9,4 +9,6 @@ if [ "${1:-}" = "--reference" ]; then
   node pipeline/check-evidence.mjs "${REFERENCE_DIR:-reference/automations}"
   node pipeline/compare-ui.mjs artifacts/upgrade-measurements.json
   node pipeline/compare-ui.mjs artifacts/runs-measurements.json
+  node pipeline/compare-ui.mjs artifacts/failed-run-list-measurements.json
+  node pipeline/compare-ui.mjs artifacts/failed-run-summary-measurements.json
 fi

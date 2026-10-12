@@ -89,3 +89,20 @@ private store. The HAR captures are sensitive; never upload them in a PR.
 enabled workflow. Publishing `.github/workflows/` was rejected because the
 available GitHub token lacks `workflow` scope. Local checks remain runnable
 without changing account permissions.
+
+### Populated failed-run checks
+
+The optional reference gate also requires two exports from
+`/automations/runs?fixture=observed-failure`:
+
+- Table visible → press **Alt+Shift+E**, save the download as
+  `artifacts/failed-run-list-measurements.json`.
+- Open the row or **More actions → View details**, then press
+  **Alt+Shift+E** while the summary is open. Save as
+  `artifacts/failed-run-summary-measurements.json`.
+
+These fixtures derive from a real, agent-created failed launch captured on
+2026-10-12. Their IDs are sanitized and their clock is fixed; they never
+create a local or remote execution. The comparison selects only the matching
+state's measured facts in `src/automations/row-facts.json`.
+API eligibility facts in that file reproduce response JSON paths separately.

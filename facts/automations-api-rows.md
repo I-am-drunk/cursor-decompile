@@ -56,6 +56,29 @@ record these states. Property-level pins are added in `ui-facts.json`.
 Successful/running runs, tool output, and the populated automation-list UI
 remain **UNVERIFIED**; the latter is still hidden by the normal plan gate.
 
+**Further observation:** View Automation successfully opens the saved
+definition's `/automations/<id>` editor on this account. The main list remains
+gated; that does not imply the saved editor is gated. Captures include the
+saved editor, its Add Tool or MCP menu, the empty MCP submenu, Browse MCPs,
+the unsubmitted Custom MCP form, and the model picker. No connection was
+saved or authorized. These screenshots are evidence for a later editor
+parity slice, not a claim that this PR reproduces all those controls.
+
+The current saved-editor model menu also differs from the earlier API
+catalog subset. Preserve these separate capture states; do not equate the
+old catalog response with the new visible picker.
+
+## Local row implementation
+
+The global run table now matches the observed seven-column structure,
+click-to-summary behavior, row menu labels, failure detail, and navigation
+to the saved automation. The reference-derived local fixture uses sanitized
+IDs and is explicitly labeled; it is not a live local execution.
+Automation-list Model/creator ordering, owner search, stable enabled-first
+sorting and row actions follow pinned extraction. Its rendered parity,
+row-menu geometry, successful/running run detail and full editor parity
+remain UNVERIFIED.
+
 ## Deliberately created account data
 
 Two **agent-authored** private test definitions were created:
