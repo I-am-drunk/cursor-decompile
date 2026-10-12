@@ -92,7 +92,7 @@ without changing account permissions.
 
 ### Populated failed-run checks
 
-The optional reference gate also requires two exports from
+The optional reference gate also requires three exports from
 `/automations/runs?fixture=observed-failure`:
 
 - Table visible → press **Alt+Shift+E**, save the download as
@@ -100,6 +100,8 @@ The optional reference gate also requires two exports from
 - Open the row or **More actions → View details**, then press
   **Alt+Shift+E** while the summary is open. Save as
   `artifacts/failed-run-summary-measurements.json`.
+- Open **More actions** and press **Alt+Shift+E** while its menu is open;
+  save as `artifacts/failed-run-menu-measurements.json`.
 
 These fixtures derive from a real, agent-created failed launch captured on
 2026-10-12. Their IDs are sanitized and their clock is fixed; they never

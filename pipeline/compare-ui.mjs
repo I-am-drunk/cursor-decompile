@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 export function compare(facts, actual) {
   const url=new URL(actual.url), isRuns=url.pathname==='/automations/runs';
-  const rowState=['failed-run-list','failed-run-summary'].includes(actual.captureState)?actual.captureState:null;
+  const rowState=['failed-run-list','failed-run-summary','failed-run-menu'].includes(actual.captureState)?actual.captureState:null;
   assert.ok(isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
   if (rowState) {
     assert.ok(isRuns && url.searchParams.get('fixture')==='observed-failure','Expected explicit reference-derived fixture');

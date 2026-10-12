@@ -1,6 +1,6 @@
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
-import { btn, dialog, editor, esc, field, gate, link, list, runs, runSummary, shell } from './view.ts';
+import { btn, dialog, editor, esc, field, gate, icon, link, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 let state: State = emptyState(), form: Automation = draft(), models: {id:string;name:string}[] = [];
 let dirty = false, scope = 'mine', page = 1, query = '', runQuery = '', searchOpen = false;
@@ -91,13 +91,13 @@ function renderModal() {
   }
   if (modal==='run-menu') {
     const run=runRows().find(r=>r.id===editId); if (!run) return;
-    overlays.innerHTML=`<div class="run-menu" role="menu" aria-label="Run actions">
-      ${btn('View details',`run:${run.id}`,'','role="menuitem"')}
-      ${btn('Edit Automation',`view-automation:${run.automationId}`,'','role="menuitem"')}</div>`;
+    overlays.innerHTML=`<div class="run-menu" role="menu" aria-label="Row actions" tabindex="-1" data-evidence="rm-menu"><div class="run-menu-items">
+      ${btn(`<span class="menu-icon">${icon('eye')}</span><span data-evidence="rm-view-label">View details</span>`,`run:${run.id}`,'','role="menuitem" data-evidence="rm-view"')}
+      ${btn(`<span class="menu-icon">${icon('edit')}</span><span data-evidence="rm-edit-label">Edit Automation</span>`,`view-automation:${run.automationId}`,'','role="menuitem" data-evidence="rm-edit"')}</div></div>`;
     const menu=overlays.firstElementChild as HTMLElement, rect=returnFocus!.getBoundingClientRect();
-    menu.style.left=`${Math.max(8,rect.right-menu.offsetWidth)}px`;
+    menu.style.left=`${Math.max(12,Math.min(rect.left,innerWidth-menu.offsetWidth-12))}px`;
     menu.style.top=`${Math.min(rect.bottom+4,innerHeight-menu.offsetHeight-8)}px`;
-    menu.querySelector('button')?.focus();return;
+    menu.focus();return;
   }
   let html = '', title = '', footer = '';
   const apply = (action: string) => btn('Cancel','dismiss','outline')+btn('Done',action,'primary');
@@ -242,7 +242,8 @@ document.addEventListener('keydown',e=>{
     if(e.key==='Escape'){e.preventDefault();closeModal();return;}
     if(e.key==='ArrowDown'||e.key==='ArrowUp'){
       e.preventDefault();const buttons=[...overlays.querySelectorAll<HTMLButtonElement>('button')];
-      const next=(buttons.indexOf(document.activeElement as HTMLButtonElement)+(e.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;
+      const current=buttons.indexOf(document.activeElement as HTMLButtonElement);
+      const next=current<0?(e.key==='ArrowDown'?0:buttons.length-1):(current+(e.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;
       buttons[next]?.focus();return;
     }
   }
@@ -263,7 +264,7 @@ async function boot() {
   }
 }
 async function exportMeasurements() {
-  const captureState=modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
+  const captureState=modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
   if(modal!=='run'&&modal!=='run-menu') closeModal();
   await new Promise<void>(r=>requestAnimationFrame(()=>r()));
   const build=await api<{hash:string}>('/api/build');

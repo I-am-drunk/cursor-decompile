@@ -12,6 +12,8 @@ export const icon = (name: string): string => {
     code: '<path d="m5 4-4 4 4 4m6-8 4 4-4 4M9 2 7 14"/>',
     check: '<path d="m3 8 3 3 7-7"/>', close: '<path d="m4 4 8 8M12 4l-8 8"/>',
     sidebar: '<rect x="2" y="3" width="12" height="10" rx="1"/><path d="M6 3v10"/>',
+    eye: '<path d="M1 8q7-10 14 0-7 10-14 0Z"/><circle cx="8" cy="8" r="2"/>',
+    edit: '<path d="M8 3H2v11h11V8M7 9l1-3 5-5 2 2-5 5-3 1Z"/>',
   };
   return `<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3">${paths[name] ?? paths.bot}</svg>`;
 };

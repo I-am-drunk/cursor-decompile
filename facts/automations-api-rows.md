@@ -6,8 +6,9 @@
 separate observations, not an inference from the UI upsell.
 
 All requests used the normal endpoints through the signed-in Twilight page.
-No credentials were exported, entitlement flags modified, billing changed,
-or automatic schedules enabled. Raw responses remain private under
+No credentials were committed, entitlement flags modified, billing changed,
+or automatic schedules enabled. HARs may contain session material and must
+remain private. Raw responses remain under
 `reference/automations/rows-2026-10-12/`.
 
 | ID | Artifact | SHA-256 |
@@ -76,7 +77,7 @@ to the saved automation. The reference-derived local fixture uses sanitized
 IDs and is explicitly labeled; it is not a live local execution.
 Automation-list Model/creator ordering, owner search, stable enabled-first
 sorting and row actions follow pinned extraction. Its rendered parity,
-row-menu geometry, successful/running run detail and full editor parity
+successful/running run detail and full editor parity
 remain UNVERIFIED.
 
 ## Deliberately created account data
@@ -91,3 +92,23 @@ Both remain disabled. A was given the public
 error; B has no repository. No further execution was attempted after the
 explicit plan-restricted failure. IDs and cleanup references stay in the
 private probe files. These are not pre-existing user automations.
+
+## Verification and handoff
+
+- 23 tests pass, including timestamp/duration formatting, row semantics,
+  summary escaping, creator search and reference-state rejection.
+- 67 fact records validate; 66 pinned raw-source locators reproduce.
+- Current-build Twilight exports at 1270 × 764 CSS px / DPR 2 pass
+  **101 failed-row + 72 summary + 29 menu checks**. The original upsell and
+  empty-history checks also pass: **303 measured checks total**.
+- Mouse and keyboard row activation, menu selection, Escape focus return,
+  View Automation navigation and browser Back were exercised locally.
+- The new private HAR has 628 entries and every recorded JS/CSS body.
+  `editor-observations.jsonl` preserves the additional read-only editor
+  observations; no new MCP connection or authorization was submitted.
+
+Remaining gaps: the main populated automation-list UI is still gated,
+successful/running execution cannot be observed on this plan, and full
+font/icon pixel parity is not certified. Next: use the now-reachable saved
+editor/MCP captures for a separate control-parity slice; a paid-plan reference
+is needed for genuine successful-run and populated main-list verification.
