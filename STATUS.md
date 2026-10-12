@@ -49,3 +49,21 @@ selection and on-disk streamed/cancellable transcripts are implemented.
 [Protocol evidence and honest gaps](facts/t3-bridge.md). 69 tests pass, including
 replay without duplicate start and visible incompatibility/expiry failures.
 Live deployment compatibility remains UNVERIFIED without a supplied environment.
+
+## P4 MCP server and registry
+
+Official SDK 1.32.1 isolated to `mcp/`: 24 management tools, read resources,
+guided prompt, stdio + authenticated Streamable HTTP; shared product state.
+Registry CRUD, real transport probes, five states and per-automation grants.
+[Verification and honest gaps](facts/mcp-verification.md); 72 root + 6 MCP tests
+pass, both strict TS projects and existing standard evidence gates remain green.
+MCP invocation in runs is deliberately a follow-up; bound runs fail visibly.
+
+## Owner delivery sequence
+
+P0 shell [#19](https://github.com/I-am-drunk/cursor-decompile/pull/19),
+P1 settings [#20](https://github.com/I-am-drunk/cursor-decompile/pull/20),
+P2 login [#21](https://github.com/I-am-drunk/cursor-decompile/pull/21),
+P3 inference [#22](https://github.com/I-am-drunk/cursor-decompile/pull/22) merged.
+P4 MCP [#23](https://github.com/I-am-drunk/cursor-decompile/pull/23) completes
+this ordered product series, not whole-reference parity.

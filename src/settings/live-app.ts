@@ -1,3 +1,4 @@
+import { mountMcp } from '../mcp/settings-ui.ts';
 import { mountInference } from '../inference/settings-ui.ts';
 import { liveSettings } from './live-view.ts';
 import { sections } from './schema.ts';
@@ -9,7 +10,7 @@ export async function settingsApi<T>(path:string,method='GET',data?:unknown):Pro
   const response=await fetch(path,{method,headers:{'Content-Type':'application/json','X-Local-Request':'1'},...(data===undefined?{}:{body:JSON.stringify(data)})});
   const result=await response.json();if(!response.ok)throw Error(result.error??result.message??'Request failed.');return result as T;
 }
-function render(){root.innerHTML=liveSettings(state,current());void showIdentity();if(current()==='inference')void mountInference(document.querySelector('#inference-status')!,settingsApi,state.inference.projectId).catch(e=>{notice.textContent=e.message;});}
+function render(){root.innerHTML=liveSettings(state,current());void showIdentity();if(current()==='mcp')void mountMcp(document.querySelector('#settings-extension')!,settingsApi,new URLSearchParams(location.search).get('automation')??'').catch(e=>{notice.textContent=e.message;});if(current()==='inference')void mountInference(document.querySelector('#inference-status')!,settingsApi,state.inference.projectId).catch(e=>{notice.textContent=e.message;});}
 async function showIdentity(){
  const status=await settingsApi<{identity:{email:string;id:string}|null}>('/api/auth/status');
  const target=document.querySelector('#identity');if(!target)return;

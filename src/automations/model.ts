@@ -3,7 +3,7 @@ export const triggerKinds = ['Schedule', 'Webhook', 'Linear', 'GitHub', 'Slack',
 export type TriggerKind = typeof triggerKinds[number];
 export interface Schedule {kind:'hourly'|'daily'|'weekly'|'custom';time:string;day:number;timeZone:string}
 export interface Trigger { id: string; kind: TriggerKind; event: string; value: string; schedule?:Schedule }
-export interface Tool { id: string; kind: 'MCP' | 'Memories' | 'Slack' | 'Microsoft Teams' | 'Source Control'; name: string; url: string; configurationRef?: string }
+export interface Tool { id: string; kind: 'MCP' | 'Memories' | 'Slack' | 'Microsoft Teams' | 'Source Control'; name: string; url: string; configurationRef?: string; serverId?:string; allowedTools?:string[]|'all'; approval?:'ask'|'auto'; scope?:'user'|'workspace' }
 export interface Automation {
   id: string; revision: number; name: string; prompt: string; enabled: boolean;
   scope: 'mine' | 'team'; model: string; repositories: string[];
@@ -43,7 +43,7 @@ export function validate(a: Automation): string[] {
   if (a.triggers.filter(t => t.kind === 'Webhook').length > 1) errors.push('Only one webhook trigger is allowed.');
   for (const t of a.tools.filter(t => t.kind === 'MCP')) {
     if (!t.name.trim()) errors.push('Name the MCP server.');
-    if(t.configurationRef) continue;
+    if(t.configurationRef||t.serverId) continue;
     try { const u = new URL(t.url); if (u.protocol !== 'https:' || u.username || u.password) throw Error(); }
     catch { errors.push('MCP requires an HTTPS URL without credentials.'); }
   }
@@ -85,7 +85,14 @@ export function parseAutomation(v: unknown): Automation {
         (t.configurationRef===undefined||text(t.configurationRef)) &&
         ['MCP','Memories','Slack','Microsoft Teams','Source Control'].includes(String(t.kind))))
     throw new Error('Invalid automation payload.');
-  const a = v as unknown as Automation;
+  const a = structuredClone(v as unknown as Automation);
+  for(const t of a.tools){
+    if(t.serverId!==undefined&&!text(t.serverId))throw Error('Invalid MCP server id.');
+    if(t.allowedTools!==undefined&&t.allowedTools!=='all'&&(!Array.isArray(t.allowedTools)||t.allowedTools.length>1000||!t.allowedTools.every(text)))throw Error('Invalid MCP tool grants.');
+    if(t.serverId){t.allowedTools??=[];t.approval??='ask';}
+    if(t.scope!==undefined&&!['user','workspace'].includes(t.scope))throw Error('Invalid MCP scope.');
+    if(t.approval!==undefined&&!['ask','auto'].includes(t.approval))throw Error('Invalid MCP approval.');
+  }
   for(const t of a.triggers)if(t.schedule!==undefined){
     const s=t.schedule;
     if(t.kind!=='Schedule'||!object(s)||!['hourly','daily','weekly','custom'].includes(s.kind)||

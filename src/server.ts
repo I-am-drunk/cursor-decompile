@@ -1,3 +1,4 @@
+import { McpRegistry } from './mcp/registry.ts';
 import { T3Bridge } from './inference/t3.ts';
 import { RunEngine } from './inference/runtime.ts';
 import { ProviderRegistry } from './inference/provider.ts';
@@ -14,6 +15,7 @@ import { parseAutomation } from './automations/model.ts';
 import { RequestError, Store } from './store.ts';
 const root = new URL('./', import.meta.url);
 const files: Record<string, [string, string]> = {
+  '/mcp/settings-ui.ts':['mcp/settings-ui.ts','application/javascript'],
   '/inference/settings-ui.ts':['inference/settings-ui.ts','application/javascript'],
   '/auth/login.ts':['auth/login.ts','application/javascript'],
   '/login.css':['auth/login.css','text/css'],
@@ -74,12 +76,13 @@ async function body(req: IncomingMessage): Promise<unknown> {
   try { return JSON.parse(Buffer.concat(chunks).toString()); }
   catch { throw new RequestError(400, 'Expected JSON.'); }
 }
-export interface AppOptions { settings?:SettingsStore; auth?:AuthStore; inference?:T3Bridge }
+export interface AppOptions { settings?:SettingsStore; auth?:AuthStore; inference?:T3Bridge; registry?:McpRegistry }
 export function createApp(store: Store, options:AppOptions={}) {
   const settings=options.settings??new SettingsStore(store.file+'.settings');
   const auth=options.auth??new AuthStore(store.file+'.auth');
   const inference=options.inference??new T3Bridge(settings),providers=new ProviderRegistry();providers.add(inference);
   store.adapter??=new RunEngine(store,providers);
+  const registry=options.registry??new McpRegistry(store.file+'.mcp');
   const attempts=new Map<string,{count:number;until:number}>();
   return createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -113,6 +116,16 @@ export function createApp(store: Store, options:AppOptions={}) {
       }
       if(path==='/api/auth/logout'&&req.method==='POST'){
         await auth.logout(token);res.setHeader('Set-Cookie',sessionCookie(''));return json(res,200,{signedOut:true});
+      }
+      if(path==='/api/mcp-servers'&&req.method==='GET')return json(res,200,await registry.list());
+      if(path==='/api/mcp-servers'&&req.method==='POST')return json(res,200,await registry.save(await body(req)));
+      const mcp=/^\/api\/mcp-servers\/([\w-]+)(\/probe)?$/.exec(path);
+      if(mcp&&req.method==='DELETE'&&!mcp[2]){await registry.remove(mcp[1]!,Number(url.searchParams.get('revision')));return json(res,200,{deleted:true});}
+      if(mcp&&req.method==='POST'&&mcp[2])return json(res,200,await registry.probe(mcp[1]!));
+      const bindings=/^\/api\/automations\/([\w-]+)\/mcp$/.exec(path);
+      if(bindings&&req.method==='GET'){
+        const a=(await store.read()).automations.find(a=>a.id===bindings[1]);if(!a)throw new RequestError(404,'Automation not found.');
+        return json(res,200,await Promise.all(a.tools.filter(t=>t.kind==='MCP').map(async tool=>({tool,...await registry.resolve(tool)}))));
       }
       if(path==='/api/inference'&&req.method==='GET')return json(res,200,{...inference.state,projects:inference.projects});
       if(path==='/api/inference/pair'&&req.method==='POST'){

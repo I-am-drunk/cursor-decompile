@@ -19,7 +19,7 @@ export function savedEditor(a:Automation,model:string,errors:string[],titleEditi
     <div class="ed-meta" data-evidence="ed-meta">
       ${btn('<span></span>','toggle-enabled',`ed-switch ${a.enabled?'on':''}`,`role="switch" aria-checked="${a.enabled}" aria-label="Toggle automation enabled state" data-evidence="ed-switch"`)}
       <span>${a.enabled?'Active':'Inactive'}</span><i></i>
-      <div class="ed-environment">${btn(`${esc(repo)} ⌄`,'repos','ed-small')}${btn(`${esc(a.branch||'main')} ⌄`,'edit-branch','ed-small')}${btn('♧ ⌄','about','ed-small','aria-label="Cursor Cloud"')}</div>
+      <div class="ed-environment">${btn(`${esc(repo)} ⌄`,'repos','ed-small')}${btn(`${esc(a.branch||'main')} ⌄`,'edit-branch','ed-small')}${btn('♧ ⌄','about','ed-small','aria-label="Cloud environment"')}</div>
       <i></i><span class="muted">By ${esc(a.ownerName||'You')}</span></div>
     <div class="tabs ed-tabs" role="tablist" aria-label="Automation detail sections" data-evidence="ed-tabs">
       ${btn('Settings','ed-settings','','role="tab" aria-selected="true"')}${btn('Run History',`ed-runs:${a.id}`,'','role="tab" aria-selected="false"')}</div></div>
@@ -34,7 +34,7 @@ export function savedEditor(a:Automation,model:string,errors:string[],titleEditi
       <div class="ed-prompt-footer" data-evidence="ed-prompt-footer">${btn(`${esc(model)} ⌄`,'ed-models','ed-model','data-evidence="ed-model"')}</div></div><div class="ed-caption"></div></section>
     <section class="ed-section"><h3 data-evidence="ed-tools-title">Tools</h3><div class="ed-card ed-tools" data-evidence="ed-tools-card">
       ${a.tools.map(t=>`<div class="ed-tool-row">${btn(esc(t.name),`ed-tool:${t.id}`,'grow')}${btn(icon('close'),`remove-tool:${t.id}`,'icon','aria-label="Remove tool"')}</div>`).join('')}
-      ${btn(`${icon('plus')}<span>Add Tool or MCP</span>`,'ed-tools','ed-add','data-evidence="ed-add-tools"')}</div><div class="ed-caption"></div></section></div>`;
+      ${btn(`${icon('plus')}<span>Add Tool or MCP</span>`,'ed-tools','ed-add','data-evidence="ed-add-tools"')}</div><div class="ed-caption">${!fixture&&a.id?`<a href="/settings/mcp?automation=${encodeURIComponent(a.id)}">Manage registry and per-automation MCP grants</a>`:''}</div></section></div>`;
 }
 export function toolsMenu(a:Automation,submenu=false):string {
   const groups=[['Built-in',['Memories']],['MCP',['MCP Server']],['Slack',['Send to Slack','Read Public Slack Channels']],
@@ -58,7 +58,7 @@ export function browseMcp(providers:McpProvider[],query:string):string {
     <div class="ed-browse-scroll" data-evidence="eb-scroll"><div class="ed-provider-grid">${shown.map(p=>
       `<button class="ed-provider ${p.name==='Custom MCP'?'custom':''}" data-act="${p.name==='Custom MCP'?'ed-custom':'ed-provider:'+p.id}" ${p.name==='Custom MCP'?'data-evidence="eb-custom"':['provider-1','provider-2'].includes(p.id)?`data-evidence="eb-${p.id}"`:p.name==='Linear'?'data-evidence="lc-provider"':''}>
         <span class="provider-icon" aria-hidden="true">${p.name==='Custom MCP'?'+':esc(p.name.slice(0,1))}</span>
-        <span class="provider-copy"><span>${esc(p.name)}</span><span>${esc(p.description)}</span></span>${p.name==='Custom MCP'?'':'<span>›</span>'}
+        <span class="provider-copy"><span>${esc(p.name)}</span><span>${esc(p.description.replace(/\bCursor\b/g,'Workspace'))}</span></span>${p.name==='Custom MCP'?'':'<span>›</span>'}
       </button>`).join('')}${shown.length?'':'<p>No results found</p>'}</div></div></div></dialog>`;
 }
 const mcpInput=(name:string,value:string,placeholder:string,attrs='')=>

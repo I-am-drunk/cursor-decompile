@@ -1,0 +1,30 @@
+import { resolve } from 'node:path';
+import { pathToFileURL,fileURLToPath } from 'node:url';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { Store } from '../src/store.ts';
+import { SettingsStore } from '../src/settings/store.ts';
+import { AuthStore } from '../src/auth/store.ts';
+import { McpRegistry } from '../src/mcp/registry.ts';
+import { createApp } from '../src/server.ts';
+import { ProviderRegistry } from '../src/inference/provider.ts';
+import { T3Bridge } from '../src/inference/t3.ts';
+import { RunEngine } from '../src/inference/runtime.ts';
+import { SdkMcpClient } from './client.ts';
+import { Management } from './service.ts';
+import { createMcpServer } from './server.ts';
+import { createMcpHttp } from './http.ts';
+export async function start(){
+ const file=resolve(process.env.DATA_FILE??fileURLToPath(new URL('../.local/automations.json',import.meta.url))),store=new Store(file),settings=new SettingsStore(file+'.settings'),auth=new AuthStore(file+'.auth');
+ const bridge=new T3Bridge(settings),registry=new McpRegistry(file+'.mcp',new SdkMcpClient(settings)),providers=new ProviderRegistry();providers.add(bridge);store.adapter=new RunEngine(store,providers);
+ const management=new Management(store,settings,registry,providers);management.bridge=bridge;management.ownerId=async()=>(await auth.disk.read()).account?.id??'local-owner';
+ const http=process.argv.includes('--http')?createMcpHttp(management,process.env.MCP_TOKEN??''):undefined;
+ const app=createApp(store,{settings,auth,inference:bridge,registry});
+ await new Promise<void>((resolve,reject)=>{app.once('error',reject);app.listen(Number(process.env.PORT??4317),'127.0.0.1',resolve);});
+ const mcp=createMcpServer(management);
+ if(http)await new Promise<void>((resolve,reject)=>{http.once('error',reject);http.listen(Number(process.env.MCP_PORT??4318),'127.0.0.1',resolve);});
+ else await mcp.connect(new StdioServerTransport());
+ const close=()=>{bridge.rpc?.close();app.closeAllConnections();app.close();http?.closeAllConnections();http?.close();void mcp.close();};
+ process.once('SIGTERM',close);process.once('SIGINT',close);if(!http)process.stdin.once('end',close);
+ return {app,http,mcp,close};
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href)void start().catch(e=>{console.error((e as Error).message);process.exit(1);});

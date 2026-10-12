@@ -42,9 +42,9 @@ npm run check
 The sidebar's **Local preview** button opens evidence/scenario links.
 List, editing, multiple triggers, per-automation MCP configuration,
 model selection, repository context, duplication and deletion work locally.
-Actual execution/authentication is deliberately unavailable without an
-`ExecutionAdapter` (see `src/store.ts`); no scheduler or fake successful
-execution is supplied. Synthetic run states are explicitly labeled.
+Local authentication and a T3 execution adapter are now available; pair a
+supported environment in Settings → Inference before running. No scheduler
+or fake successful execution is supplied. Synthetic run states are explicitly labeled.
 
 The first capture covered the upsell and empty Run History. A subsequent
 [API/row slice](facts/automations-api-rows.md) added a real failed run and
@@ -115,3 +115,18 @@ settings shows the active identity and Sign out. Authentication lives in
 single-user **loopback-only** deployment, not a public authentication service.
 See [settings scope](facts/settings-functional.md) and
 [account security boundary](facts/account-login.md).
+
+## MCP management server (owner P4)
+
+See [MCP setup and transports](mcp/README.md). The isolated `mcp/` package is the
+one authorized runtime-dependency exception: official SDK 1.32.1. Install it
+with `npm --prefix mcp ci` before `npm run check` (the full gate checks both
+packages). Start `npm --prefix mcp start` or `npm --prefix mcp run http` instead
+of starting a second product process; both share one state owner with the UI.
+
+It exposes full definition/trigger/run management, model and settings reads and
+writes, resources and a guided prompt. Registry probes implement stdio and
+Streamable HTTP with deny-by-default destination policy and write-only secrets.
+Per-automation MCP grants persist, but run-time MCP invocation is a follow-up:
+bound runs fail visibly rather than silently dropping their tools.
+T3 live interoperability and all new unmeasured UI remain explicitly UNVERIFIED.
