@@ -34,11 +34,8 @@ export function shell(content: string, crumb = '', toolbar = ''): string {
   const destination=(name: string, glyph: string, path: string) =>
     `<a href="${path}" ${path.startsWith('/automations')?'data-nav':''} aria-label="${name}" title="${name}" class="destination ${name===(crumb==='Run History'?'Run History':'Automations')?'selected':''}"><span class="rail-icon">${icon(glyph)}</span><span class="side-label">${name}</span></a>`;
   return `<aside data-evidence="sidebar" class="shell-sidebar" aria-label="Main navigation"><div class="sidebar-surface">
-    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Toggle sidebar" aria-expanded="true"')}<strong class="side-label">Workspace</strong></div>
-    <nav class="side-nav">${destination('Automations','bot','/automations')}${destination('Run History','clock','/automations/runs')}</nav>
-    <div class="account">
-      ${destination('Settings','gear','/settings')}${destination('Accounts','person','/settings/accounts')}
-      ${btn('<span class="rail-icon">'+icon('menu')+'</span><span class="side-label">Local preview</span>', 'about', 'destination', 'aria-label="Local preview" title="Local preview"')}</div>
+    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Collapse sidebar" aria-expanded="true"')}</div>
+    <nav class="side-nav">${destination('Automations','bot','/automations')}</nav>
   </div></aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
     <div class="scroll-pane">${content}</div></main>`;
 }

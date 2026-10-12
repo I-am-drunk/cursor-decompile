@@ -22,7 +22,7 @@ test('HTTP server serves original UI and protects mutation and private files',as
     const page=await send(path);assert.equal(page.status,404);assert.match(await page.text(),/Back to Automations/);
   }
   for(const path of ['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending']){
-    const settings=await send(path);assert.equal(settings.status,200);assert.match(await settings.text(),/settings-app.ts/);
+    const settings=await send(path);assert.equal(settings.status,404);assert.match(await settings.text(),/Page not found/);
   }
   assert.equal((await send('/dashboard/unknown')).status,404);
   assert.equal((await send('/api/settings',{method:'POST',headers:{'x-local-request':'1'},body:'{}'})).status,404);

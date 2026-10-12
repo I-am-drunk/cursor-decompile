@@ -115,7 +115,7 @@ export function createApp(store: Store, options:AppOptions={}) {
         return res.end(await readFile(new URL('auth/login.html',root)));
       }
       if(req.method==='GET'&&!files[path]&&!path.startsWith('/api/')&&
-          !['/','/login'].includes(path)&&!/^\/(?:settings|dashboard)(?:\/|$)/.test(path)&&
+          !['/','/login'].includes(path)&&!/^\/settings(?:\/|$)/.test(path)&&
           !/^\/automations(?:\/[\w-]+)?$/.test(path)){
         res.writeHead(404,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(new URL('not-found.html',root)));
@@ -186,10 +186,7 @@ export function createApp(store: Store, options:AppOptions={}) {
         res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(new URL('settings/live.html',root)));
       }
-      if(['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending'].includes(path)){
-        res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
-        return res.end(await readFile(new URL('settings/index.html',root)));
-      }
+
       const file = files[path];
       if (file) {
         let content = await readFile(new URL(file[0], root), 'utf8');
