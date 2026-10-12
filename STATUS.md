@@ -26,3 +26,11 @@ Codebases removed; five accessible destinations, overlay reveal, reduced-motion
 support and settings entry added. Unit/type/evidence gates pass (57 tests).
 Timing/hover fidelity remains explicitly UNVERIFIED; no whole-shell parity claim.
 P1 functional settings, P2 local login, P3 T3 inference and P4 MCP remain pending.
+
+## P1 functional settings
+
+Five functional settings sections now save and reload via a validated,
+revisioned disk API; write-only credentials never appear in responses.
+[Scope/evidence and UNVERIFIED list](facts/settings-functional.md).
+59 tests, strict TS and existing evidence checks pass. Historical comparison
+fixtures remain read-only; live identity/pairing/MCP registry follow in P2–P4.
