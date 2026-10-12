@@ -1,7 +1,8 @@
 // DESIGN: local domain, deliberately not Cursor's private wire protocol.
 export const triggerKinds = ['Schedule', 'Webhook', 'Linear', 'GitHub', 'Slack', 'PagerDuty'] as const;
 export type TriggerKind = typeof triggerKinds[number];
-export interface Trigger { id: string; kind: TriggerKind; event: string; value: string }
+export interface Schedule {kind:'hourly'|'daily'|'weekly'|'custom';time:string;day:number;timeZone:string}
+export interface Trigger { id: string; kind: TriggerKind; event: string; value: string; schedule?:Schedule }
 export interface Tool { id: string; kind: 'MCP' | 'Memories' | 'Slack' | 'Microsoft Teams' | 'Source Control'; name: string; url: string; configurationRef?: string }
 export interface Automation {
   id: string; revision: number; name: string; prompt: string; enabled: boolean;
@@ -84,7 +85,14 @@ export function parseAutomation(v: unknown): Automation {
         ['MCP','Memories','Slack','Microsoft Teams','Source Control'].includes(String(t.kind))))
     throw new Error('Invalid automation payload.');
   const a = v as unknown as Automation;
+  for(const t of a.triggers)if(t.schedule!==undefined){
+    const s=t.schedule;
+    if(t.kind!=='Schedule'||!object(s)||!['hourly','daily','weekly','custom'].includes(s.kind)||
+      !hoursValid(s.time)||!Number.isInteger(s.day)||s.day<0||s.day>6||!text(s.timeZone))
+      throw new Error('Invalid schedule metadata.');
+  }
   if ([a.triggers, a.tools].some(items => new Set(items.map(t => t.id)).size !== items.length))
     throw new Error('Duplicate configuration IDs.');
   return structuredClone(a);
 }
+const hoursValid=(v:unknown):v is string=>typeof v==='string'&&/^(?:[01]\d|2[0-3]):00$/.test(v);

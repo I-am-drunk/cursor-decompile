@@ -4,6 +4,7 @@ import { btn, dialog, editor, esc, field, gate, icon, link, list, runs, runSumma
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
 import { TriggerController } from './trigger-controller.ts';
+import { unsavedDialog } from './preset-view.ts';
 import { editorToolbar, savedEditor } from './editor-view.ts';
 import { modelSuffix, savedEditorFixture } from './editor-state.ts';
 import type { EditorModel, McpProvider } from './editor-state.ts';
@@ -52,7 +53,7 @@ function render() {
   else if (params().get('state') === 'error') content = `<div class="page" role="alert">Could not load automations. ${btn('Retry','retry','outline')}</div>`;
   else if (params().get('state') === 'upgrade') content = gate();
   else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen,names,referenceFixture()?referenceTime:Date.now());
-  else if (id&&id!=='new') content = savedEditor(form,selectedName,errors,titleEditing,editorFixture());
+  else if (id&&id!=='new') content = savedEditor(form,selectedName,errors,titleEditing,editorFixture(),triggerUi.preview());
   else if (id) content = editor(form, selectedName, errors);
   else content = list(state.automations, scope, query, page,names);
   app.innerHTML = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '',id&&id!=='new'&&!isRuns?editorToolbar(form,dirty):'');
@@ -102,6 +103,7 @@ async function save() {
 const value = (name: string) => (overlays.querySelector<HTMLInputElement>(`[name="${name}"]`)?.value ?? '');
 const options = (values: readonly string[], selected: string) => values.map(v=>`<option ${v===selected?'selected':''}>${esc(v)}</option>`).join('');
 function renderModal() {
+  if(modal==='unsaved'){overlays.innerHTML=unsavedDialog();activateDialog();return;}
   if (modal==='run') {
     const run=runRows().find(r=>r.id===editId);
     if (!run) {closeModal();toast('Run not found.');return;}
@@ -163,6 +165,7 @@ function renderModal() {
       ${link('Reference-derived failed run','/automations/runs?fixture=observed-failure','button')}
       ${link('Reference-derived saved editor','/automations/editor-fixture?fixture=saved-editor','button')}
       ${link('Captured trigger controls','/automations/editor-fixture?fixture=saved-editor&controls=triggers','button')}
+      ${link('Preset and validation captures','/automations/editor-fixture?fixture=saved-editor&controls=presets','button')}
       ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
       ${btn('Export layout measurements','export')}</div>`;
   }
@@ -306,10 +309,11 @@ async function boot() {
   }
 }
 async function exportMeasurements() {
-  const captureState=triggerUi.panel?triggerUi.captureState():editUi.panel?editUi.captureState():
+  const captureState=params().get('controls')==='presets'?(modal==='unsaved'?'unsaved-dialog':triggerUi.capturePresetState()):
+    triggerUi.panel?triggerUi.captureState():editUi.panel?editUi.captureState():
     params().get('controls')==='triggers'?triggerUi.captureState():editorFixture()?'saved-editor':
     modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
-  if(!triggerUi.panel&&!editUi.panel&&modal!=='run'&&modal!=='run-menu') closeModal();
+  if(!triggerUi.panel&&!editUi.panel&&modal!=='run'&&modal!=='run-menu'&&modal!=='unsaved') closeModal();
   await new Promise<void>(r=>requestAnimationFrame(()=>r()));
   const build=await api<{hash:string}>('/api/build');
   const elements=[...document.querySelectorAll<HTMLElement>('[data-evidence]')].map(e=>{
