@@ -30,4 +30,5 @@ if [ "${1:-}" = "--reference" ]; then
   for state in settings-account settings-user-menu settings-overview settings-returned settings-dismissed; do
     node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
   done
+  node pipeline/measurement-summary.mjs
 fi

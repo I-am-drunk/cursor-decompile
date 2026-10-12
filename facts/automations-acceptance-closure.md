@@ -14,8 +14,8 @@ Running alone shows **No Results / Try different filters**. Adding Failed
 restores the previously captured failure. No new execution was made.
 Preview: `/automations/runs?fixture=observed-failure&controls=filters`.
 
-Fifty-one tests and **2,778 measured checks across 55 states** pass (all 2,157
-prior checks + 621 new). All 551 raw-source pins reproduce. Same-state local
+Fifty-one tests and **2,678 measured checks across 55 states** pass (all 2,157
+prior checks + 521 new). All 551 raw-source pins reproduce. Same-state local
 exports/screenshots were refreshed through Computer Use at 1270 × 764, DPR 2.
 No vendor assets or personal account data are served. Other filter categories,
 full icon/font raster parity, connected providers and successful runs remain

@@ -90,7 +90,17 @@ and the Linear MCP pre-install disclosure. Preview at
 `/automations/editor-fixture?fixture=saved-editor&controls=connections`.
 Connect and Add Plugin explain that authorization/installation is unavailable;
 they do not contact a provider. The [closure audit](facts/automations-acceptance-closure.md) expands this to 55
-states / 2,778 checks with multi-status run filters. The captured web subset
+states / 2,678 checks with multi-status run filters. The captured web subset
 is complete, not whole-product parity. Desktop gate geometry and the historical
 Grok Bot promotion remain explicitly unverified in C-SHELL/C-ACCOUNT.
-C-SETTINGS opens with read-only settings navigation and account/team first.
+The C-SETTINGS navigation/account opener is described below.
+
+## Settings navigation preview
+
+Open `/dashboard/settings?fixture=settings-navigation`, or use the Automations
+**Local preview → My Settings** link. The [settings opener](facts/settings-navigation-verification.md)
+includes the observed sidebar, Privacy/Profile, account menu and overview.
+All controls are read-only locally; identity is synthetic and no account,
+privacy, billing, upload, session or authorization request is made.
+Integrations and Spending panels are explicitly unverified placeholders.
+The optional private gate covers 60 states / 3,676 measured comparisons.
