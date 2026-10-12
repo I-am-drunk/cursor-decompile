@@ -5,7 +5,7 @@ one visible state or interaction per PR; claim the exact slice on #1.
 
 | Order | Lane | Surface / first slice | Acceptance evidence |
 |---|---|---|---|
-| 1 | C-AUTOMATIONS | next: Add Trigger and schedule-control capture; saved-editor/MCP measured subset verified; foundation [#10](https://github.com/I-am-drunk/cursor-decompile/pull/10) and failed-run rows [#11](https://github.com/I-am-drunk/cursor-decompile/pull/11) complete | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
+| 1 | C-AUTOMATIONS | next: implement captured Add Trigger/custom-cron controls; saved-editor/MCP measured subset verified; foundation [#10](https://github.com/I-am-drunk/cursor-decompile/pull/10) and failed-run rows [#11](https://github.com/I-am-drunk/cursor-decompile/pull/11) complete | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
 | 2 | C-SETTINGS | settings navigation, account/team, models, integrations, MCP | navigation and one panel at a time; measured UI facts |
 | 3 | C-SHELL | window, sidebar, command palette, navigation | route/state/keyboard captures |
 | 4 | C-AGENTS | agent list, conversation, tool results, review, projects | loading/empty/populated/error states and interactions |
@@ -62,8 +62,12 @@ locally behind opaque references; no MCP command, authorization or run executes.
 Thirty tests and 737 measured checks across fourteen states pass; 149 raw
 source pins reproduce. This is subset verification, not independent pixel parity.
 
-Next thin slice: **capture Add Trigger and the existing schedule's picker** on
-the same disabled private fixture, without saving or running it. Record menu,
-schedule variants and keyboard behavior before replacing the current DESIGN
-trigger form. Event-provider authorization, live MCP and execution remain
-separate adapter work; a plan-enabled populated main list remains an access gap.
+The subsequent [trigger evidence slice](facts/automations-trigger-capture.md)
+captures Add Trigger, Scheduled choices and the existing custom-cron editor,
+with 30 source pins and unchanged disabled/clean fixture state.
+
+Next thin slice: **implement Add Trigger and the existing custom-cron picker**
+from those captures and add matching local measured checks. Capture preset
+configuration forms separately before replacing their DESIGN controls.
+Event-provider authorization, live MCP and execution remain separate adapter
+work; a plan-enabled populated main list remains an access gap.
