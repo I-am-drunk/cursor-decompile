@@ -2,7 +2,7 @@ import { ScheduleController } from './schedule-controller.ts';
 import { installSidebar } from '../shell/sidebar.ts';
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
-import { btn, dialog, editor, esc, field, gate, chatGate, notFound, icon, link, list, runs, runSummary, shell } from './view.ts';
+import { btn, dialog, esc, field, gate, chatGate, notFound, icon, link, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
 import { TriggerController } from './trigger-controller.ts';
@@ -70,7 +70,7 @@ function render() {
   else content = list(state.automations, scope, query, page,names);
   const markup = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '',id&&!isRuns&&!missingRoute?editorToolbar(form,dirty):'');
   if (app.querySelector('main')) { const template=document.createElement('template');template.innerHTML=markup;app.querySelector('main')!.replaceWith(template.content.querySelector('main')!); } else app.innerHTML=markup;
-  app.querySelectorAll<HTMLAnchorElement>('.side-nav a').forEach(a=>{const active=a.pathname==='/automations';a.classList.toggle('selected',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  app.querySelectorAll<HTMLAnchorElement>('.side-nav a').forEach(a=>{const active=a.pathname===(location.pathname==='/chat'?'/chat':'/automations');a.classList.toggle('selected',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   if (referenceFixture() && id==='evidence-automation') {
     app.querySelectorAll<HTMLInputElement>('.ed-header input,.ed-body textarea,.ed-header button,.ed-body button,.ed-toolbar button').forEach(e=>{e.disabled=true;});
   }

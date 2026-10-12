@@ -4,7 +4,7 @@ export function savedEditorFixture():Automation {
   return {...draft(),id:'editor-fixture',revision:1,
     name:'C-AUTOMATIONS TEST 2026-10-12 A - disabled',
     prompt:'Return only the word OK. Do not change files or make external network calls.',
-    repositories:['I-am-drunk/cursor-decompile'],branch:'main',ownerName:'You',
+    repositories:['example/workspace'],branch:'main',ownerName:'You',
     modelParameters:{fast:'false'},createdAt:'2026-10-12T07:36:06.000Z',
     triggers:[{id:'annual',kind:'Schedule',event:'Cron',value:'0 0 1 1 *'}]};
 }

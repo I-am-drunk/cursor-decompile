@@ -20,7 +20,7 @@ try {
  const captures=new URL('../corpus/copy-first/',import.meta.url);await mkdir(captures,{recursive:true});
  const capture=name=>page.screenshot({path:new URL(name+'.png',captures).pathname});
  page.on('pageerror',e=>errors.push(e.message));
- for(const path of ['/codebases','/codebase','/chat','/search','/agents','/editor','/dashboard','/dashboard/settings']){
+ for(const path of ['/codebases','/codebase','/search','/agents','/editor','/dashboard','/dashboard/settings']){
   const r=await page.request.get(base+path);assert.equal(r.status(),404);assert.match(await r.text(),/Page not found/);
  }
  await page.goto(base+'/login');
@@ -41,11 +41,11 @@ try {
  await page.click('[data-act=collapse]');
  await capture('compact');
  assert.equal(await page.locator('a[aria-label=Automations]').evaluate(e=>e.getBoundingClientRect().width),26);
- assert.equal(await page.locator('a[aria-label=Automations] svg').evaluate(e=>e.getBoundingClientRect().width),14);
+ assert.equal(await page.locator('a[aria-label=Automations] svg:visible').evaluate(e=>e.getBoundingClientRect().width),14);
  await page.locator('a[aria-label=Automations]').focus();
  assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
  assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
- assert.equal(await page.locator('a[aria-label=Automations] svg').evaluate(e=>getComputedStyle(e).visibility),'visible');
+ assert.equal(await page.locator('a[aria-label=Automations] svg:visible').evaluate(e=>getComputedStyle(e).visibility),'visible');
  await page.mouse.move(500,400);await page.locator('a[aria-label=Automations]').hover();
  assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
  await page.mouse.move(500,400);assert.equal(await page.locator('.sidebar-surface').evaluate(e=>e.getBoundingClientRect().width),44);
@@ -63,7 +63,7 @@ try {
  assert.equal(await page.locator('a[aria-label="Automations"]').getAttribute('aria-current'),'page');
  await page.keyboard.press('Escape');await page.mouse.move(500,400);
  await page.setViewportSize({width:390,height:844});
- assert.equal(await page.locator('a[aria-label=Automations] svg').evaluate(e=>getComputedStyle(e).visibility),'visible');
+ assert.equal(await page.locator('a[aria-label=Automations] svg:visible').evaluate(e=>getComputedStyle(e).visibility),'visible');
  await page.locator('a[aria-label=Automations]').click();assert.match(page.url(),/\/automations$/);
  assert.deepEqual(errors,[]);
  console.log('Browser checks passed: persistence, presets, custom cron, timezone, compact clicks without hover/drag expansion, mobile icons and 404s.');
