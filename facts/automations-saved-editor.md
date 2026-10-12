@@ -44,3 +44,32 @@ No reference mutation was saved.
 `mcp-browse.json`; every entry retains its source element indexes. Provider
 logos and vendor code are not copied. Local provider authorization remains
 unavailable; local MCP configuration storage is not a claim of real connection.
+
+## Verification of the original implementation
+
+The nine paired states above now have property records in
+[`editor-facts.json`](../src/automations/editor-facts.json).
+`OBSERVED` in this report means a view was opened on the authenticated fixture;
+`EXTRACTED_UI` records pin values extracted from its DOM/computed-style snapshot
+or the model-catalogue response. Neither label claims local/remote equivalence.
+
+On 2026-10-12, Computer Use in Twilight exercised all nine local views at the
+same 1270 × 764 CSS px, DPR 2 viewport. **434 new measured checks passed**.
+All fourteen states, including earlier gate/run baselines, pass **737 checks**;
+30 tests and 149 raw-source pins also pass. The local UI build hash is
+`a2c71f0703f1c81dfb9a11900941d7a43a7f6ce6bd5f80540e18e7ff60b34c55`.
+Reproduction: [pipeline instructions](../pipeline/README.md#saved-editor--mcp-checks).
+
+Original functionality includes draft editing, local model/parameter selection,
+per-automation MCP configuration references, URL/command/JSON conversion, and
+provider search. Tests cover isolation, persistence, secret-free public state,
+transport validation, model filtering and non-execution of stored commands.
+No reference fixture was activated or run during this slice.
+
+Visual review confirms the measured panel geometry, not whole-page raster
+parity. System-font glyphs/text widths, original icon substitutes (including
+provider initials), account identity, focus rings and shadows differ.
+New-editor, trigger-editor, populated/authorized MCP states, real provider
+authorization and non-default viewport/theme variants remain UNVERIFIED.
+The single-server JSON policy, validation messages and local persistence are
+DESIGN, not observed Cursor behavior. No vendor implementation is redistributed.

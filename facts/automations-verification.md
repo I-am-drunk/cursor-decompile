@@ -1,5 +1,9 @@
 # Local Automations verification — 2026-10-12
 
+Latest: the [saved-editor/MCP follow-up](automations-saved-editor.md) passes
+30 tests, 149 source pins, and 737 measured checks across fourteen states.
+The foundation results below are historical, not the current coverage total.
+
 ## Reproduced checks
 
 - Strict TypeScript and 18 automated tests: reader, validation, persistence,
@@ -28,8 +32,10 @@ These are tests of our implementation, **not observations of gated Cursor UI**.
 - No proprietary font, logo, icon artwork or vendor runtime is redistributed.
   System-font glyphs, original icons, sidebar account copy and cursor overlays
   differ from the screenshots. Whole-page pixel parity is not claimed.
-- Current editor/populated-list screenshots remain gated. The local editor
-  uses extracted order/labels plus original, UNVERIFIED controls and geometry.
+- At the foundation checkpoint the editor and populated list appeared gated.
+  [API-created disabled fixtures](automations-api-rows.md) subsequently exposed
+  the saved editor; [nine editor states](automations-saved-editor.md) are now
+  measured. The populated main list and unrecorded editor variants remain open.
 - Trigger forms cover a subset of types. The managed-agent overview, template
   gallery, complete run-filter hierarchy and full model catalog are not rebuilt.
 - MCP connection/authentication, execution, real run streaming and provider

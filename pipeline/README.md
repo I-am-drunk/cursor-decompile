@@ -108,3 +108,30 @@ These fixtures derive from a real, agent-created failed launch captured on
 create a local or remote execution. The comparison selects only the matching
 state's measured facts in `src/automations/row-facts.json`.
 API eligibility facts in that file reproduce response JSON paths separately.
+
+### Saved-editor / MCP checks
+
+Open `/automations/editor-fixture?fixture=saved-editor` in the same Twilight
+viewport (**1270 × 764, DPR 2**). This is a reference-derived local fixture,
+not a remote automation; editing it does not modify the reference account.
+Use **Alt+Shift+E** and save each download as
+`artifacts/<state>-measurements.json`:
+
+| State | Action |
+|---|---|
+| `saved-editor` | Open the fixture with Save disabled |
+| `tools-menu` | Add Tool or MCP |
+| `mcp-menu` | MCP Server |
+| `mcp-browse` | New Connection |
+| `mcp-url` | Custom MCP |
+| `mcp-command` | Command tab |
+| `mcp-json` | Return to URL, then Edit JSON |
+| `model-picker` | Cancel the form, then Composer 2.5 |
+| `model-options` | Open Grok 4.7 options; do not save |
+
+Keep paired screenshots for visual review. Run `sh ci/check-src.sh --reference`
+after exporting all fourteen baseline/editor states from the current build.
+The additional nine states check 434 measured properties; total checks: 737.
+The source gate reproduces all property pins and both catalogues, including
+their original element indexes or API model definitions. It does not certify
+provider logos, font glyphs, focus rings, uncaptured forms, or authorization.
