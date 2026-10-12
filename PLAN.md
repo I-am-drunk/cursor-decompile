@@ -5,7 +5,7 @@ one visible state or interaction per PR; claim the exact slice on #1.
 
 | Order | Lane | Surface / first slice | Acceptance evidence |
 |---|---|---|---|
-| 1 | C-AUTOMATIONS | next: implement captured Add Trigger/custom-cron controls; saved-editor/MCP measured subset verified; foundation [#10](https://github.com/I-am-drunk/cursor-decompile/pull/10) and failed-run rows [#11](https://github.com/I-am-drunk/cursor-decompile/pull/11) complete | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
+| 1 | C-AUTOMATIONS | next: preset schedule and validation/dirty-state capture; Add Trigger/custom-cron and saved-editor/MCP measured subsets verified | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
 | 2 | C-SETTINGS | settings navigation, account/team, models, integrations, MCP | navigation and one panel at a time; measured UI facts |
 | 3 | C-SHELL | window, sidebar, command palette, navigation | route/state/keyboard captures |
 | 4 | C-AGENTS | agent list, conversation, tool results, review, projects | loading/empty/populated/error states and interactions |
@@ -67,8 +67,15 @@ The subsequent [trigger evidence slice](facts/automations-trigger-capture.md),
 captures Add Trigger, Scheduled choices and the existing custom-cron editor,
 with 30 source pins and unchanged disabled/clean fixture state.
 
-Next thin slice: **implement Add Trigger and the existing custom-cron picker**
-from those captures and add matching local measured checks. Capture preset
-configuration forms separately before replacing their DESIGN controls.
-Event-provider authorization, live MCP and execution remain separate adapter
-work; a plan-enabled populated main list remains an access gap.
+The [trigger implementation](facts/automations-trigger-verification.md) now
+reproduces the captured menu, custom-cron and dismissal subset: 35 tests,
+992 measured checks (737 preserved + 255 new), 199 source pins.
+Local parser, commit and preset policies are explicitly DESIGN; no scheduler
+or authorization/execution integration was added.
+
+Next thin slice: **capture hourly/daily/weekly configuration forms and
+validation/dirty states** in unsaved drafts of the disabled private fixture.
+Discard changes; do not Save, Test, activate or authorize providers.
+Only then replace their DESIGN controls. Event-provider authorization,
+live MCP and execution remain separate adapter work; a plan-enabled populated
+main list remains an access gap.

@@ -69,3 +69,8 @@ The [saved-editor follow-up](../facts/automations-saved-editor.md) now verifies
 nine editor/MCP/model states with 434 additional measured checks at the same
 viewport. This closes those measured-subset gaps, not trigger-form, authorized
 MCP, responsive, font/icon raster, or independent peer acceptance gaps.
+
+The [trigger-control follow-up](../facts/automations-trigger-verification.md)
+adds matched Add Trigger, Scheduled submenu, existing custom-cron and dismissed
+states. Preset/provider forms and reference mutation/validation behavior remain
+unverified; passing local syntax and persistence tests do not close those gaps.

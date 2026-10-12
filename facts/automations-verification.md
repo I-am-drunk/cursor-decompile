@@ -1,7 +1,7 @@
 # Local Automations verification — 2026-10-12
 
-Latest: the [saved-editor/MCP follow-up](automations-saved-editor.md) passes
-30 tests, 149 source pins, and 737 measured checks across fourteen states.
+Latest: the [trigger-control follow-up](automations-trigger-verification.md)
+passes 35 tests, 199 source pins, and 992 measured checks across nineteen states.
 The foundation results below are historical, not the current coverage total.
 
 ## Reproduced checks

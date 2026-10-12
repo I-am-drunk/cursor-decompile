@@ -1,5 +1,8 @@
 # Add Trigger / schedule evidence — 2026-10-12
 
+Follow-up: [original implementation and measured verification](automations-trigger-verification.md).
+The report below records the earlier evidence-only checkpoint.
+
 This is an **evidence-only slice**, not a trigger implementation or parity claim.
 Computer Use in authenticated Twilight opened the existing private, disabled,
 agent-created fixture A. No trigger was selected or edited, and no Save, Test,
