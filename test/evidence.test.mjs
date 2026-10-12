@@ -57,3 +57,12 @@ test('preset comparison verifies dirty-state presence and explicit fixture conte
   assert.match(compare([f],{...s,elements:[{id:'ed-save',attributes:{disabled:''}}]}).mismatches.join(),/state differs/);
   assert.throws(()=>compare([f],{...s,url:s.url.replace('controls=presets','controls=triggers')}));
 });
+test('connection comparisons require the explicit context and captured search value',()=>{
+  const f={id:'connection:query',target:'eb-search',captureState:'mcp-linear-search',
+    inputValue:true,value:'Linear',source:{jsonPath:[]},viewport};
+  const s={url:'http://localhost/automations/editor-fixture?fixture=saved-editor&controls=connections',
+    captureState:'mcp-linear-search',viewport,elements:[{id:'eb-search',value:'Linear'}]};
+  assert.deepEqual(compare([f],s).mismatches,[]);
+  assert.match(compare([f],{...s,elements:[{id:'eb-search',value:''}]}).mismatches.join(),/state differs/);
+  assert.throws(()=>compare([f],{...s,url:s.url.replace('connections','presets')}));
+});

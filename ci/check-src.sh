@@ -21,4 +21,7 @@ if [ "${1:-}" = "--reference" ]; then
   for state in preset-baseline hourly-added daily-added daily-time daily-selected weekly-added weekly-days weekly-selected weekly-time custom-added custom-popup cron-invalid cron-range cron-empty invalid-escape invalid-outside custom-restored unsaved-dialog; do
     node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
   done
+  for state in connection-baseline linear-menu linear-issue-menu linear-created linear-status linear-cycle mcp-unconfigured mcp-linear-search mcp-linear-unconnected mcp-linear-expanded mcp-returned; do
+    node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
+  done
 fi

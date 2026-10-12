@@ -166,6 +166,7 @@ function renderModal() {
       ${link('Reference-derived saved editor','/automations/editor-fixture?fixture=saved-editor','button')}
       ${link('Captured trigger controls','/automations/editor-fixture?fixture=saved-editor&controls=triggers','button')}
       ${link('Preset and validation captures','/automations/editor-fixture?fixture=saved-editor&controls=presets','button')}
+      ${link('Unconnected Linear and MCP','/automations/editor-fixture?fixture=saved-editor&controls=connections','button')}
       ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
       ${btn('Export layout measurements','export')}</div>`;
   }
@@ -309,7 +310,8 @@ async function boot() {
   }
 }
 async function exportMeasurements() {
-  const captureState=params().get('controls')==='presets'?(modal==='unsaved'?'unsaved-dialog':triggerUi.capturePresetState()):
+  const captureState=params().get('controls')==='connections'?(editUi.panel?editUi.captureConnectionState():triggerUi.captureConnectionState()):
+    params().get('controls')==='presets'?(modal==='unsaved'?'unsaved-dialog':triggerUi.capturePresetState()):
     triggerUi.panel?triggerUi.captureState():editUi.panel?editUi.captureState():
     params().get('controls')==='triggers'?triggerUi.captureState():editorFixture()?'saved-editor':
     modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';

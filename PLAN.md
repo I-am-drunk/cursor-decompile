@@ -5,8 +5,8 @@ one visible state or interaction per PR; claim the exact slice on #1.
 
 | Order | Lane | Surface / first slice | Acceptance evidence |
 |---|---|---|---|
-| 1 | C-AUTOMATIONS | next: Linear trigger submenu and unconnected configuration capture; preset/validation, Add Trigger and editor/MCP measured subsets verified | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
-| 2 | C-SETTINGS | settings navigation, account/team, models, integrations, MCP | navigation and one panel at a time; measured UI facts |
+| 1 | C-AUTOMATIONS | Linear/unconnected slice verified; next: measure and accept screenshot-only run-filter/status variants | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
+| 2 | C-SETTINGS | queued opener: settings entry/navigation/default panel, then one unconnected provider panel | read-only capture first; no settings mutations or authorization; measured UI facts |
 | 3 | C-SHELL | window, sidebar, command palette, navigation | route/state/keyboard captures |
 | 4 | C-AGENTS | agent list, conversation, tool results, review, projects | loading/empty/populated/error states and interactions |
 | 5 | C-EDITOR | files, tabs, search, source control, terminal, diff | pane layouts and keyboard behavior |
@@ -81,8 +81,20 @@ the unsaved guard. Nineteen private capture triples support eighteen added
 local comparison states: 43 tests, 1,736 measured checks and 360 source pins
 pass, preserving all prior 992 comparisons.
 
-Next thin slice: **capture the Linear trigger submenu and unconnected
-configuration states**, in an unsaved disabled fixture. Do not Save, Test,
-activate or authorize providers. Implement only the observed configuration
-subset afterward. Server-side cron validation, live MCP/execution and
-plan-enabled populated-list parity remain distinct gaps.
+[PR #16](https://github.com/I-am-drunk/cursor-decompile/pull/16), the
+[Linear/unconnected slice](facts/automations-linear-verification.md),
+now verifies nested menus, three Requires connection rows, empty MCP state,
+Linear discovery and the pre-install disclosure: 47 tests, 2,157 measured
+checks (all 1,736 preserved) and 456 raw-source pins pass.
+
+Next thin slice: **measure and accept the screenshot-only Run History filter
+and status-menu states**. They already exist in the private corpus but are not
+in the 48-state comparison matrix; do not call the whole captured backlog
+complete. Desktop upgrade-modal screenshots also lack measured acceptance.
+Server validation, connected MCP/execution and plan-enabled populated-list
+parity remain distinct gaps.
+
+C-SETTINGS opens with read-only settings entry/navigation and the default
+panel, then one unconnected provider/integration panel. Record selected
+navigation and keyboard behavior before implementation. That lane is queued,
+not started or certified by the Automations checks.

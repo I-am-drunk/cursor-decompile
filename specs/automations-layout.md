@@ -80,3 +80,9 @@ adds observed unsaved preset rows/selectors, duplicate-cron warning, live
 invalid-input and unsaved-dialog states. It closes their measured subset only:
 reference saves, provider authorization, server validation and execution were
 not attempted. Runtime/serialization policies remain separately labeled DESIGN.
+
+The [Linear/unconnected follow-up](../facts/automations-linear-verification.md)
+adds nested menus, Requires connection rows, empty MCP configuration and the
+pre-install disclosure. Authorization and installation were not attempted.
+The handoff audit retains screenshot-only run-filter/status and desktop-modal
+acceptance gaps; the 48-state matrix is not whole-lane pixel certification.

@@ -22,6 +22,8 @@ const files: Record<string, [string, string]> = {
   '/preset-state.ts': ['automations/preset-state.ts', 'application/javascript'],
   '/preset-view.ts': ['automations/preset-view.ts', 'application/javascript'],
   '/preset.css': ['automations/preset.css', 'text/css'],
+  '/connection-view.ts': ['automations/connection-view.ts', 'application/javascript'],
+  '/connection.css': ['automations/connection.css', 'text/css'],
   '/editor-models.json': ['automations/editor-models.json', 'application/json'],
   '/mcp-catalog.json': ['automations/mcp-catalog.json', 'application/json'],
   '/editor.css': ['automations/editor.css', 'text/css'],
