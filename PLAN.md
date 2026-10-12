@@ -81,7 +81,8 @@ the unsaved guard. Nineteen private capture triples support eighteen added
 local comparison states: 43 tests, 1,736 measured checks and 360 source pins
 pass, preserving all prior 992 comparisons.
 
-The [Linear/unconnected slice](facts/automations-linear-verification.md)
+[PR #16](https://github.com/I-am-drunk/cursor-decompile/pull/16), the
+[Linear/unconnected slice](facts/automations-linear-verification.md),
 now verifies nested menus, three Requires connection rows, empty MCP state,
 Linear discovery and the pre-install disclosure: 47 tests, 2,157 measured
 checks (all 1,736 preserved) and 456 raw-source pins pass.
