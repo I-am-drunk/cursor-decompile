@@ -26,3 +26,21 @@ OBSERVED: saved-editor sections are Triggers, Agent Instructions, Tools.
 New Connection opens Browse MCPs; Custom MCP opens an unsubmitted form.
 Local implementation, full catalog/provider authorization, and pixel-perfect
 font/icon reproduction remain UNVERIFIED at this checkpoint.
+
+## Additional pinned states and metadata
+
+Model options were inspected in an unsaved draft, then discarded. The stored
+fixture was reopened with Save disabled, its enabled switch off, and Composer 2.5.
+No reference mutation was saved.
+
+- `mcp-json.json`: `db2ac0f2bef7df78df3bd1047e2b9232d88464aacbf1e9ee62c1a221e8f2d7cb`
+- `model-picker.json`: `90fdcd33d8c3993c3cfe190ea5ce69c39f37c38340ee750a33964fea939011dc`
+- `model-options.json`: `7f769cee404c23c95568102c622467093ad24e7f9be27cb8b7b22fad9a174e68`
+
+`editor-models.json` derives eight visible models and parameter definitions from
+`bodies/0297-f3e88b1079371e22.body` (SHA-256
+`f3e88b1079371e22c4a790e507a217aa955e57241676e6b34e8ce74c70b83507`).
+`mcp-catalog.json` contains the 363 rendered provider names/descriptions from
+`mcp-browse.json`; every entry retains its source element indexes. Provider
+logos and vendor code are not copied. Local provider authorization remains
+unavailable; local MCP configuration storage is not a claim of real connection.

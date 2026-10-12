@@ -23,7 +23,7 @@ export const link = (label: string, path: string, cls = '') =>
   `<a class="${cls}" href="${esc(path)}" data-nav>${label}</a>`;
 export const field = (label: string, name: string, value = '', attrs = '') =>
   `<label class="field">${label}<input name="${name}" value="${esc(value)}" ${attrs}></label>`;
-export function shell(content: string, crumb = ''): string {
+export function shell(content: string, crumb = '', toolbar = ''): string {
   return `<aside data-evidence="sidebar">
     <div class="brand"><strong aria-label="Original local implementation">◈</strong><span></span>
       ${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Collapse sidebar"')}
@@ -35,7 +35,7 @@ export function shell(content: string, crumb = ''): string {
     </nav><div class="no-agents">No Agents Yet</div>
     <div class="account">${btn('✧ &nbsp; Upgrade to Pro', 'upgrade', 'outline wide')}
       ${btn('<span class="avatar">L</span><span>Local preview<small>Free</small></span> ⋯', 'about', 'profile')}</div>
-  </aside><main>${crumb ? `<div class="breadcrumb" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}</div>` : ''}
+  </aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
     <div class="scroll-pane">${content}</div></main>`;
 }
 export function gate(): string {

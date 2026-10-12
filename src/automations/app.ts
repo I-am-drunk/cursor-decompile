@@ -2,13 +2,19 @@ import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
 import { btn, dialog, editor, esc, field, gate, icon, link, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
+import { EditorController } from './editor-controller.ts';
+import { editorToolbar, savedEditor } from './editor-view.ts';
+import { modelSuffix, savedEditorFixture } from './editor-state.ts';
+import type { EditorModel, McpProvider } from './editor-state.ts';
 let state: State = emptyState(), form: Automation = draft(), models: {id:string;name:string}[] = [];
 let dirty = false, scope = 'mine', page = 1, query = '', runQuery = '', searchOpen = false;
+let titleEditing=false;
 let errors: string[] = [], pendingPath = '', editId = '', modal = '', busy = false, returnFocus: HTMLElement | null = null;
 const app = document.querySelector<HTMLDivElement>('#app')!, overlays = document.querySelector<HTMLDivElement>('#overlays')!;
 const params = () => new URLSearchParams(location.search);
 const routeId = () => location.pathname.split('/')[2] ?? '';
 const referenceFixture = () => params().get('fixture') === 'observed-failure';
+const editorFixture = () => params().get('fixture') === 'saved-editor';
 function toast(message: string) { document.querySelector('#toast')!.textContent = message; }
 async function api<T>(path: string, method = 'GET', data?: unknown): Promise<T> {
   const response = await fetch(path, { method, headers: { 'Content-Type': 'application/json', 'X-Local-Request':'1' },
@@ -18,10 +24,13 @@ async function api<T>(path: string, method = 'GET', data?: unknown): Promise<T> 
   return result as T;
 }
 function openModal(kind: string, id = '') {
+  if(editUi.panel)editUi.close();
   if (!modal) returnFocus = document.activeElement as HTMLElement;
   modal = kind; editId = id; renderModal();
 }
 function closeModal() { modal = ''; overlays.innerHTML = ''; returnFocus?.focus(); }
+const editUi=new EditorController({form:()=>form,render,changed:()=>{dirty=true;},
+  closeOther:closeModal,notify:toast,overlays,api});
 function activateDialog() {
   const d=overlays.querySelector('dialog')!;
   d.addEventListener('cancel',e=>{e.preventDefault();closeModal();pendingPath='';});
@@ -32,17 +41,19 @@ function render() {
   const name = focused?.name, selection = focused?.selectionStart;
   const id = routeId(), isRuns = id === 'runs';
   const names=Object.fromEntries(models.map(m=>[m.id,m.name]));
+  const selected=editUi.models.find(m=>m.id===form.model);
+  const selectedName=selected?`${selected.name} ${modelSuffix(selected,form.modelParameters??(form.model==='composer-2.5'?{fast:'false'}:selected.defaults))}`.trim():names[form.model]??form.model;
   let content: string;
   if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
   else if (params().get('state') === 'error') content = `<div class="page" role="alert">Could not load automations. ${btn('Retry','retry','outline')}</div>`;
   else if (params().get('state') === 'upgrade') content = gate();
   else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen,names,referenceFixture()?referenceTime:Date.now());
-  else if (id) content = editor(form, models.find(m=>m.id===form.model)?.name ?? form.model, errors);
+  else if (id&&id!=='new') content = savedEditor(form,selectedName,errors,titleEditing,editorFixture());
+  else if (id) content = editor(form, selectedName, errors);
   else content = list(state.automations, scope, query, page,names);
-  app.innerHTML = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '');
+  app.innerHTML = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '',id&&id!=='new'&&!isRuns?editorToolbar(form,dirty):'');
   if (referenceFixture() && id==='evidence-automation') {
-    app.querySelectorAll<HTMLInputElement>('.editor input,.editor textarea,.editor button,.editor select').forEach(e=>{e.disabled=true;});
-    app.querySelector('.implementation-note')!.textContent='Read-only reference-derived fixture. No live account or local definition is changed.';
+    app.querySelectorAll<HTMLInputElement>('.ed-header input,.ed-body textarea,.ed-header button,.ed-body button,.ed-toolbar button').forEach(e=>{e.disabled=true;});
   }
   if (name) { const next = app.querySelector<HTMLInputElement>(`[name="${name}"]`); next?.focus();
     if (selection !== null && next && ['text','search'].includes(next.type)) next.setSelectionRange(selection,selection); }
@@ -59,21 +70,23 @@ function runRows(): Run[] {
 function loadRoute() {
   const id = routeId();
   if (id && id !== 'runs' && id !== 'new') {
-    const found = referenceFixture() && id==='evidence-automation' ? referenceAutomation() : state.automations.find(a=>a.id===id);
+    const found = editorFixture() && id==='editor-fixture' ? savedEditorFixture() :
+      referenceFixture() && id==='evidence-automation' ? referenceAutomation() : state.automations.find(a=>a.id===id);
     if (!found) { toast('Automation not found.'); history.replaceState(null,'','/automations'); }
     else form = structuredClone(found);
   } else if (id === 'new') form = draft();
-  errors = []; dirty = false; render();
+  errors = []; dirty = false; titleEditing=false; render();
 }
 function navigate(path: string, force = false) {
   if (dirty && !force) { pendingPath = path; openModal('unsaved'); return; }
-  closeModal(); history.pushState(null,'',path); loadRoute();
+  editUi.close(); closeModal(); history.pushState(null,'',path); loadRoute();
 }
 async function save() {
   errors = validate(form); if (errors.length) { closeModal(); render(); return; }
   if (busy) return; busy = true;
   try {
-    const saved = await api<Automation>('/api/automations','POST',form);
+    const payload=editorFixture()?{...form,id:'',revision:0,createdAt:''}:form;
+    const saved = await api<Automation>('/api/automations','POST',payload);
     state.automations = [...state.automations.filter(a=>a.id!==saved.id),saved];
     form = saved; dirty = false;
     const destination = pendingPath || `/automations/${saved.id}`; pendingPath = '';
@@ -143,6 +156,7 @@ function renderModal() {
       ${link('Local automation list','/automations','button')}${link('Captured upgrade state','/automations?state=upgrade','button')}
       ${link('Observed empty Run History','/automations/runs','button')}${link('Synthetic run states','/automations/runs?fixture=runs','button')}
       ${link('Reference-derived failed run','/automations/runs?fixture=observed-failure','button')}
+      ${link('Reference-derived saved editor','/automations/editor-fixture?fixture=saved-editor','button')}
       ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
       ${btn('Export layout measurements','export')}</div>`;
   }
@@ -150,7 +164,13 @@ function renderModal() {
   activateDialog();
 }
 async function action(command: string) {
+  if(await editUi.handle(command))return;
   const [kind, id = ''] = command.split(':');
+  if(kind==='edit-title'){titleEditing=true;render();app.querySelector<HTMLInputElement>('[name="name"]')?.focus();return;}
+  if(kind==='toggle-enabled'){form.enabled=!form.enabled;dirty=true;render();return;}
+  if(kind==='edit-branch'){toast('Branch context is stored with this local definition. Repository authorization is not connected.');return;}
+  if(kind==='ed-settings')return;
+  if(kind==='ed-runs'){navigate(`/automations/runs?automation=${form.id}`);return;}
   if (kind === 'dismiss') { pendingPath=''; closeModal(); }
   else if (kind === 'collapse') document.body.classList.toggle('collapsed');
   else if (kind === 'export') await exportMeasurements();
@@ -211,6 +231,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('input',e=>{
   const input=e.target as HTMLInputElement;
+  if(editUi.input(input))return;
   if (input.name === 'list-search') { query=input.value; page=1; render(); return; }
   if (input.name === 'run-search') { runQuery=input.value; render(); return; }
   if (input.name === 'model-search') {
@@ -221,9 +242,15 @@ document.addEventListener('input',e=>{
     select.innerHTML=options(events[input.value as TriggerKind], ''); return;
   }
   if (!app.contains(input)) return;
-  if (input.name === 'name' || input.name === 'prompt') { form[input.name]=input.value; dirty=true; }
+  if (input.name === 'name' || input.name === 'prompt') {
+    form[input.name]=input.value;dirty=true;
+    app.querySelector<HTMLButtonElement>('[data-act="save"]')?.removeAttribute('disabled');
+  }
   else if (input.name === 'enabled') { form.enabled=input.checked; dirty=true; }
   else if (input.name === 'scope') { form.scope=input.value as Automation['scope']; dirty=true; }
+});
+document.addEventListener('submit',e=>{
+  if((e.target as HTMLElement).id==='mcp-form'){e.preventDefault();void editUi.handle('ed-commit-mcp').catch(e=>toast((e as Error).message));}
 });
 window.addEventListener('beforeunload',e=>{if (dirty) {e.preventDefault(); e.returnValue='';}});
 window.addEventListener('popstate',()=>{
@@ -234,6 +261,8 @@ window.addEventListener('popstate',()=>{
 });
 document.addEventListener('keydown',e=>{
   if (e.altKey && e.shiftKey && e.code==='KeyE') {e.preventDefault();void exportMeasurements();return;}
+  if(editUi.key(e))return;
+  if(titleEditing&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();titleEditing=false;render();return;}
   const target=e.target as HTMLElement;
   if (target.matches('.run-data') && (e.key==='Enter'||e.key===' ')) {
     e.preventDefault();void action(target.dataset.act!);return;
@@ -252,20 +281,24 @@ document.addEventListener('keydown',e=>{
   }
 });
 document.addEventListener('pointerdown',e=>{
+  editUi.pointer(e.target as Node);
   if(modal==='run-menu'&&!overlays.contains(e.target as Node)&&!returnFocus?.contains(e.target as Node)) closeModal();
 });
 async function boot() {
   app.innerHTML=shell('<div class="page" role="status">Loading…</div>');
   try {
-    [state,models]=await Promise.all([api<State>('/api/state'),api<typeof models>('/catalog.json')]);
+    const loaded=await Promise.all([api<State>('/api/state'),api<typeof models>('/catalog.json'),
+      api<EditorModel[]>('/editor-models.json'),api<McpProvider[]>('/mcp-catalog.json')]);
+    [state,models]=loaded;editUi.models=loaded[2];editUi.providers=loaded[3];
     loadRoute();
   } catch(e) {
     app.innerHTML=shell(`<div class="page" role="alert">${esc((e as Error).message)} ${btn('Retry','reload','outline')}</div>`);
   }
 }
 async function exportMeasurements() {
-  const captureState=modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
-  if(modal!=='run'&&modal!=='run-menu') closeModal();
+  const captureState=editUi.panel?editUi.captureState():editorFixture()?'saved-editor':
+    modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
+  if(!editUi.panel&&modal!=='run'&&modal!=='run-menu') closeModal();
   await new Promise<void>(r=>requestAnimationFrame(()=>r()));
   const build=await api<{hash:string}>('/api/build');
   const elements=[...document.querySelectorAll<HTMLElement>('[data-evidence]')].map(e=>{
