@@ -170,7 +170,7 @@ function renderModal() {
     html = `<p>No remote account, billing, MCP or agent execution is connected. Definitions are saved on this machine.</p>
       <p>Observed: upgrade gate, Run History and a real plan-restricted failed-run summary.
       Automation-list rows remain extracted, not screenshot-certified.</p><div class="menu">
-      ${link('My Settings — read-only preview','/dashboard/settings?fixture=settings-navigation','button')}
+      ${link('Settings','/settings','button')}
       ${link('Local automation list','/automations','button')}${link('Captured upgrade state','/automations?state=upgrade','button')}
       ${link('Observed empty Run History','/automations/runs','button')}${link('Synthetic run states','/automations/runs?fixture=runs','button')}
       ${link('Reference-derived failed run','/automations/runs?fixture=observed-failure','button')}

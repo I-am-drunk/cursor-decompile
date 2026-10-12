@@ -37,7 +37,7 @@ export function shell(content: string, crumb = '', toolbar = ''): string {
     <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Toggle sidebar" aria-expanded="true"')}<strong class="side-label">Workspace</strong></div>
     <nav class="side-nav">${destination('New chat','edit','/chat')}${destination('Automations','bot','/automations')}${destination('Search','search','/search')}</nav>
     <div class="no-agents side-label">No Agents Yet</div><div class="account">
-      ${destination('Settings','gear','/settings')}${destination('Profile','person','/settings/account')}
+      ${destination('Settings','gear','/settings')}${destination('Profile','person','/settings/accounts')}
       ${btn('<span class="rail-icon">'+icon('menu')+'</span><span class="side-label">Local preview</span>', 'about', 'destination', 'aria-label="Local preview" title="Local preview"')}</div>
   </div></aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
     <div class="scroll-pane">${content}</div></main>`;

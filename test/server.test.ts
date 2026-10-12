@@ -14,8 +14,8 @@ test('HTTP server serves original UI and protects mutation and private files',as
   t.after(async()=>{await new Promise<void>(r=>server.close(()=>r()));await rm(dir,{recursive:true,force:true});});
   const origin=`http://127.0.0.1:${(server.address() as AddressInfo).port}`;
   const send=await signIn(origin);
-  for(const path of ['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending']){
-    const settings=await send(path);assert.equal(settings.status,200);assert.match(await settings.text(),/settings-app.ts/);
+  for(const path of ['/settings','/settings/linear','/settings/mcp','/settings/accounts','/settings/general']){
+    const settings=await send(path);assert.equal(settings.status,200);assert.match(await settings.text(),/live-app.ts/);
   }
   assert.equal((await send('/dashboard/unknown')).status,404);
   assert.equal((await send('/api/settings',{method:'POST',headers:{'x-local-request':'1'},body:'{}'})).status,404);

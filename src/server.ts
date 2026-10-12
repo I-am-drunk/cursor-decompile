@@ -1,3 +1,4 @@
+import { isSettingsRoute } from './settings/routes.ts';
 import { McpRegistry } from './mcp/registry.ts';
 import { T3Bridge } from './inference/t3.ts';
 import { RunEngine } from './inference/runtime.ts';
@@ -16,17 +17,16 @@ import { RequestError, Store } from './store.ts';
 const root = new URL('./', import.meta.url);
 const files: Record<string, [string, string]> = {
   '/mcp/settings-ui.ts':['mcp/settings-ui.ts','application/javascript'],
-  '/inference/settings-ui.ts':['inference/settings-ui.ts','application/javascript'],
   '/auth/login.ts':['auth/login.ts','application/javascript'],
   '/login.css':['auth/login.css','text/css'],
   '/settings/live-app.ts':['settings/live-app.ts','application/javascript'],
   '/settings/live-view.ts':['settings/live-view.ts','application/javascript'],
   '/settings/schema.ts':['settings/schema.ts','application/javascript'],
+  '/settings/routes.ts':['settings/routes.ts','application/javascript'],
+  '/settings/linear-ui.ts':['settings/linear-ui.ts','application/javascript'],
   '/live-settings.css':['settings/live.css','text/css'],
   '/shell/sidebar.ts': ['shell/sidebar.ts','application/javascript'],
   '/sidebar.css': ['shell/sidebar.css','text/css'],
-  '/settings-app.ts': ['settings/settings-app.ts','application/javascript'],
-  '/settings-view.ts': ['settings/settings-view.ts','application/javascript'],
   '/settings.css': ['settings/settings.css','text/css'],
   '/app.ts': ['automations/app.ts', 'application/javascript'],
   '/model.ts': ['automations/model.ts', 'application/javascript'],
@@ -57,7 +57,6 @@ for(const value of Object.values(files)) if(value[0].endsWith('.ts')) files['/'+
 export async function buildHash() {
   const hash = createHash('sha256');
   hash.update(await readFile(new URL('index.html',root)));
-  hash.update(await readFile(new URL('settings/index.html',root)));
   hash.update(await readFile(new URL('settings/live.html',root)));
   for (const [path] of Object.values(files)) hash.update(await readFile(new URL(path, root)));
   return hash.digest('hex');
@@ -172,13 +171,9 @@ export function createApp(store: Store, options:AppOptions={}) {
       if (match?.[2] && req.method === 'POST') return json(res, 200, await store.start(match[1]!));
       if (path.startsWith('/api/')) throw new RequestError(404, 'Unknown endpoint.');
       if (req.method !== 'GET' && req.method !== 'HEAD') throw new RequestError(405, 'Method not allowed.');
-      if(/^\/settings(?:\/(account|inference|integrations|mcp|automations))?$/.test(path)){
+      if(isSettingsRoute(path)){
         res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(new URL('settings/live.html',root)));
-      }
-      if(['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending'].includes(path)){
-        res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
-        return res.end(await readFile(new URL('settings/index.html',root)));
       }
       const file = files[path];
       if (file) {

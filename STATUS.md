@@ -67,3 +67,13 @@ P2 login [#21](https://github.com/I-am-drunk/cursor-decompile/pull/21),
 P3 inference [#22](https://github.com/I-am-drunk/cursor-decompile/pull/22) merged.
 P4 MCP [#23](https://github.com/I-am-drunk/cursor-decompile/pull/23) completes
 this ordered product series, not whole-reference parity.
+
+## UI SETTINGS CARVE — four-section product settings
+
+Agent A replaces settings with Linear connection, MCP connectors, Accounts
+and General; deletes legacy dashboard/upsell/download and T3 settings UI.
+Registry CRUD, local session/sign-out and preferences work; Linear connection
+request is an honest persisted placeholder pending agent D's backend.
+[Implementation, handoff and validation](docs/SETTINGS-CARVE.md).
+71 app/reader + 6 MCP tests and local Chromium desktop/mobile smoke pass.
+Historical evidence is unchanged; new panel parity remains UNVERIFIED.

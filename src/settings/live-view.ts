@@ -1,15 +1,23 @@
 import { esc } from '../automations/view.ts';
-import { sections } from './schema.ts';
-import type { Settings, Section } from './schema.ts';
-export const titles:Record<Section,string>={account:'Account',inference:'Inference',integrations:'Integrations',mcp:'MCP Servers',automations:'Automations'};
-const input=(label:string,key:string,value:string|number,type='text')=>`<label class="setting-row"><span>${label}</span><input name="${key}" type="${type}" value="${esc(value)}" ${type==='password'?'autocomplete="new-password"':''}></label>`;
-const check=(label:string,key:string,value:boolean)=>`<label class="setting-row"><span>${label}</span><input name="${key}" type="checkbox" ${value?'checked':''}></label>`;
-export function liveSettings(s:Settings,section:Section):string{
-  let rows='';
-  if(section==='account')rows=input('Display name','displayName',s.account.displayName)+`<label class="setting-row"><span>Theme preference</span><select name="theme">${['system','light','dark'].map(v=>`<option ${v===s.account.theme?'selected':''}>${v}</option>`).join('')}</select></label><p>Saved deployment preference. Only the captured light theme is implemented.</p><div id="identity"></div>`;
-  if(section==='inference')rows=input('Provider name','name',s.inference.name)+input('Environment URL','url',s.inference.url)+`<label class="setting-row"><span>Credential type</span><select name="credentialKind">${['bootstrap','bearer'].map(k=>`<option ${k===s.inference.credentialKind?'selected':''}>${k}</option>`).join('')}</select></label>`+input('Pairing credential','credential','','password')+`<p>Credential: ${s.inference.credentialPresent?'stored (write-only)':'not configured'}. Leave blank to preserve it.</p><div id="inference-status">Not connected. Use the controls below to pair the T3 bridge.</div>`;
-  if(section==='integrations')rows=check('Enable Linear integration','linearEnabled',s.integrations.linearEnabled)+input('Linear credential','credential','','password')+`<p>${s.integrations.credentialPresent?'Credential stored.':'No credential.'} OAuth and execution are not connected; enabling saves intent only.</p>`;
-  if(section==='mcp')rows=check('Allow local stdio execution','allowStdio',s.mcp.allowStdio)+input('Explicit destination hosts (comma separated)','allowedHosts',s.mcp.allowedHosts.join(', '))+'<p>Default: no local commands or private destinations. Configure registry entries and test connections below.</p><div id="mcp-registry"></div>';
-  if(section==='automations')rows=input('Timezone','timezone',s.automations.timezone)+input('Run retention (days)','retentionDays',s.automations.retentionDays,'number')+input('Maximum concurrent runs','concurrency',s.automations.concurrency,'number')+'<p>Defaults persist. Retention cleanup and scheduling are not enabled.</p>';
-  return `<aside aria-label="Settings sidebar"><header><a href="/automations">‹ Workspace</a></header><nav aria-label="Settings sections">${sections.map(v=>`<a href="/settings/${v}" ${v===section?'aria-current="page"':''}>${titles[v]}</a>`).join('')}</nav></aside><main><h1>${titles[section]}</h1><form id="preferences"><section class="card live-settings">${rows}<footer><button type="submit">Save changes</button></footer></section></form><p class="local-note">Functional local settings. New panel geometry and copy: UNVERIFIED.</p><div id="settings-extension"></div></main>`;
+import type { Settings } from './schema.ts';
+import { settingsSections, titles } from './routes.ts';
+import type { SettingsSection } from './routes.ts';
+export { titles } from './routes.ts';
+const input = (label: string, key: string, value: string | number, type = 'text') =>
+  `<label class="setting-row"><span>${label}</span><input name="${key}" type="${type}" value="${esc(value)}" required></label>`;
+const descriptions: Record<SettingsSection, string> = {
+  linear: 'Connect the Linear accounts that run your automations.',
+  mcp: 'Manage the tools available to your automations.',
+  accounts: 'View your accounts and manage this session.',
+  general: 'Set your display name and automation defaults.',
+};
+export function liveSettings(s: Settings, section: SettingsSection | null): string {
+  let content = '';
+  if (section === null) content = `<div class="settings-index">${settingsSections.map(name =>
+    `<a class="card index-section" href="/settings/${name}"><h2>${titles[name]}</h2><p>${descriptions[name]}</p><span aria-hidden="true">›</span></a>`).join('')}</div>`;
+  if (section === 'linear') content = `<section class="card live-settings"><h2>Connect Linear</h2><p>Use your Linear account to run automations and access connected tools.</p><button type="button" id="connect-linear">Connect Linear</button><div id="linear-connect"></div></section><section class="card live-settings"><h2>Connected accounts</h2><div id="linear-accounts" aria-live="polite">Loading accounts…</div></section>`;
+  if (section === 'accounts') content = `<section class="card live-settings"><h2>Linear accounts</h2><div id="linear-accounts" aria-live="polite">Loading accounts…</div><a class="button-link" href="/settings/linear">Connect an account</a></section><section class="card live-settings"><h2>Current session</h2><div id="identity" aria-live="polite">Loading session…</div></section>`;
+  if (section === 'mcp') content = `<div id="settings-extension" aria-live="polite">Loading connectors…</div><details class="card live-settings"><summary>Connection permissions</summary><form data-preferences="mcp"><label class="setting-row"><span>Allow local commands</span><input name="allowStdio" type="checkbox" ${s.mcp.allowStdio ? 'checked' : ''}></label>${input('Allowed destination hosts (comma separated)', 'allowedHosts', s.mcp.allowedHosts.join(', ')).replace(' required', '')}<p>Allow only hosts and local commands you trust.</p><footer><button type="submit">Save permissions</button></footer></form></details>`;
+  if (section === 'general') content = `<form data-preferences="account" class="card live-settings"><h2>Profile</h2>${input('Display name', 'displayName', s.account.displayName)}<footer><button type="submit">Save profile</button></footer></form><form data-preferences="automations" class="card live-settings"><h2>Automation defaults</h2>${input('Timezone', 'timezone', s.automations.timezone)}${input('Run retention (days)', 'retentionDays', s.automations.retentionDays, 'number')}${input('Maximum concurrent runs', 'concurrency', s.automations.concurrency, 'number')}<p>These defaults are saved for the automation service. Scheduling and retention are not active yet.</p><footer><button type="submit">Save defaults</button></footer></form>`;
+  return `<aside aria-label="Settings sidebar"><header><a href="/automations">‹ Automations</a></header><nav aria-label="Settings sections">${settingsSections.map(name => `<a href="/settings/${name}" ${name === section ? 'aria-current="page"' : ''}>${titles[name]}</a>`).join('')}</nav></aside><main><h1>${section ? titles[section] : 'Settings'}</h1>${content}</main>`;
 }
