@@ -97,3 +97,14 @@ hour/minute choices, labeled timezone search and raw cron editor, retaining
 Cursor validation behavior. [Complete change/source audit](docs/verification/automations-carve.md).
 Historical passing tests do not establish new raster parity; limitations remain
 explicit. Peer COMMENT review is required before merge.
+
+## Visual verification and branding cleanup
+
+[Eight screenshots and comparison report](docs/verification/visual-branding.md)
+cover settings entry/four sections, disconnected chat and expanded/compact
+sidebar. Fixed the chat 404, clipped rail toggle, settings gutter, icon spacing
+and chat selection. Rendered branding is neutral; a regression protects all
+runtime source/catalogues while retaining unrendered evidence citations.
+77 root + 6 MCP tests, strict TS and 157 retained settings comparisons pass.
+Whole-page raster identity remains UNVERIFIED where matching original images
+are missing; the report distinguishes those gaps from measured properties.

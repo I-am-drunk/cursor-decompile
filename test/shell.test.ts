@@ -6,7 +6,7 @@ import { shell, list, chatGate } from '../src/automations/view.ts';
 test('shell keeps captured header search and removes invented destinations', () => {
   const html=shell('');
   for(const label of ['New Chat','Automations','Search','Settings']) assert.ok(html.includes(`aria-label="${label}"`));
-  assert.equal((html.match(/class="full-icon"/g)||[]).length,3);
+  assert.equal((html.match(/class="rail-icon"/g)||[]).length,3);
   assert.doesNotMatch(html+list([],'mine','',1),/Codebase|Cursor/);
   assert.match(html,/href="\/settings"/);
   assert.doesNotMatch(html, /Profile|href="\/search"|Local preview/);

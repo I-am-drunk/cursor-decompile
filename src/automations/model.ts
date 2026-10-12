@@ -1,4 +1,4 @@
-// DESIGN: local domain, deliberately not Cursor's private wire protocol.
+// DESIGN: local domain, deliberately not the reference product’s private wire protocol.
 export const triggerKinds = ['Schedule', 'Webhook', 'Linear', 'GitHub', 'Slack', 'PagerDuty'] as const;
 export type TriggerKind = typeof triggerKinds[number];
 export interface Schedule {kind:'hourly'|'daily'|'weekly'|'custom';time:string;day:number;timeZone:string}

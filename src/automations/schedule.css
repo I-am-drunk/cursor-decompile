@@ -1,4 +1,4 @@
-/* Cursor row/menu geometry; Devin §12.6–12.7 controls and raw editor layout.
+/* Captured row/menu geometry; Devin §12.6–12.7 controls and raw editor layout.
    Source mapping: docs/verification/automations-carve.md. */
 .sc-row{height:auto;min-height:40px}.sc-row>.tr-clock{width:20px;flex-shrink:0;display:flex;justify-content:center}.sc-row>.tr-clock svg{width:14px;height:14px}
 .sc-phrase{display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap;min-width:0}.sc-time{display:flex;align-items:center;gap:4px}
