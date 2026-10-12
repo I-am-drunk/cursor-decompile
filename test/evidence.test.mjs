@@ -49,3 +49,11 @@ test('trigger comparison rejects changed values, enabled state and unclosed over
   const v={...f,id:'cron',captureState:'schedule-picker',target:'tr-cron-input',attribute:undefined,inputValue:true,value:'0 0 1 1 *'};
   assert.match(compare([v],{...s,captureState:'schedule-picker',elements:[{id:v.target,value:'changed'}]}).mismatches.join(),/state differs/);
 });
+test('preset comparison verifies dirty-state presence and explicit fixture context',()=>{
+  const f={id:'dirty',target:'ed-save',captureState:'daily-added',attributePresent:'disabled',value:false,source:{attributePresence:{}},viewport};
+  const s={url:'http://localhost/automations/editor-fixture?fixture=saved-editor&controls=presets',
+    captureState:'daily-added',viewport,elements:[{id:'ed-save',attributes:{}}]};
+  assert.deepEqual(compare([f],s).mismatches,[]);
+  assert.match(compare([f],{...s,elements:[{id:'ed-save',attributes:{disabled:''}}]}).mismatches.join(),/state differs/);
+  assert.throws(()=>compare([f],{...s,url:s.url.replace('controls=presets','controls=triggers')}));
+});

@@ -74,3 +74,9 @@ The [trigger-control follow-up](../facts/automations-trigger-verification.md)
 adds matched Add Trigger, Scheduled submenu, existing custom-cron and dismissed
 states. Preset/provider forms and reference mutation/validation behavior remain
 unverified; passing local syntax and persistence tests do not close those gaps.
+
+The [preset/validation slice](../facts/automations-preset-verification.md)
+adds observed unsaved preset rows/selectors, duplicate-cron warning, live
+invalid-input and unsaved-dialog states. It closes their measured subset only:
+reference saves, provider authorization, server validation and execution were
+not attempted. Runtime/serialization policies remain separately labeled DESIGN.

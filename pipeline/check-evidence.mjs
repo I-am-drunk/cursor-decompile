@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
-const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json'].map(async name=>
+const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json'].map(async name=>
   JSON.parse(await readFile(`src/automations/${name}`,'utf8'))))).flat();
 const root=process.argv[2], ids=new Set();
 let verified=0;
@@ -45,6 +45,9 @@ for (const f of facts) {
       const defaults=model.variants.find(v=>v.isDefaultNonMaxConfig);
       assert.deepEqual(row.defaults,Object.fromEntries((defaults?.parameterValues??[]).map(v=>[v.id,v.value])));
     }
+  } else if(f.source.attributePresence){
+    const {element,attribute}=f.source.attributePresence;
+    assert.equal(Object.hasOwn(JSON.parse(bytes).elements[element].attributes,attribute),f.value);
   } else if (f.source.jsonPath) {
     let data=JSON.parse(bytes);
     if(f.source.responsePath) data=JSON.parse(f.source.responsePath.reduce((v,key)=>v[key],data));

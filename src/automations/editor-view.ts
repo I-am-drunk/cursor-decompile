@@ -2,13 +2,15 @@ import type { Automation } from './model.ts';
 import type { EditorModel, McpConfig, McpProvider } from './editor-state.ts';
 import { modelSuffix } from './editor-state.ts';
 import { btn, esc, icon } from './view.ts';
+import { presetRow, presetWarning } from './preset-view.ts';
 export function editorToolbar(a:Automation,dirty:boolean):string {
   return `<div class="ed-toolbar">${btn('Save','save','ed-save',`${dirty?'':'disabled'} data-evidence="ed-save"`)}
     ${btn(`▷ Test`,'test','outline','data-evidence="ed-test"')}
     ${btn(icon('menu'),`row:${a.id}`,'icon','aria-label="More actions"')}</div>`;
 }
-export function savedEditor(a:Automation,model:string,errors:string[],titleEditing=false,fixture=false):string {
+export function savedEditor(a:Automation,model:string,errors:string[],titleEditing=false,fixture=false,preview?:{id:string;value:string}):string {
   const repo=a.repositories[0]?.split('/').at(-1)||'No repository';
+  const multiple=a.triggers.filter(t=>t.kind==='Schedule').length>1;
   return `<div class="ed-header"><div class="ed-title-line">${titleEditing?
     `<input name="name" aria-label="Automation name" value="${esc(a.name)}" maxlength="200">`:
     btn(`<span data-evidence="ed-name">${esc(a.name||'Untitled Automation')}</span>${icon('edit')}`,'edit-title','ed-title',`aria-label="Edit automation name" data-evidence="ed-title"`)}</div>
@@ -21,10 +23,10 @@ export function savedEditor(a:Automation,model:string,errors:string[],titleEditi
       ${btn('Settings','ed-settings','','role="tab" aria-selected="true"')}${btn('Run History',`ed-runs:${a.id}`,'','role="tab" aria-selected="false"')}</div></div>
     <div class="ed-body">${errors.length?`<div class="validation" role="alert">${errors.map(esc).join('<br>')}</div>`:''}
     <section class="ed-section ed-triggers"><h3 data-evidence="ed-trigger-title">Triggers</h3><div class="ed-card" data-evidence="ed-trigger-card">
-      ${a.triggers.map(t=>`<div class="ed-trigger-row tr-row" data-evidence="tr-existing-row"><span class="tr-clock">${icon('clock')}</span><div class="ed-trigger-main"><span class="${t.kind==='Schedule'?'tr-schedule-label':''}" data-evidence="tr-existing-label">${t.kind==='Schedule'?'Custom schedule':esc(t.kind)}</span>
+      ${a.triggers.map(t=>t.schedule?presetRow(t,fixture,preview?.id===t.id?preview.value:undefined):`<div class="ed-trigger-row tr-row" data-evidence="tr-existing-row"><span class="tr-clock">${icon('clock')}</span><div class="ed-trigger-main"><span class="${t.kind==='Schedule'?'tr-schedule-label':''}" data-evidence="tr-existing-label">${t.kind==='Schedule'?'Custom schedule':esc(t.kind)}</span>
       ${btn(`<span data-evidence="tr-existing-cron-label">${esc(t.value)}</span>${icon('chevron')}`,`${t.kind==='Schedule'?'tr-cron':'trigger'}:${t.id}`,'ed-cron',`aria-haspopup="menu" aria-expanded="false" data-evidence="tr-existing-cron" ${t.value==='0 0 1 1 *'?'data-reference-cron':''}`)}<span class="muted">${fixture&&t.value==='0 0 1 1 *'?'Next run Thu, Dec 31, 7:00 p.m. EST':esc(t.event)}</span></div>
       ${btn(icon('close'),`remove-trigger:${t.id}`,'icon','aria-label="Remove trigger"')}</div>`).join('')}
-      <div class="ed-add-wrap">${btn(`${icon('plus')}<span data-evidence="tr-add-label">Add Trigger</span>`,'tr-add','ed-add','role="combobox" aria-label="Add Trigger" aria-haspopup="dialog" aria-expanded="false" data-evidence="ed-add-trigger"')}</div></div><div class="ed-caption"></div></section>
+      <div class="ed-add-wrap">${btn(`${icon('plus')}<span data-evidence="tr-add-label">Add Trigger</span>`,'tr-add','ed-add','role="combobox" aria-label="Add Trigger" aria-haspopup="dialog" aria-expanded="false" data-evidence="ed-add-trigger"')}</div></div><div class="ed-caption ${multiple?'has-warning':''}">${multiple?presetWarning():''}</div></section>
     <section class="ed-section"><h3 data-evidence="ed-prompt-title">Agent Instructions</h3><div class="ed-prompt-card" data-evidence="ed-prompt-card">
       <textarea name="prompt" aria-label="Agent Instructions" placeholder="Type @ for tools, / for commands..." data-evidence="ed-prompt">${esc(a.prompt)}</textarea>
       <div class="ed-prompt-footer" data-evidence="ed-prompt-footer">${btn(`${esc(model)} ⌄`,'ed-models','ed-model','data-evidence="ed-model"')}</div></div><div class="ed-caption"></div></section>

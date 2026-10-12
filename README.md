@@ -66,11 +66,20 @@ forms, and the model/parameter picker. Preview its reference-derived fixture
 at `/automations/editor-fixture?fixture=saved-editor`. Configuration values
 stay in the private local store (0600); API state and copied definitions use
 opaque references. No provider is authorized and no configured command runs.
-Preset/provider trigger forms and unobserved variants remain unverified.
+Provider-specific trigger forms and unobserved variants remain unverified.
 
 The [trigger-control follow-up](facts/automations-trigger-verification.md)
 adds the measured Add Trigger menu, Scheduled choices and custom-cron popup.
 Preview at `/automations/editor-fixture?fixture=saved-editor&controls=triggers`.
-Use Enter to stage a local cron edit, Escape to discard it, and Save to persist.
-Preset defaults and provider-specific forms are not reference-verified;
+Use Enter to stage a local cron edit and Save to persist. Correct invalid
+input before dismissing its popup. Execution bindings and provider forms
+are not reference-verified;
 no scheduler, execution or provider authorization is connected.
+
+The [preset/validation slice](facts/automations-preset-verification.md) adds
+hourly/daily/weekly rows, day/time menus, live cron errors and the unsaved guard.
+Its fixture lives at
+`/automations/editor-fixture?fixture=saved-editor&controls=presets`.
+Local schedule metadata persists without executing anything. Displayed reference
+dates, local serialization and full runtime scheduling are distinct concerns;
+this build still provides no scheduler or connected provider authorization.
