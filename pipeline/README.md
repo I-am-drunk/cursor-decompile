@@ -216,3 +216,17 @@ This adds **421** checks: **2,157** across 48 states, plus **456** raw-source
 pins. No reference authorization, installation, save or execution is needed.
 The local Connect/Add Plugin controls deliberately make no such request.
 Visual reference metadata does not certify this local implementation.
+
+### Run-filter closure comparisons
+
+Use `/automations/runs?fixture=observed-failure&controls=filters` at the same
+1270 × 764, DPR 2 viewport. Export these states with Alt+Shift+E:
+`runs-baseline`; open Filter → `runs-filter`; open Status → `runs-status`;
+select Running → `runs-running`; add Failed → `runs-multiple-status`;
+deselect Failed and dismiss both menus → `runs-filtered-empty`; reopen
+Filter, Clear all filters and dismiss → `runs-cleared`.
+
+These add 621 checks: **2,778 across 55 states**, preserving all 2,157.
+The gate rejects wrong selection URLs, stale builds and wrong viewports.
+Desktop PNG/AX/metadata are an explicit audit, not a DOM/pixel comparison;
+see the [disposition](../facts/automations-acceptance-closure.md).

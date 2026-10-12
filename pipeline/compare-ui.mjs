@@ -18,6 +18,8 @@ export function compare(facts, actual) {
     if(connectionState)assert.equal(url.searchParams.get('controls'),'connections');
   } else if (filterState) {
     assert.ok(isRuns && url.searchParams.get('fixture')==='observed-failure' && url.searchParams.get('controls')==='filters','Expected filter fixture');
+    const selected=url.searchParams.get('status')??'';
+    assert.equal(selected,filterState==='runs-running'||filterState==='runs-filtered-empty'?'running':filterState==='runs-multiple-status'?'running,failed':'','Wrong filter selection');
   } else if (rowState) {
     assert.ok(isRuns && url.searchParams.get('fixture')==='observed-failure','Expected explicit reference-derived fixture');
   } else if (isRuns) {

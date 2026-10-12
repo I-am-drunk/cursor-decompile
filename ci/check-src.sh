@@ -24,4 +24,7 @@ if [ "${1:-}" = "--reference" ]; then
   for state in connection-baseline linear-menu linear-issue-menu linear-created linear-status linear-cycle mcp-unconfigured mcp-linear-search mcp-linear-unconnected mcp-linear-expanded mcp-returned; do
     node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
   done
+  for state in runs-baseline runs-filter runs-status runs-running runs-multiple-status runs-filtered-empty runs-cleared; do
+    node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
+  done
 fi

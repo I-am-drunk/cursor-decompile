@@ -12,3 +12,8 @@
 .rf-root h3{display:flex;align-items:center}.rf-root h3 span{font-size:12px;line-height:16px;height:15px}
 .stat strong{line-height:22px;height:24px}.rf-filter{position:relative}
 .rf-badge{position:absolute;right:-1.5px;top:-1.5px;width:12px;height:12px;border-radius:9999px;background:#141414;color:white;font-size:9px;line-height:9px;display:grid;place-items:center}
+.rf-hint,.rf-pop [data-act="rf-clear"],.rf-chevron{color:var(--muted)}
+.rf-badge{background:#257d81}.rf-symbol svg{width:12px;height:12px;display:block}
+.rf-symbol.running{color:#af853a}.rf-symbol.failed{color:#be1744}.rf-symbol.succeeded{color:#378268}.rf-symbol.skipped{color:#888}
+.rf-pop button{position:relative;background:transparent!important;isolation:isolate}
+.rf-pop button:hover:before,.rf-pop button:focus-visible:before,.rf-pop button[aria-expanded=true]:before{content:"";position:absolute;inset:0 6px;z-index:-1;background:#eee;border-radius:8px}

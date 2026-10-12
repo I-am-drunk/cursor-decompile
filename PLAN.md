@@ -5,8 +5,8 @@ one visible state or interaction per PR; claim the exact slice on #1.
 
 | Order | Lane | Surface / first slice | Acceptance evidence |
 |---|---|---|---|
-| 1 | C-AUTOMATIONS | Linear/unconnected slice verified; next: measure and accept screenshot-only run-filter/status variants | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
-| 2 | C-SETTINGS | queued opener: settings entry/navigation/default panel, then one unconnected provider panel | read-only capture first; no settings mutations or authorization; measured UI facts |
+| 1 | C-AUTOMATIONS | Captured web subset complete; retain gated/connected and desktop acceptance gaps | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
+| 2 | C-SETTINGS | next opener: settings entry/navigation and account/team panel, then one unconnected provider panel | read-only capture first; no settings mutations or authorization; measured UI facts |
 | 3 | C-SHELL | window, sidebar, command palette, navigation | route/state/keyboard captures |
 | 4 | C-AGENTS | agent list, conversation, tool results, review, projects | loading/empty/populated/error states and interactions |
 | 5 | C-EDITOR | files, tabs, search, source control, terminal, diff | pane layouts and keyboard behavior |
@@ -87,14 +87,21 @@ now verifies nested menus, three Requires connection rows, empty MCP state,
 Linear discovery and the pre-install disclosure: 47 tests, 2,157 measured
 checks (all 1,736 preserved) and 456 raw-source pins pass.
 
-Next thin slice: **measure and accept the screenshot-only Run History filter
-and status-menu states**. They already exist in the private corpus but are not
-in the 48-state comparison matrix; do not call the whole captured backlog
-complete. Desktop upgrade-modal screenshots also lack measured acceptance.
-Server validation, connected MCP/execution and plan-enabled populated-list
-parity remain distinct gaps.
+## Captured-web acceptance closure — 2026-10-12
 
-C-SETTINGS opens with read-only settings entry/navigation and the default
-panel, then one unconnected provider/integration panel. Record selected
-navigation and keyboard behavior before implementation. That lane is queued,
-not started or certified by the Automations checks.
+The [closure audit](facts/automations-acceptance-closure.md) adds seven run-filter
+states: 51 tests, 2,778 measured checks, 551 source pins. Every earlier 2,157
+check is preserved. The web captured-state backlog is complete, not whole-lane
+pixel parity. No new runs, saves, authorization or fixture mutations occurred.
+
+Desktop reinspection did not reproduce the historical Grok Bot promotional
+modal. That global promotion is explicitly transferred to C-SHELL/C-ACCOUNT;
+current desktop gate geometry is still UNVERIFIED. Neither is counted as a
+passing Automations web comparison. Gated populated lists, connected/execution,
+alternate themes/viewports and independent raster acceptance also remain open.
+
+Next thin slice: **C-SETTINGS navigation shell and account/team first**.
+Capture the settings entry, selected navigation and account/team panel with
+AX/JSON/PNG; implement only observed read-only navigation. No settings changes,
+account creation, billing or provider authorization. Then capture one
+unconnected provider/integration panel separately.
