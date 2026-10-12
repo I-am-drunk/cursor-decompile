@@ -1,0 +1,32 @@
+# CodeRabbit — review discipline for this repo
+language: en-US
+reviews:
+  profile: chill
+  auto_review:
+    enabled: true
+    drafts: true
+    auto_incremental_review: true
+    auto_pause_after_reviewed_commits: 15
+  request_changes_workflow: true
+  high_level_summary: true
+  review_status: true
+  poem: false
+  collapse_walkthrough: true
+  finishing_touches:
+    autofix:
+      enabled: true
+    fix_ci:
+      enabled: true
+    unit_tests:
+      enabled: true
+    docstrings:
+      enabled: false
+  tools:
+    shellcheck:
+      enabled: true
+    actionlint:
+      enabled: true
+    biome:
+      enabled: true
+chat:
+  auto_reply: true
