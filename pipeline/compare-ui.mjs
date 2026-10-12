@@ -8,18 +8,20 @@ export function compare(facts, actual) {
   const editorState=['saved-editor','tools-menu','mcp-menu','mcp-browse','mcp-url','mcp-command','mcp-json','model-picker','model-options'].includes(actual.captureState)?actual.captureState:null;
   const triggerState=['trigger-baseline','add-trigger','scheduled-submenu','schedule-picker','trigger-dismissed'].includes(actual.captureState)?actual.captureState:null;
   const presetState=['preset-baseline','hourly-added','daily-added','daily-time','daily-selected','weekly-added','weekly-days','weekly-selected','weekly-time','custom-added','custom-popup','cron-invalid','cron-range','cron-empty','invalid-escape','invalid-outside','custom-restored','unsaved-dialog'].includes(actual.captureState)?actual.captureState:null;
-  assert.ok(presetState || triggerState || editorState || isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
-  if(editorState||triggerState||presetState){
+  const connectionState=['connection-baseline','linear-menu','linear-issue-menu','linear-created','linear-status','linear-cycle','mcp-unconfigured','mcp-linear-search','mcp-linear-unconnected','mcp-linear-expanded','mcp-returned'].includes(actual.captureState)?actual.captureState:null;
+  assert.ok(connectionState || presetState || triggerState || editorState || isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
+  if(editorState||triggerState||presetState||connectionState){
     assert.equal(url.pathname,'/automations/editor-fixture');assert.equal(url.searchParams.get('fixture'),'saved-editor');
     if(triggerState)assert.equal(url.searchParams.get('controls'),'triggers');
     if(presetState)assert.equal(url.searchParams.get('controls'),'presets');
+    if(connectionState)assert.equal(url.searchParams.get('controls'),'connections');
   } else if (rowState) {
     assert.ok(isRuns && url.searchParams.get('fixture')==='observed-failure','Expected explicit reference-derived fixture');
   } else if (isRuns) {
     assert.ok(!url.searchParams.get('fixture') && !url.searchParams.get('status'),'Expected unfiltered non-fixture runs');
     assert.ok(!url.searchParams.get('scope') || url.searchParams.get('scope')==='team','Expected Team runs');
   }
-  const state=presetState||triggerState||editorState||rowState;
+  const state=connectionState||presetState||triggerState||editorState||rowState;
   const chosen=facts.filter(f=>(f.source?.element!==undefined||f.attribute||f.inputValue||f.attributePresent) &&
     (state ? f.captureState===state : !f.captureState && (isRuns ? !f.id.startsWith('gate-') : f.id.startsWith('gate-'))));
   const mismatches=[]; let checks=0;
@@ -38,6 +40,8 @@ export function compare(facts, actual) {
     if (['gate-button','runs-empty','sum-close','sum-view','ed-save','ed-test','mc-toggle','mc-cancel','mc-submit'].includes(target)) dimensions=['y','height'];
     if(['pr-next','pr-unsaved-title','pr-unsaved-copy'].includes(target))dimensions=['x','y','height'];
     if(['pr-discard','pr-keep','pr-save'].includes(target))dimensions=['y','height'];
+    if(['lc-required','lp-name','lp-publisher'].includes(target))dimensions=['x','y','height'];
+    if(['lp-more','lp-back','lp-add'].includes(target))dimensions=['y','height'];
     for (const key of dimensions) {
       checks++;
       if (!Number.isFinite(measured.rect[key]) || Math.abs(measured.rect[key]-f.value.rect[key])>.75)
@@ -47,6 +51,8 @@ export function compare(facts, actual) {
     if(presetState&&(target==='pr-warning-label'||(target==='pv-hint'&&/Expected|is required/.test(f.value.text??''))))
       styleKeys.push('color');
     if(presetState&&target==='ed-save')styleKeys.push('background-color','color');
+    if(connectionState&&['lc-required','pr-warning-label'].includes(target))styleKeys.push('color');
+    if(connectionState&&['lc-connect','lp-add'].includes(target))styleKeys.push('background-color','color');
     for (const key of styleKeys) {
       checks++;
       if (measured.style[key]!==f.value.style[key]) mismatches.push(`${f.id}.${key}: ${measured.style[key]} != ${f.value.style[key]}`);
@@ -70,7 +76,7 @@ export function compare(facts, actual) {
 if (process.argv[1] && import.meta.url===pathToFileURL(resolve(process.argv[1])).href) {
   if (!process.argv[2]) throw Error('Usage: node pipeline/compare-ui.mjs <local-measurements.json>');
   const actual=JSON.parse(await readFile(process.argv[2],'utf8'));
-  const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json'].map(async file=>
+  const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json','connection-facts.json'].map(async file=>
     JSON.parse(await readFile(`src/automations/${file}`,'utf8'))))).flat();
   const {buildHash}=await import('../src/server.ts');
   assert.equal(actual.buildHash,await buildHash(),'Stale snapshot: recapture the current build');

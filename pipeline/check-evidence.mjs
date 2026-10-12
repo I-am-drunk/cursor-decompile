@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
-const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json'].map(async name=>
+const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json','connection-facts.json'].map(async name=>
   JSON.parse(await readFile(`src/automations/${name}`,'utf8'))))).flat();
 const root=process.argv[2], ids=new Set();
 let verified=0;
