@@ -44,6 +44,8 @@ export function compare(facts, actual) {
         mismatches.push(`${f.id}.${key}: ${measured.rect[key]} != ${f.value.rect[key]}`);
     }
     const styleKeys=f.value.text!==null?['font-size','line-height']:['border-radius'];
+    if(presetState&&(target==='pr-warning-label'||(target==='pv-hint'&&/Expected|is required/.test(f.value.text??''))))
+      styleKeys.push('color');
     for (const key of styleKeys) {
       checks++;
       if (measured.style[key]!==f.value.style[key]) mismatches.push(`${f.id}.${key}: ${measured.style[key]} != ${f.value.style[key]}`);

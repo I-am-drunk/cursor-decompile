@@ -1,5 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { Store } from '../src/store.ts';
 import { cronFieldError, makePreset } from '../src/automations/preset-state.ts';
 import { parseAutomation, validCron } from '../src/automations/model.ts';
 import { savedEditorFixture } from '../src/automations/editor-state.ts';
@@ -49,4 +53,21 @@ test('preset and safeguard views expose captured controls without unsafe interpo
   assert.doesNotMatch(presetRow(t,true),/<script>/);
   assert.doesNotMatch(validatedCronMenu(t.value,true),/<script>/);
   const html=unsavedDialog();assert.ok(html.indexOf('Discard')<html.indexOf('Keep Editing'));
+});
+test('live validation reacquires its anchor after the underlying row re-renders',()=>{
+  const {a,c}=controller();c.addPreset(3);const t=a.triggers.at(-1)!;
+  c.handle(`tr-cron:${t.id}`);
+  c.anchor={dataset:{act:`tr-cron:${t.id}`}} as unknown as HTMLElement;
+  const next={setAttribute:()=>{}} as unknown as HTMLElement;c.findAction=()=>next;
+  c.input({name:'cron-expression',value:'bad'} as HTMLInputElement);
+  assert.equal(c.anchor,next);assert.equal(c.value,'bad');
+});
+test('preset metadata persists locally without activation or execution',async t=>{
+  const dir=await mkdtemp(join(tmpdir(),'preset-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+  const store=new Store(join(dir,'state.json')),a=savedEditorFixture();
+  a.id='';a.revision=0;a.triggers.push(makePreset(2)!);
+  a.triggers.at(-1)!.schedule!.day=2;a.triggers.at(-1)!.schedule!.time='10:00';
+  const saved=await store.save(a),reloaded=await new Store(store.file).read();
+  assert.deepEqual(reloaded.automations,[saved]);assert.equal(saved.enabled,false);
+  assert.deepEqual(reloaded.runs,[]);
 });

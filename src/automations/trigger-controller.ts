@@ -106,7 +106,10 @@ export class TriggerController {
     if(input.name==='trigger-search'){this.query=input.value;this.panel='add-trigger';this.render();return true;}
     if(input.name==='cron-expression'){
       this.value=input.value;this.error='';this.attempt='';
-      if(this.current()?.schedule)this.host.render();
+      if(this.current()?.schedule){
+        const command=this.anchor?.dataset?.act;this.host.render();
+        if(command){this.anchor=this.findAction(command);this.anchor?.setAttribute('aria-expanded','true');}
+      }
       this.render();return true;
     }
     return false;

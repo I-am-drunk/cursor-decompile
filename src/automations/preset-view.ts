@@ -11,7 +11,7 @@ export function presetRow(t:Trigger,fixture:boolean,preview?:string):string {
   const time=['daily','weekly'].includes(s.kind)?`<span class="pr-between pr-at">at</span>${control(s.time,`pr-time:${t.id}`,'pr-time')}<span class="pr-between pr-zone">${esc(zone)}</span>`:'';
   const cron=s.kind==='custom'?control(t.value,`tr-cron:${t.id}`,'pr-cron'):'';
   const next=fixture?referenceNext(t):'';
-  return `<div class="ed-trigger-row tr-row pr-row" data-preset="${s.kind}" data-day="${weekdays[s.day]}" data-evidence="pr-row">
+  return `<div class="ed-trigger-row tr-row pr-row" data-preset="${s.kind}" data-day="${weekdays[s.day]}" data-time="${esc(s.time)}" data-evidence="pr-row">
     <span class="tr-clock">${icon('clock')}</span><div class="ed-trigger-main"><span class="pr-title" data-evidence="pr-title">${title}</span>${day}${time}${cron}
     ${(preview===undefined||preview===t.value)&&next?`<span class="muted" data-evidence="pr-next">Next run ${next}</span>`:''}</div>
     ${btn(icon('close'),`remove-trigger:${t.id}`,'icon','aria-label="Remove trigger"')}</div>`;
