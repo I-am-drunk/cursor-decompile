@@ -83,3 +83,6 @@ Rules for every agent: work in ~/cursor-decompile on a branch; small PRs; never 
 3. C scaffolds server; D lands Linear connect → first end-to-end: create automation (cron) → server sends prompt → Linear answers → run record shows result.
 4. Webhook trigger; MCP attach per automation (uses V5).
 5. v2: event triggers (GitHub/Linear pollers), MCP facade exposure, multi-account rotation.
+
+## 6. UI RULE (owner directive 2026-10-12, supersedes all UI lanes)
+**COPY-FIRST, CHISEL-ONLY.** Every pixel, layout, style, and string starts from the CAPTURED original (facts/*.md, artifacts/ screenshots); agents only DELETE. Nothing invented ships — an invented surface is worse than a missing page. Settings copies Cursor's own settings layout (facts/settings-*) chiseled to {Linear connection, MCP connectors, Accounts, General}. No standalone search page — copy Cursor's sidebar top-right search button. The chat page is LINEAR-ONLY and gated: no connection → center-screen "Connect to Linear" with "Linear" underlined in an accent color, routing to the connect page.
