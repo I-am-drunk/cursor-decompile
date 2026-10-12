@@ -54,7 +54,8 @@ promote extracted or reference-derived fixture behavior into observed parity.
 
 ## Saved-editor/MCP measured subset — 2026-10-12
 
-The [editor slice](facts/automations-saved-editor.md) implements the captured
+[PR #12](https://github.com/I-am-drunk/cursor-decompile/pull/12), the
+[editor slice](facts/automations-saved-editor.md), implements the captured
 saved editor, tools/MCP menus, new-connection browser, custom URL/command/JSON
 forms, and eight-model picker with parameter controls. Configurations persist
 locally behind opaque references; no MCP command, authorization or run executes.
