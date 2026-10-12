@@ -62,7 +62,8 @@ locally behind opaque references; no MCP command, authorization or run executes.
 Thirty tests and 737 measured checks across fourteen states pass; 149 raw
 source pins reproduce. This is subset verification, not independent pixel parity.
 
-The subsequent [trigger evidence slice](facts/automations-trigger-capture.md)
+The subsequent [trigger evidence slice](facts/automations-trigger-capture.md),
+[PR #13](https://github.com/I-am-drunk/cursor-decompile/pull/13),
 captures Add Trigger, Scheduled choices and the existing custom-cron editor,
 with 30 source pins and unchanged disabled/clean fixture state.
 
