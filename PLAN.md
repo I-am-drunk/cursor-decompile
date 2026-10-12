@@ -74,7 +74,8 @@ reproduces the captured menu, custom-cron and dismissal subset: 35 tests,
 Local parser, commit and preset policies are explicitly DESIGN; no scheduler
 or authorization/execution integration was added.
 
-The [preset/validation follow-up](facts/automations-preset-verification.md)
+[PR #15](https://github.com/I-am-drunk/cursor-decompile/pull/15), the
+[preset/validation follow-up](facts/automations-preset-verification.md),
 adds hourly/daily/weekly/custom rows, day/time selectors, live validation and
 the unsaved guard. Nineteen private capture triples support eighteen added
 local comparison states: 43 tests, 1,736 measured checks and 360 source pins
