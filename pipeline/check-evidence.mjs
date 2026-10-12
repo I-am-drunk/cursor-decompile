@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json','connection-facts.json','closure-facts.json'].map(async name=>
   JSON.parse(await readFile(`src/automations/${name}`,'utf8'))))).flat();
+facts.push(...JSON.parse(await readFile('src/settings/ui-facts.json','utf8')));
 const root=process.argv[2], ids=new Set();
 let verified=0;
 for (const f of facts) {
@@ -14,8 +15,10 @@ for (const f of facts) {
   if (!f.source) { assert.ok(['UNVERIFIED','DESIGN'].includes(f.label)); continue; }
   assert.match(f.source.sha256,/^[a-f0-9]{64}$/);
   if (!root) continue;
-  const file=resolve(root,f.source.path);
-  assert.ok(file.startsWith(resolve(root)+'/'),'Source escapes reference root');
+  if(f.surface)assert.equal(f.surface,'settings');
+  const sourceRoot=f.surface==='settings'?resolve(root,'../settings'):resolve(root);
+  const file=resolve(sourceRoot,f.source.path);
+  assert.ok(file.startsWith(sourceRoot+'/'),'Source escapes reference root');
   const bytes=await readFile(file);
   assert.equal(createHash('sha256').update(bytes).digest('hex'),f.source.sha256,`${f.id}: changed source`);
   if (f.source.element !== undefined) {
