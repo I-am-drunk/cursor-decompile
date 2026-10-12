@@ -4,9 +4,11 @@ import { validCron } from './model.ts';
 import { cronFieldError, customDates, hours, referenceNext, weekdays } from './preset-state.ts';
 export function presetRow(t:Trigger,fixture:boolean,preview?:string):string {
   const s=t.schedule!,title={hourly:'Every hour',daily:'Every day',weekly:'Every week',custom:'Custom schedule'}[s.kind];
+  let zone='EDT';
+  if(!fixture)try{zone=new Intl.DateTimeFormat('en',{timeZone:s.timeZone,timeZoneName:'short'}).formatToParts(new Date()).find(p=>p.type==='timeZoneName')?.value??'Local';}catch{zone='Local';}
   const control=(text:string,act:string,id:string)=>btn(`<span data-evidence="${id}-label">${esc(text)}</span>${icon('chevron')}`,act,'ed-cron',`data-evidence="${id}"`);
   const day=s.kind==='weekly'?`<span class="pr-between pr-on">on</span>${control(weekdays[s.day]!,`pr-day:${t.id}`,'pr-day')}`:'';
-  const time=['daily','weekly'].includes(s.kind)?`<span class="pr-between pr-at">at</span>${control(s.time,`pr-time:${t.id}`,'pr-time')}<span class="pr-between pr-zone">EDT</span>`:'';
+  const time=['daily','weekly'].includes(s.kind)?`<span class="pr-between pr-at">at</span>${control(s.time,`pr-time:${t.id}`,'pr-time')}<span class="pr-between pr-zone">${esc(zone)}</span>`:'';
   const cron=s.kind==='custom'?control(t.value,`tr-cron:${t.id}`,'pr-cron'):'';
   const next=fixture?referenceNext(t):'';
   return `<div class="ed-trigger-row tr-row pr-row" data-preset="${s.kind}" data-day="${weekdays[s.day]}" data-evidence="pr-row">

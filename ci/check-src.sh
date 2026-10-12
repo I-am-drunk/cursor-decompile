@@ -18,4 +18,7 @@ if [ "${1:-}" = "--reference" ]; then
   for state in trigger-baseline add-trigger scheduled-submenu schedule-picker trigger-dismissed; do
     node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
   done
+  for state in preset-baseline hourly-added daily-added daily-time daily-selected weekly-added weekly-days weekly-selected weekly-time custom-added custom-popup cron-invalid cron-range cron-empty invalid-escape invalid-outside custom-restored unsaved-dialog; do
+    node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
+  done
 fi
