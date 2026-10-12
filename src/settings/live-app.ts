@@ -8,7 +8,15 @@ export async function settingsApi<T>(path:string,method='GET',data?:unknown):Pro
   const response=await fetch(path,{method,headers:{'Content-Type':'application/json','X-Local-Request':'1'},...(data===undefined?{}:{body:JSON.stringify(data)})});
   const result=await response.json();if(!response.ok)throw Error(result.error??'Request failed.');return result as T;
 }
-function render(){root.innerHTML=liveSettings(state,current());}
+function render(){root.innerHTML=liveSettings(state,current());void showIdentity();}
+async function showIdentity(){
+ const status=await settingsApi<{identity:{email:string;id:string}|null}>('/api/auth/status');
+ const target=document.querySelector('#identity');if(!target)return;
+ if(!status.identity){location.assign('/login');return;}
+ const text=document.createElement('p');text.textContent=`Signed in as ${status.identity.email}`;
+ const button=document.createElement('button');button.type='button';button.textContent='Sign out';
+ button.addEventListener('click',()=>{void settingsApi('/api/auth/logout','POST',{}).then(()=>location.assign('/login')).catch(e=>{notice.textContent=e.message;});});target.replaceChildren(text,button);
+}
 root.addEventListener('click',e=>{
   const a=(e.target as Element).closest<HTMLAnchorElement>('nav a');if(!a||e instanceof MouseEvent&&(e.metaKey||e.ctrlKey))return;
   e.preventDefault();if(busy)return;history.pushState(null,'',a.href);notice.textContent='';render();

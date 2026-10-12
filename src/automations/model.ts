@@ -8,7 +8,7 @@ export interface Automation {
   id: string; revision: number; name: string; prompt: string; enabled: boolean;
   scope: 'mine' | 'team'; model: string; repositories: string[];
   triggers: Trigger[]; tools: Tool[]; createdAt: string; ownerName?: string;
-  modelParameters?: Record<string,string>; branch?: string;
+  modelParameters?: Record<string,string>; branch?: string; userId?:string;
 }
 export interface Run {
   id: string; automationId: string; name: string;
@@ -70,6 +70,7 @@ const text = (v: unknown): v is string => typeof v === 'string' && v.length <= 3
 export function parseAutomation(v: unknown): Automation {
   if (object(v) && v.ownerName !== undefined && !text(v.ownerName))
     throw new Error('Invalid automation owner.');
+  if(object(v) && v.userId!==undefined && !text(v.userId)) throw new Error('Invalid user id.');
   if(object(v) && v.branch!==undefined && !text(v.branch)) throw new Error('Invalid branch.');
   if(object(v) && v.modelParameters!==undefined && (!object(v.modelParameters) ||
     !Object.entries(v.modelParameters).every(([k,x])=>k.length<80&&text(x)))) throw new Error('Invalid model parameters.');

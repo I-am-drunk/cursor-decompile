@@ -104,3 +104,14 @@ All controls are read-only locally; identity is synthetic and no account,
 privacy, billing, upload, session or authorization request is made.
 Integrations and Spending panels are explicitly unverified placeholders.
 The optional private gate covers 60 states / 3,676 measured comparisons.
+
+## Local product settings and sign-in
+
+The shell gear opens `/settings`. Five sections save validated preferences to
+`<DATA_FILE>.settings`; secrets are write-only. `/login` creates the deployment's
+first local account, then signs it in. Later registrations are disabled. Account
+settings shows the active identity and Sign out. Authentication lives in
+`<DATA_FILE>.auth` (0600); passwords and session tokens are hashed. This is a
+single-user **loopback-only** deployment, not a public authentication service.
+See [settings scope](facts/settings-functional.md) and
+[account security boundary](facts/account-login.md).

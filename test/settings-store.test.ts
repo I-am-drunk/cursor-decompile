@@ -1,3 +1,4 @@
+import { signIn } from './http-helper.ts';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, readFile, stat } from 'node:fs/promises';
@@ -25,12 +26,13 @@ test('settings HTTP route saves and reloads without exposing credentials',async(
  const path=join(await mkdtemp(join(tmpdir(),'settings-http-')),'data');
  const server=createApp(new Store(path));await new Promise<void>(r=>server.listen(0,'127.0.0.1',r));
  const address=server.address();assert.ok(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}`;
+ const send=await signIn(base);
  try{
-  assert.equal((await fetch(base+'/settings/inference')).status,200);
-  assert.equal((await fetch(base+'/settings/live-app.ts')).status,200);
-  const result=await fetch(base+'/api/settings',{method:'PATCH',headers:{'Content-Type':'application/json','X-Local-Request':'1'},body:JSON.stringify({section:'inference',values:{credential:'PRIVATE'},revision:0})});
+  assert.equal((await send('/settings/inference')).status,200);
+  assert.equal((await send('/settings/live-app.ts')).status,200);
+  const result=await send('/api/settings',{method:'PATCH',headers:{'Content-Type':'application/json','X-Local-Request':'1'},body:JSON.stringify({section:'inference',values:{credential:'PRIVATE'},revision:0})});
   assert.equal(result.status,200);assert.doesNotMatch(await result.text(),/PRIVATE/);
-  const state=await (await fetch(base+'/api/settings')).json();assert.equal(state.inference.credentialPresent,true);
-  assert.equal((await fetch(base+'/api/settings',{method:'PATCH',body:'{}'})).status,403);
+  const state=await (await send('/api/settings')).json();assert.equal(state.inference.credentialPresent,true);
+  assert.equal((await send('/api/settings',{method:'PATCH',body:'{}'})).status,403);
  }finally{await new Promise<void>((resolve,reject)=>server.close(e=>e?reject(e):resolve()));}
 });

@@ -34,3 +34,10 @@ revisioned disk API; write-only credentials never appear in responses.
 [Scope/evidence and UNVERIFIED list](facts/settings-functional.md).
 59 tests, strict TS and existing evidence checks pass. Historical comparison
 fixtures remain read-only; live identity/pairing/MCP registry follow in P2–P4.
+
+## P2 local login
+
+Signed-out gate, one local account, scrypt password store, hashed expiring
+session cookies, server revocation and settings identity/sign-out implemented.
+[Security boundary, checks and UNVERIFIED scope](facts/account-login.md).
+61 tests pass. Loopback-only deployment; multi-user ACL/TLS/reset not claimed.

@@ -1,3 +1,4 @@
+import { signIn } from './http-helper.ts';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -12,7 +13,7 @@ test('HTTP server serves original UI and protects mutation and private files',as
   await new Promise<void>(r=>server.listen(0,'127.0.0.1',r));
   t.after(async()=>{await new Promise<void>(r=>server.close(()=>r()));await rm(dir,{recursive:true,force:true});});
   const origin=`http://127.0.0.1:${(server.address() as AddressInfo).port}`;
-  const send=(path:string,options?:RequestInit)=>fetch(origin+path,options);
+  const send=await signIn(origin);
   for(const path of ['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending']){
     const settings=await send(path);assert.equal(settings.status,200);assert.match(await settings.text(),/settings-app.ts/);
   }
