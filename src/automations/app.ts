@@ -1,0 +1,240 @@
+import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
+import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
+import { btn, dialog, editor, esc, field, gate, link, list, runs, shell } from './view.ts';
+let state: State = emptyState(), form: Automation = draft(), models: {id:string;name:string}[] = [];
+let dirty = false, scope = 'mine', page = 1, query = '', runQuery = '', searchOpen = false;
+let errors: string[] = [], pendingPath = '', editId = '', modal = '', busy = false, returnFocus: HTMLElement | null = null;
+const app = document.querySelector<HTMLDivElement>('#app')!, overlays = document.querySelector<HTMLDivElement>('#overlays')!;
+const params = () => new URLSearchParams(location.search);
+const routeId = () => location.pathname.split('/')[2] ?? '';
+function toast(message: string) { document.querySelector('#toast')!.textContent = message; }
+async function api<T>(path: string, method = 'GET', data?: unknown): Promise<T> {
+  const response = await fetch(path, { method, headers: { 'Content-Type': 'application/json', 'X-Local-Request':'1' },
+    ...(data === undefined ? {} : { body: JSON.stringify(data) }) });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error ?? `Request failed (${response.status})`);
+  return result as T;
+}
+function openModal(kind: string, id = '') {
+  if (!modal) returnFocus = document.activeElement as HTMLElement;
+  modal = kind; editId = id; renderModal();
+}
+function closeModal() { modal = ''; overlays.innerHTML = ''; returnFocus?.focus(); }
+function render() {
+  const focused = document.activeElement as HTMLInputElement;
+  const name = focused?.name, selection = focused?.selectionStart;
+  const id = routeId(), isRuns = id === 'runs';
+  let content: string;
+  if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
+  else if (params().get('state') === 'error') content = `<div class="page" role="alert">Could not load automations. ${btn('Retry','retry','outline')}</div>`;
+  else if (params().get('state') === 'upgrade') content = gate();
+  else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen);
+  else if (id) content = editor(form, models.find(m=>m.id===form.model)?.name ?? form.model, errors);
+  else content = list(state.automations, scope, query, page);
+  app.innerHTML = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '');
+  if (name) { const next = app.querySelector<HTMLInputElement>(`[name="${name}"]`); next?.focus();
+    if (selection !== null && next && ['text','search'].includes(next.type)) next.setSelectionRange(selection,selection); }
+}
+function runRows(): Run[] {
+  if (params().get('fixture') === 'runs') return (['running','succeeded','failed','skipped'] as const).map((status,i)=>({
+    id:`fixture-${i}`,automationId:'fixture',name:`Example ${status} run`,status,
+    createdAt:new Date(Date.now()-i*3600000).toISOString(),output:'Synthetic UI fixture. No agent was executed.',model:'composer-2.5',fixture:true,
+  }));
+  const id = params().get('automation');
+  return state.runs.filter(r=>!id||r.automationId===id);
+}
+function loadRoute() {
+  const id = routeId();
+  if (id && id !== 'runs' && id !== 'new') {
+    const found = state.automations.find(a=>a.id===id);
+    if (!found) { toast('Automation not found.'); history.replaceState(null,'','/automations'); }
+    else form = structuredClone(found);
+  } else if (id === 'new') form = draft();
+  errors = []; dirty = false; render();
+}
+function navigate(path: string, force = false) {
+  if (dirty && !force) { pendingPath = path; openModal('unsaved'); return; }
+  closeModal(); history.pushState(null,'',path); loadRoute();
+}
+async function save() {
+  errors = validate(form); if (errors.length) { closeModal(); render(); return; }
+  if (busy) return; busy = true;
+  try {
+    const saved = await api<Automation>('/api/automations','POST',form);
+    state = await api<State>('/api/state'); form = saved; dirty = false;
+    const destination = pendingPath || `/automations/${saved.id}`; pendingPath = '';
+    navigate(destination,true); toast('Saved locally.');
+  } catch (e) { errors = [(e as Error).message]; closeModal(); render(); }
+  finally { busy = false; }
+}
+const value = (name: string) => (overlays.querySelector<HTMLInputElement>(`[name="${name}"]`)?.value ?? '');
+const options = (values: readonly string[], selected: string) => values.map(v=>`<option ${v===selected?'selected':''}>${esc(v)}</option>`).join('');
+function renderModal() {
+  let html = '', title = '', footer = '';
+  const apply = (action: string) => btn('Cancel','dismiss','outline')+btn('Done',action,'primary');
+  if (modal === 'trigger') {
+    const t = form.triggers.find(t=>t.id===editId) ?? {kind:'Schedule',event:'Cron',value:''};
+    title = 'Add Trigger'; html = `<label class="field">Trigger<select name="trigger-kind">${options(triggerKinds,t.kind)}</select></label>
+      <label class="field">Event<select name="trigger-event">${options(events[t.kind],t.event)}</select></label>
+      ${field('Configuration (cron or event filter)','trigger-value',t.value,'placeholder="0 9 * * 1-5"')}
+      <p>Schedules are stored, not executed. Webhook URLs require a connected execution adapter.</p>`;
+    footer = apply('commit-trigger');
+  } else if (modal === 'tool') {
+    const t = form.tools.find(t=>t.id===editId) ?? {kind:'MCP',name:'',url:''};
+    title = 'Add Tool or MCP'; html = `<label class="field">Tool<select name="tool-kind">${options(['MCP','Memories','Slack'],t.kind)}</select></label>
+      ${field('Server or tool name','tool-name',t.name)}${field('MCP server URL','tool-url',t.url,'placeholder="https://example.com/mcp"')}
+      <p>Not connected. Credentials are never collected here. An execution adapter must resolve authentication and tool access.</p>`;
+    footer = apply('commit-tool');
+  } else if (modal === 'models') {
+    title = 'Model'; html = `${field('Search models','model-search')}<div class="menu">${models.map(m=>
+      btn(esc(m.name),`model:${m.id}`,`model-item ${form.model===m.id?'selected':''}`)).join('')}</div>
+      <p>Captured catalog subset; actual picker visibility and selection persistence on Cursor are UNVERIFIED.</p>`;
+  } else if (modal === 'repos') {
+    title = 'Repositories'; html = `${field('Repositories (comma-separated owner/repository)','repositories',form.repositories.join(', '))}
+      <p>Leave blank for no repository. Multiple repositories remain scoped to this automation.</p>`;
+    footer = apply('commit-repos');
+  } else if (modal === 'row') {
+    title = 'Row actions'; html = `<div class="menu">${btn('Edit Details',`edit:${editId}`)}${btn('Duplicate',`duplicate:${editId}`)}
+      ${btn('Copy as JSON',`copy:${editId}`)}<hr>${btn('Delete',`delete:${editId}`,'danger')}</div>`;
+  } else if (modal === 'delete') {
+    title = 'Delete automation?'; html = '<p>This removes the local definition. Existing run records are retained.</p>';
+    footer = btn('Cancel','dismiss','outline')+btn('Delete',`confirm-delete:${editId}`,'primary');
+  } else if (modal === 'filters') {
+    title = 'Filter by'; html = `<div class="menu"><h3>Status</h3>${['running','failed','succeeded','skipped'].map(s=>
+      btn(s[0]!.toUpperCase()+s.slice(1),`status:${s}`,params().get('status')===s?'selected':'')).join('')}
+      <hr>${btn('Clear all filters','status:')}</div><p>Automation filtering is available from its editor's Run History link. Trigger/tool filters remain UNVERIFIED.</p>`;
+  } else if (modal === 'run') {
+    const r = runRows().find(r=>r.id===editId);
+    title = r?.name ?? 'Run not found'; html = r ? `<p>Status: ${esc(r.status)} · ${esc(r.model)}</p><pre>${esc(r.output)}</pre>` : '';
+  } else if (modal === 'unsaved') {
+    title = 'Unsaved Changes'; html = '<p>Save or discard changes before continuing.</p>';
+    footer = btn('Keep Editing','dismiss','outline')+btn('Discard','discard','outline')+btn('Save','save','primary');
+  } else {
+    title = modal === 'upgrade' ? 'Local preview — no checkout' : 'Original local implementation';
+    html = `<p>No Cursor account, billing, MCP or agent execution is connected. Definitions are saved on this machine.</p>
+      <p>Observed: upgrade gate and empty Run History. Extracted: editor/list labels and declared styles.
+      Other layouts, filters and fixture runs are not certified parity.</p><div class="menu">
+      ${link('Local automation list','/automations','button')}${link('Captured upgrade state','/automations?state=upgrade','button')}
+      ${link('Observed empty Run History','/automations/runs','button')}${link('Synthetic run states','/automations/runs?fixture=runs','button')}
+      ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
+      ${btn('Export layout measurements','export')}</div>`;
+  }
+  overlays.innerHTML = dialog(title,html,footer);
+  const d = overlays.querySelector('dialog')!;
+  d.addEventListener('cancel',e=>{e.preventDefault(); closeModal(); pendingPath='';});
+  d.showModal();
+}
+async function action(command: string) {
+  const [kind, id = ''] = command.split(':');
+  if (kind === 'dismiss') { pendingPath=''; closeModal(); }
+  else if (kind === 'collapse') document.body.classList.toggle('collapsed');
+  else if (kind === 'export') await exportMeasurements();
+  else if (['about','upgrade','models','repos','filters','unsaved'].includes(kind!)) openModal(kind!);
+  else if (['trigger','tool','row','run','delete'].includes(kind!)) openModal(kind!,id);
+  else if (kind === 'scope') { scope=id; page=1; render(); }
+  else if (kind === 'prev' || kind === 'next') { page=Math.max(1,page+(kind==='next'?1:-1)); render(); }
+  else if (kind === 'edit') navigate(`/automations/${id}`);
+  else if (kind === 'save') await save();
+  else if (kind === 'discard') { const path=pendingPath; pendingPath=''; navigate(path,true); }
+  else if (kind === 'retry') navigate('/automations',true);
+  else if (kind === 'run-search') { searchOpen=true; render(); app.querySelector<HTMLInputElement>('[name="run-search"]')?.focus(); }
+  else if (kind === 'status' || kind === 'run-scope') {
+    const url = new URL(location.href), key=kind==='status'?'status':'scope';
+    if (id) url.searchParams.set(key,id); else url.searchParams.delete(key);
+    history.replaceState(null,'',url); closeModal(); render();
+  } else if (kind === 'model') { form.model=id; dirty=true; closeModal(); render(); }
+  else if (kind === 'remove-trigger' || kind === 'remove-tool') {
+    if (kind === 'remove-trigger') form.triggers=form.triggers.filter(t=>t.id!==id);
+    else form.tools=form.tools.filter(t=>t.id!==id);
+    dirty=true; render();
+  }
+  else if (kind === 'commit-trigger') {
+    const t: Trigger = {id:editId==='new'?crypto.randomUUID():editId,kind:value('trigger-kind') as TriggerKind,event:value('trigger-event'),value:value('trigger-value').trim()};
+    form.triggers=[...form.triggers.filter(v=>v.id!==t.id),t]; dirty=true; closeModal(); render();
+  } else if (kind === 'commit-tool') {
+    const t: Tool = {id:editId==='new'?crypto.randomUUID():editId,kind:value('tool-kind') as Tool['kind'],name:value('tool-name').trim()||value('tool-kind'),url:value('tool-url').trim()};
+    if (t.kind!=='MCP') t.url='';
+    form.tools=[...form.tools.filter(v=>v.id!==t.id),t]; dirty=true; closeModal(); render();
+  } else if (kind === 'commit-repos') {
+    form.repositories=[...new Set(value('repositories').split(',').map(v=>v.trim()).filter(Boolean))];
+    dirty=true; closeModal(); render();
+  } else if (kind === 'copy') {
+    await navigator.clipboard.writeText(JSON.stringify(state.automations.find(a=>a.id===id),null,2));
+    closeModal(); toast('Copied local definition.');
+  } else if (kind === 'duplicate') {
+    const a=state.automations.find(a=>a.id===id); if (!a) return;
+    navigate('/automations/new',true); form={...structuredClone(a),id:'',revision:0,createdAt:'',name:`Copy of ${a.name}`,enabled:false}; dirty=true; render();
+  } else if (kind === 'confirm-delete') {
+    const a=state.automations.find(a=>a.id===id); if (!a) return;
+    await api(`/api/automations/${id}?revision=${a.revision}`,'DELETE');
+    state=await api<State>('/api/state'); closeModal(); render();
+  } else if (kind === 'test') {
+    if (dirty) { toast('Save changes before testing.'); return; }
+    await api(`/api/automations/${form.id}/runs`,'POST',{});
+    state=await api<State>('/api/state'); navigate(`/automations/runs?automation=${form.id}`);
+  }
+}
+document.addEventListener('click',e=>{
+  const target=(e.target as Element).closest<HTMLElement>('[data-act],a[data-nav]');
+  if (!target) return;
+  if (target instanceof HTMLAnchorElement) {
+    if ((e as MouseEvent).metaKey || (e as MouseEvent).ctrlKey) return;
+    e.preventDefault(); navigate(target.getAttribute('href')!); return;
+  }
+  if (target.dataset.act) void action(target.dataset.act).catch(e=>toast((e as Error).message));
+});
+document.addEventListener('input',e=>{
+  const input=e.target as HTMLInputElement;
+  if (input.name === 'list-search') { query=input.value; page=1; render(); return; }
+  if (input.name === 'run-search') { runQuery=input.value; render(); return; }
+  if (input.name === 'model-search') {
+    overlays.querySelectorAll<HTMLButtonElement>('.model-item').forEach(b=>{b.hidden=!b.textContent?.toLowerCase().includes(input.value.toLowerCase());}); return;
+  }
+  if (input.name === 'trigger-kind') {
+    const select=overlays.querySelector<HTMLSelectElement>('[name="trigger-event"]')!;
+    select.innerHTML=options(events[input.value as TriggerKind], ''); return;
+  }
+  if (!app.contains(input)) return;
+  if (input.name === 'name' || input.name === 'prompt') { form[input.name]=input.value; dirty=true; }
+  else if (input.name === 'enabled') { form.enabled=input.checked; dirty=true; }
+  else if (input.name === 'scope') { form.scope=input.value as Automation['scope']; dirty=true; }
+});
+window.addEventListener('beforeunload',e=>{if (dirty) {e.preventDefault(); e.returnValue='';}});
+window.addEventListener('popstate',()=>{
+  if (dirty) {
+    pendingPath=location.pathname+location.search;
+    history.pushState(null,'',form.id?`/automations/${form.id}`:'/automations/new'); openModal('unsaved');
+  } else loadRoute();
+});
+document.addEventListener('keydown',e=>{
+  if ((e.metaKey||e.ctrlKey) && e.key==='s' && routeId() && routeId()!=='runs') {
+    e.preventDefault(); void save();
+  }
+});
+async function boot() {
+  app.innerHTML=shell('<div class="page" role="status">Loading…</div>');
+  try {
+    [state,models]=await Promise.all([api<State>('/api/state'),api<typeof models>('/catalog.json')]);
+    loadRoute();
+  } catch(e) {
+    app.innerHTML=shell(`<div class="page" role="alert">${esc((e as Error).message)} ${btn('Retry','reload','outline')}</div>`);
+  }
+}
+async function exportMeasurements() {
+  closeModal();
+  await new Promise<void>(r=>requestAnimationFrame(()=>r()));
+  const build=await api<{hash:string}>('/api/build');
+  const elements=[...document.querySelectorAll<HTMLElement>('[data-evidence]')].map(e=>{
+    const rect=e.getBoundingClientRect(), computed=getComputedStyle(e);
+    return {id:e.dataset.evidence,rect:{x:rect.x,y:rect.y,width:rect.width,height:rect.height},
+      text:e.textContent,style:Object.fromEntries([...computed,'border-radius','padding','margin'].map(k=>[k,computed.getPropertyValue(k)]))};
+  });
+  const measurement={buildHash:build.hash,captureDate:new Date().toISOString(),url:location.href,
+    viewport:{width:innerWidth,height:innerHeight,devicePixelRatio},elements};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(measurement,null,2)],{type:'application/json'}));
+  const anchor=document.createElement('a'); anchor.href=url;
+  anchor.download=`local-automations-${routeId()==='runs'?'runs':'upgrade'}.json`; anchor.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+document.addEventListener('click',e=>{if ((e.target as Element).closest('[data-act="reload"]')) void boot();});
+void boot();

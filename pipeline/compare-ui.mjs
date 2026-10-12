@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
+import { resolve } from 'node:path';
+export function compare(facts, actual) {
+  const isRuns=new URL(actual.url).pathname==='/automations/runs';
+  const chosen=facts.filter(f=>f.source?.element!==undefined &&
+    (isRuns ? !f.id.startsWith('gate-') : f.id.startsWith('gate-')));
+  const mismatches=[]; let checks=0;
+  for (const f of chosen) {
+    assert.deepEqual(actual.viewport,f.viewport,'Same viewport/DPR required');
+    const measured=actual.elements.find(e=>e.id===f.id);
+    if (!measured) {mismatches.push(`${f.id}: element missing`);continue;}
+    let dimensions=['x','y','width','height'];
+    if (['gate-title','runs-title'].includes(f.id)) dimensions=['x','y','height'];
+    if (['gate-button','runs-empty'].includes(f.id)) dimensions=['y','height'];
+    for (const key of dimensions) {
+      checks++;
+      if (!Number.isFinite(measured.rect[key]) || Math.abs(measured.rect[key]-f.value.rect[key])>.75)
+        mismatches.push(`${f.id}.${key}: ${measured.rect[key]} != ${f.value.rect[key]}`);
+    }
+    const styleKeys=f.value.text!==null?['font-size','line-height']:['border-radius'];
+    for (const key of styleKeys) {
+      checks++;
+      if (measured.style[key]!==f.value.style[key]) mismatches.push(`${f.id}.${key}: ${measured.style[key]} != ${f.value.style[key]}`);
+    }
+    if (f.value.text!==null) {
+      checks++;
+      if (measured.text.trim()!==f.value.text.trim()) mismatches.push(`${f.id}: copy differs`);
+    }
+  }
+  assert.ok(chosen.length>0,'No measured facts selected');
+  return {checks,mismatches};
+}
+if (process.argv[1] && import.meta.url===pathToFileURL(resolve(process.argv[1])).href) {
+  if (!process.argv[2]) throw Error('Usage: node pipeline/compare-ui.mjs <local-measurements.json>');
+  const actual=JSON.parse(await readFile(process.argv[2],'utf8'));
+  const facts=JSON.parse(await readFile('src/automations/ui-facts.json','utf8'));
+  const {buildHash}=await import('../src/server.ts');
+  assert.equal(actual.buildHash,await buildHash(),'Stale snapshot: recapture the current build');
+  const result=compare(facts,actual);
+  console.log(JSON.stringify(result,null,2));
+  console.log('Subset only: font glyphs, text widths, custom icons and unobserved states are NOT certified.');
+  if (result.mismatches.length) process.exitCode=1;
+}

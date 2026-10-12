@@ -1,4 +1,7 @@
 corpus/
+reference
+.local/
+artifacts/
 node_modules/
 *.deb
 *.AppImage
