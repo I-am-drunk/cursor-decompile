@@ -9,19 +9,24 @@ export function compare(facts, actual) {
   const triggerState=['trigger-baseline','add-trigger','scheduled-submenu','schedule-picker','trigger-dismissed'].includes(actual.captureState)?actual.captureState:null;
   const presetState=['preset-baseline','hourly-added','daily-added','daily-time','daily-selected','weekly-added','weekly-days','weekly-selected','weekly-time','custom-added','custom-popup','cron-invalid','cron-range','cron-empty','invalid-escape','invalid-outside','custom-restored','unsaved-dialog'].includes(actual.captureState)?actual.captureState:null;
   const connectionState=['connection-baseline','linear-menu','linear-issue-menu','linear-created','linear-status','linear-cycle','mcp-unconfigured','mcp-linear-search','mcp-linear-unconnected','mcp-linear-expanded','mcp-returned'].includes(actual.captureState)?actual.captureState:null;
-  assert.ok(connectionState || presetState || triggerState || editorState || isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
+  const filterState=['runs-baseline','runs-filter','runs-status','runs-running','runs-multiple-status','runs-filtered-empty','runs-cleared'].includes(actual.captureState)?actual.captureState:null;
+  assert.ok(filterState || connectionState || presetState || triggerState || editorState || isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
   if(editorState||triggerState||presetState||connectionState){
     assert.equal(url.pathname,'/automations/editor-fixture');assert.equal(url.searchParams.get('fixture'),'saved-editor');
     if(triggerState)assert.equal(url.searchParams.get('controls'),'triggers');
     if(presetState)assert.equal(url.searchParams.get('controls'),'presets');
     if(connectionState)assert.equal(url.searchParams.get('controls'),'connections');
+  } else if (filterState) {
+    assert.ok(isRuns && url.searchParams.get('fixture')==='observed-failure' && url.searchParams.get('controls')==='filters','Expected filter fixture');
+    const selected=url.searchParams.get('status')??'';
+    assert.equal(selected,filterState==='runs-running'||filterState==='runs-filtered-empty'?'running':filterState==='runs-multiple-status'?'running,failed':'','Wrong filter selection');
   } else if (rowState) {
     assert.ok(isRuns && url.searchParams.get('fixture')==='observed-failure','Expected explicit reference-derived fixture');
   } else if (isRuns) {
     assert.ok(!url.searchParams.get('fixture') && !url.searchParams.get('status'),'Expected unfiltered non-fixture runs');
     assert.ok(!url.searchParams.get('scope') || url.searchParams.get('scope')==='team','Expected Team runs');
   }
-  const state=connectionState||presetState||triggerState||editorState||rowState;
+  const state=filterState||connectionState||presetState||triggerState||editorState||rowState;
   const chosen=facts.filter(f=>(f.source?.element!==undefined||f.attribute||f.inputValue||f.attributePresent) &&
     (state ? f.captureState===state : !f.captureState && (isRuns ? !f.id.startsWith('gate-') : f.id.startsWith('gate-'))));
   const mismatches=[]; let checks=0;
@@ -36,7 +41,7 @@ export function compare(facts, actual) {
       continue;
     }
     let dimensions=['x','y','width','height'];
-    if (['gate-title','runs-title','sum-title','rw-status','ed-title','ed-name','ed-model'].includes(target)) dimensions=['x','y','height'];
+    if (['rf-title','gate-title','runs-title','sum-title','rw-status','ed-title','ed-name','ed-model'].includes(target)) dimensions=['x','y','height'];
     if (['gate-button','runs-empty','sum-close','sum-view','ed-save','ed-test','mc-toggle','mc-cancel','mc-submit'].includes(target)) dimensions=['y','height'];
     if(['pr-next','pr-unsaved-title','pr-unsaved-copy'].includes(target))dimensions=['x','y','height'];
     if(['pr-discard','pr-keep','pr-save'].includes(target))dimensions=['y','height'];
@@ -76,7 +81,7 @@ export function compare(facts, actual) {
 if (process.argv[1] && import.meta.url===pathToFileURL(resolve(process.argv[1])).href) {
   if (!process.argv[2]) throw Error('Usage: node pipeline/compare-ui.mjs <local-measurements.json>');
   const actual=JSON.parse(await readFile(process.argv[2],'utf8'));
-  const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json','connection-facts.json'].map(async file=>
+  const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json','trigger-facts.json','preset-facts.json','connection-facts.json','closure-facts.json'].map(async file=>
     JSON.parse(await readFile(`src/automations/${file}`,'utf8'))))).flat();
   const {buildHash}=await import('../src/server.ts');
   assert.equal(actual.buildHash,await buildHash(),'Stale snapshot: recapture the current build');

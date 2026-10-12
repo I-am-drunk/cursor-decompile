@@ -89,7 +89,8 @@ adds nested Linear trigger menus, Requires connection rows and warnings,
 and the Linear MCP pre-install disclosure. Preview at
 `/automations/editor-fixture?fixture=saved-editor&controls=connections`.
 Connect and Add Plugin explain that authorization/installation is unavailable;
-they do not contact a provider. The 48-state measured subset passes, not
-whole-product pixel parity. Screenshot-only run-filter variants still need
-acceptance before closing the captured-state backlog. C-SETTINGS is queued
-to open with read-only settings entry/navigation and one unconnected provider panel.
+they do not contact a provider. The [closure audit](facts/automations-acceptance-closure.md) expands this to 55
+states / 2,778 checks with multi-status run filters. The captured web subset
+is complete, not whole-product parity. Desktop gate geometry and the historical
+Grok Bot promotion remain explicitly unverified in C-SHELL/C-ACCOUNT.
+C-SETTINGS opens with read-only settings navigation and account/team first.

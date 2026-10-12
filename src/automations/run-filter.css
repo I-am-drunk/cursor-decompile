@@ -1,0 +1,19 @@
+.rf-pop{position:fixed;z-index:10;width:200px;padding:6px 0;background:var(--card);border-radius:14px;box-shadow:0 0 0 1px var(--line),0 12px 28px #0002;font:13px/18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.rf-root h3{height:28px;padding:4px 14px;font-size:12px;line-height:20px;color:var(--muted)}
+.rf-pop button{display:flex;align-items:center;width:100%;height:30px;padding:0 14px;text-align:left;border-radius:0;font:inherit;gap:0}
+.rf-root button>span:first-child{flex:1}.rf-chevron,.rf-tick{width:34px;flex-shrink:0;text-align:center;color:var(--muted)}
+.rf-root small{font-size:12px;line-height:18px;white-space:nowrap}.rf-root hr{height:1px;border:0;background:var(--line);margin:6px 14px}
+.rf-root button>svg{width:14px;height:14px;margin-right:10px}.rf-root button>svg+span{flex:1}
+.rf-symbol{width:24px;flex-shrink:0}.rf-label{flex:1;height:18px}
+.rf-status-menu button:last-child:not([role=menuitemcheckbox]){font-size:13px}
+.rf-pop button:focus-visible{outline-offset:-2px}.runs-empty.filtered{flex-direction:column;text-align:center}
+.runs-empty.filtered h3{font-size:13px;line-height:19.5px}.runs-empty.filtered .rf-hint{margin-top:2px;font-size:12px;line-height:16px}
+.rf-empty-content{width:105.083px}
+.rf-root h3{display:flex;align-items:center}.rf-root h3 span{font-size:12px;line-height:16px;height:15px}
+.stat strong{line-height:22px;height:24px}.rf-filter{position:relative}
+.rf-badge{position:absolute;right:-1.5px;top:-1.5px;width:12px;height:12px;border-radius:9999px;background:#141414;color:white;font-size:9px;line-height:9px;display:grid;place-items:center}
+.rf-hint,.rf-pop [data-act="rf-clear"],.rf-chevron{color:var(--muted)}
+.rf-badge{background:#257d81}.rf-symbol svg{width:12px;height:12px;display:block}
+.rf-symbol.running{color:#af853a}.rf-symbol.failed{color:#be1744}.rf-symbol.succeeded{color:#378268}.rf-symbol.skipped{color:#888}
+.rf-pop button{position:relative;background:transparent!important;isolation:isolate}
+.rf-pop button:hover:before,.rf-pop button:focus-visible:before,.rf-pop button[aria-expanded=true]:before{content:"";position:absolute;inset:0 6px;z-index:-1;background:#eee;border-radius:8px}

@@ -86,3 +86,10 @@ adds nested menus, Requires connection rows, empty MCP configuration and the
 pre-install disclosure. Authorization and installation were not attempted.
 The handoff audit retains screenshot-only run-filter/status and desktop-modal
 acceptance gaps; the 48-state matrix is not whole-lane pixel certification.
+
+The [acceptance closure audit](../facts/automations-acceptance-closure.md)
+closes the screenshot-only web filter subset (55 measured states). The old
+Grok Bot promotion is reassigned to C-SHELL/C-ACCOUNT, not passed as an
+Automations state. Current desktop gate geometry remains unverified; so do
+gated, connected, alternate-theme and whole-lane pixel acceptance. The web
+subset's completion permits the next capture lane, not a whole-Cursor claim.

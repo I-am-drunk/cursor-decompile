@@ -66,3 +66,10 @@ test('connection comparisons require the explicit context and captured search va
   assert.match(compare([f],{...s,elements:[{id:'eb-search',value:''}]}).mismatches.join(),/state differs/);
   assert.throws(()=>compare([f],{...s,url:s.url.replace('connections','presets')}));
 });
+test('run filter measurements reject a mismatched selection URL',()=>{
+  const f={...fact,id:'rf-menu',captureState:'runs-running'};
+  const s={...snapshot(),captureState:'runs-running',url:'http://localhost/automations/runs?fixture=observed-failure&controls=filters&status=running',elements:[{id:'rf-menu',...fact.value}]};
+  assert.deepEqual(compare([f],s).mismatches,[]);
+  s.url=s.url.replace('status=running','status=failed');
+  assert.throws(()=>compare([f],s),/Wrong filter selection/);
+});
