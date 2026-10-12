@@ -52,3 +52,14 @@ Strict app TypeScript, 75 app/reader tests and evidence metadata checks pass.
 Real headless Chrome at 1270×764 checks preset/time/day/zone edits, custom
 validation/Apply, compact icons, hover, drag/drop cleanup and HTML 404s.
 The final PR records the fresh-clone full gate, including the MCP package.
+
+Repeat the browser gate with an existing Playwright install and Chrome:
+
+```sh
+PLAYWRIGHT_MODULE=/absolute/path/to/playwright-core/index.mjs \
+BROWSER_EXECUTABLE=/absolute/path/to/chrome node test/browser-automations.mjs
+```
+
+The gate creates a temporary local store/account, checks saved schedule reloads,
+custom invalid/Escape handling, compact navigation without losing state,
+mobile icons and removed routes, then removes its temporary store.
