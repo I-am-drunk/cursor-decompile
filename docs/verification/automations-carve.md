@@ -55,3 +55,9 @@ BROWSER_EXECUTABLE=/absolute/path/to/chrome node test/browser-automations.mjs
 Use Node 22.18+; the machine's default Node 18 cannot run TypeScript tests.
 A fresh clone avoids unrelated ancestor Bun ambient types affecting the MCP
 TypeScript check in the home-directory checkout.
+
+Final validation (fresh clone, Node 24.13.0): strict app/MCP TypeScript,
+75 root tests, 6 MCP tests, 748 evidence records and diff check pass. Chromium
+passes the interaction gate with DPR-2 screenshots of weekly controls, minute
+menu, timezone search, compact rail and live custom error. Audit links pass.
+No refreshed full-reference raster comparison or peer acceptance is claimed.
