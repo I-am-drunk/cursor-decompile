@@ -20,6 +20,13 @@ test('HTTP server serves original UI and protects mutation and private files',as
   for (const path of ['/reference/automations/routes.har','/store.ts','/package.json','/api/unknown']) assert.equal((await send(path)).status,404);
   assert.equal((await send('/api/automations',{method:'POST',body:'{}'})).status,403);
   const headers={'x-local-request':'1','content-type':'application/json',origin};
+  const connection=await send('/api/configurations',{method:'POST',headers,body:JSON.stringify({
+    text:JSON.stringify({mcpServers:{test:{url:'https://example.com/mcp',headers:{Authorization:'secret-fixture'}}}})})});
+  assert.equal(connection.status,200);const {ref}=await connection.json();
+  assert.equal((await send(`/api/configurations/${ref}`)).status,403);
+  const detail=await send(`/api/configurations/${ref}`,{headers});assert.equal(detail.status,200);
+  assert.equal((await detail.json()).headers.Authorization,'secret-fixture');
+  assert.doesNotMatch(await (await send('/api/state')).text(),/secret-fixture/);
   assert.equal((await send('/api/automations',{method:'POST',headers:{...headers,origin:'https://attacker.invalid'},body:'{}'})).status,403);
   assert.equal((await send('/api/automations',{method:'POST',headers,body:'{'})).status,400);
   assert.equal((await send('/api/automations',{method:'POST',headers,body:' '.repeat(66000)})).status,413);

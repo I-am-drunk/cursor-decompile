@@ -12,4 +12,7 @@ if [ "${1:-}" = "--reference" ]; then
   node pipeline/compare-ui.mjs artifacts/failed-run-list-measurements.json
   node pipeline/compare-ui.mjs artifacts/failed-run-summary-measurements.json
   node pipeline/compare-ui.mjs artifacts/failed-run-menu-measurements.json
+  for state in saved-editor tools-menu mcp-menu mcp-browse mcp-url mcp-command mcp-json model-picker model-options; do
+    node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
+  done
 fi

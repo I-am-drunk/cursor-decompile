@@ -59,3 +59,11 @@ Results and remaining deviations: [verification report](facts/automations-verifi
 `/automations/runs?fixture=observed-failure` displays a labeled,
 reference-derived failure fixture without contacting Cursor. Use
 **Alt+Shift+E** to export measurements of the current table, menu or summary.
+
+The [saved-editor slice](facts/automations-saved-editor.md) adds measured
+tools/MCP menus, the connection catalogue, URL/command/JSON configuration
+forms, and the model/parameter picker. Preview its reference-derived fixture
+at `/automations/editor-fixture?fixture=saved-editor`. Configuration values
+stay in the private local store (0600); API state and copied definitions use
+opaque references. No provider is authorized and no configured command runs.
+Trigger forms and unobserved variants remain original, unverified designs.

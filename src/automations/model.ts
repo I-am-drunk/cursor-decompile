@@ -2,11 +2,12 @@
 export const triggerKinds = ['Schedule', 'Webhook', 'Linear', 'GitHub', 'Slack', 'PagerDuty'] as const;
 export type TriggerKind = typeof triggerKinds[number];
 export interface Trigger { id: string; kind: TriggerKind; event: string; value: string }
-export interface Tool { id: string; kind: 'MCP' | 'Memories' | 'Slack'; name: string; url: string }
+export interface Tool { id: string; kind: 'MCP' | 'Memories' | 'Slack' | 'Microsoft Teams' | 'Source Control'; name: string; url: string; configurationRef?: string }
 export interface Automation {
   id: string; revision: number; name: string; prompt: string; enabled: boolean;
   scope: 'mine' | 'team'; model: string; repositories: string[];
   triggers: Trigger[]; tools: Tool[]; createdAt: string; ownerName?: string;
+  modelParameters?: Record<string,string>; branch?: string;
 }
 export interface Run {
   id: string; automationId: string; name: string;
@@ -40,9 +41,10 @@ export function validate(a: Automation): string[] {
   }
   if (a.triggers.filter(t => t.kind === 'Webhook').length > 1) errors.push('Only one webhook trigger is allowed.');
   for (const t of a.tools.filter(t => t.kind === 'MCP')) {
+    if (!t.name.trim()) errors.push('Name the MCP server.');
+    if(t.configurationRef) continue;
     try { const u = new URL(t.url); if (u.protocol !== 'https:' || u.username || u.password) throw Error(); }
     catch { errors.push('MCP requires an HTTPS URL without credentials.'); }
-    if (!t.name.trim()) errors.push('Name the MCP server.');
   }
   if (!a.model.trim()) errors.push('Choose a model.');
   return errors;
@@ -62,6 +64,9 @@ const text = (v: unknown): v is string => typeof v === 'string' && v.length <= 3
 export function parseAutomation(v: unknown): Automation {
   if (object(v) && v.ownerName !== undefined && !text(v.ownerName))
     throw new Error('Invalid automation owner.');
+  if(object(v) && v.branch!==undefined && !text(v.branch)) throw new Error('Invalid branch.');
+  if(object(v) && v.modelParameters!==undefined && (!object(v.modelParameters) ||
+    !Object.entries(v.modelParameters).every(([k,x])=>k.length<80&&text(x)))) throw new Error('Invalid model parameters.');
   if (!object(v) || !['id','name','prompt','model','createdAt'].every(k => text(v[k])) ||
       typeof v.enabled !== 'boolean' || !['mine','team'].includes(String(v.scope)) ||
       !Number.isSafeInteger(v.revision) || Number(v.revision) < 0 ||
@@ -69,7 +74,9 @@ export function parseAutomation(v: unknown): Automation {
       !Array.isArray(v.triggers) || v.triggers.length > 50 || !v.triggers.every(t => object(t) &&
         ['id','kind','event','value'].every(k => text(t[k])) && triggerKinds.includes(t.kind as TriggerKind)) ||
       !Array.isArray(v.tools) || v.tools.length > 50 || !v.tools.every(t => object(t) &&
-        ['id','kind','name','url'].every(k => text(t[k])) && ['MCP','Memories','Slack'].includes(String(t.kind))))
+        ['id','kind','name','url'].every(k => text(t[k])) &&
+        (t.configurationRef===undefined||text(t.configurationRef)) &&
+        ['MCP','Memories','Slack','Microsoft Teams','Source Control'].includes(String(t.kind))))
     throw new Error('Invalid automation payload.');
   const a = v as unknown as Automation;
   if ([a.triggers, a.tools].some(items => new Set(items.map(t => t.id)).size !== items.length))

@@ -13,6 +13,12 @@ const files: Record<string, [string, string]> = {
   '/model.ts': ['automations/model.ts', 'application/javascript'],
   '/view.ts': ['automations/view.ts', 'application/javascript'],
   '/row-data.ts': ['automations/row-data.ts', 'application/javascript'],
+  '/editor-state.ts': ['automations/editor-state.ts', 'application/javascript'],
+  '/editor-view.ts': ['automations/editor-view.ts', 'application/javascript'],
+  '/editor-controller.ts': ['automations/editor-controller.ts', 'application/javascript'],
+  '/editor-models.json': ['automations/editor-models.json', 'application/json'],
+  '/mcp-catalog.json': ['automations/mcp-catalog.json', 'application/json'],
+  '/editor.css': ['automations/editor.css', 'text/css'],
   '/catalog.json': ['automations/catalog.json', 'application/json'],
   '/style.css': ['automations/style.css', 'text/css'],
 };
@@ -48,6 +54,19 @@ export function createApp(store: Store) {
         throw new RequestError(403, 'Same-origin local request required.');
       if (path === '/api/state' && req.method === 'GET') return json(res, 200, await store.read());
       if (path === '/api/build' && req.method === 'GET') return json(res, 200, { hash: await buildHash() });
+      if(path.startsWith('/api/configurations')) {
+        if(req.headers['x-local-request']!=='1'||(req.headers.origin&&req.headers.origin!==origin))
+          throw new RequestError(403,'Same-origin local request required.');
+        if(path==='/api/configurations'&&req.method==='POST'){
+          const input=await body(req);
+          if(!input||typeof input!=='object'||!('text' in input)||typeof input.text!=='string')
+            throw new RequestError(400,'Expected MCP JSON text.');
+          try{return json(res,200,await store.addConfiguration(input.text));}
+          catch(e){if(e instanceof RequestError)throw e;throw new RequestError(400,(e as Error).message);}
+        }
+        const ref=/^\/api\/configurations\/([\w-]+)$/.exec(path);
+        if(ref&&req.method==='GET') return json(res,200,await store.getConfiguration(ref[1]!));
+      }
       if (path === '/api/automations' && req.method === 'POST') {
         let input: unknown;
         try { input = parseAutomation(await body(req)); }

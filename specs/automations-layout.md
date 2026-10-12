@@ -64,3 +64,8 @@ though the main `/automations` page remains gated. Therefore a gated main
 list must not be cited as proof that every saved-editor route is gated.
 Saved-editor/menu screenshots are available for the next separate parity
 slice; successful/running execution and the main populated list remain open.
+
+The [saved-editor follow-up](../facts/automations-saved-editor.md) now verifies
+nine editor/MCP/model states with 434 additional measured checks at the same
+viewport. This closes those measured-subset gaps, not trigger-form, authorized
+MCP, responsive, font/icon raster, or independent peer acceptance gaps.
