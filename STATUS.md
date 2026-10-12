@@ -65,4 +65,5 @@ P0 shell [#19](https://github.com/I-am-drunk/cursor-decompile/pull/19),
 P1 settings [#20](https://github.com/I-am-drunk/cursor-decompile/pull/20),
 P2 login [#21](https://github.com/I-am-drunk/cursor-decompile/pull/21),
 P3 inference [#22](https://github.com/I-am-drunk/cursor-decompile/pull/22) merged.
-P4 completes this ordered product series, not whole-reference parity.
+P4 MCP [#23](https://github.com/I-am-drunk/cursor-decompile/pull/23) completes
+this ordered product series, not whole-reference parity.
