@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
-const facts=(await Promise.all(['ui-facts.json','row-facts.json'].map(async name=>
+const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json'].map(async name=>
   JSON.parse(await readFile(`src/automations/${name}`,'utf8'))))).flat();
 const root=process.argv[2], ids=new Set();
 let verified=0;
@@ -30,6 +30,21 @@ for (const f of facts) {
     const models=JSON.parse(bytes).models.slice(0,13).map(m=>({id:m.name,name:m.clientDisplayName}));
     assert.deepEqual(f.value,models);
     assert.deepEqual(JSON.parse(await readFile('src/automations/catalog.json','utf8')),models);
+  } else if(f.source.uiCatalogue){
+    const source=JSON.parse(bytes).elements, rows=JSON.parse(await readFile('src/automations/mcp-catalog.json','utf8'));
+    assert.equal(rows.length,f.value);
+    for(const row of rows){assert.equal(source[row.nameElement].text,row.name);assert.equal(source[row.descriptionElement].text,row.description);}
+  } else if(f.source.modelCatalogue){
+    const source=JSON.parse(bytes).models, rows=JSON.parse(await readFile('src/automations/editor-models.json','utf8'));
+    assert.equal(rows.length,f.value);
+    for(const row of rows){
+      const model=source.find(m=>m.name===row.id);assert.equal(model.clientDisplayName,row.name);
+      const params=model.parameterDefinitions.map(p=>{const type=p.parameterType,boolean=!!type.booleanParameter;return {
+        id:p.id,name:p.name,boolean,options:(type.booleanParameter??type.enumParameter).values.map(v=>({value:v.value,label:v.displayName??v.value}))};});
+      assert.deepEqual(row.parameters,params);
+      const defaults=model.variants.find(v=>v.isDefaultNonMaxConfig);
+      assert.deepEqual(row.defaults,Object.fromEntries((defaults?.parameterValues??[]).map(v=>[v.id,v.value])));
+    }
   } else if (f.source.jsonPath) {
     let data=JSON.parse(bytes);
     if(f.source.responsePath) data=JSON.parse(f.source.responsePath.reduce((v,key)=>v[key],data));

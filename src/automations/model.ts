@@ -41,10 +41,10 @@ export function validate(a: Automation): string[] {
   }
   if (a.triggers.filter(t => t.kind === 'Webhook').length > 1) errors.push('Only one webhook trigger is allowed.');
   for (const t of a.tools.filter(t => t.kind === 'MCP')) {
+    if (!t.name.trim()) errors.push('Name the MCP server.');
     if(t.configurationRef) continue;
     try { const u = new URL(t.url); if (u.protocol !== 'https:' || u.username || u.password) throw Error(); }
     catch { errors.push('MCP requires an HTTPS URL without credentials.'); }
-    if (!t.name.trim()) errors.push('Name the MCP server.');
   }
   if (!a.model.trim()) errors.push('Choose a model.');
   return errors;

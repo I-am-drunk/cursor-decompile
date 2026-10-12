@@ -5,23 +5,27 @@ import { resolve } from 'node:path';
 export function compare(facts, actual) {
   const url=new URL(actual.url), isRuns=url.pathname==='/automations/runs';
   const rowState=['failed-run-list','failed-run-summary','failed-run-menu'].includes(actual.captureState)?actual.captureState:null;
-  assert.ok(isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
-  if (rowState) {
+  const editorState=['saved-editor','tools-menu','mcp-menu','mcp-browse','mcp-url','mcp-command','mcp-json','model-picker','model-options'].includes(actual.captureState)?actual.captureState:null;
+  assert.ok(editorState || isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
+  if(editorState){
+    assert.equal(url.pathname,'/automations/editor-fixture');assert.equal(url.searchParams.get('fixture'),'saved-editor');
+  } else if (rowState) {
     assert.ok(isRuns && url.searchParams.get('fixture')==='observed-failure','Expected explicit reference-derived fixture');
   } else if (isRuns) {
     assert.ok(!url.searchParams.get('fixture') && !url.searchParams.get('status'),'Expected unfiltered non-fixture runs');
     assert.ok(!url.searchParams.get('scope') || url.searchParams.get('scope')==='team','Expected Team runs');
   }
   const chosen=facts.filter(f=>f.source?.element!==undefined &&
-    (rowState ? f.captureState===rowState : !f.captureState && (isRuns ? !f.id.startsWith('gate-') : f.id.startsWith('gate-'))));
+    (editorState||rowState ? f.captureState===(editorState||rowState) : !f.captureState && (isRuns ? !f.id.startsWith('gate-') : f.id.startsWith('gate-'))));
   const mismatches=[]; let checks=0;
   for (const f of chosen) {
     assert.deepEqual(actual.viewport,f.viewport,'Same viewport/DPR required');
-    const measured=actual.elements.find(e=>e.id===f.id);
+    const target=f.target??f.id;
+    const measured=actual.elements.find(e=>e.id===target);
     if (!measured) {mismatches.push(`${f.id}: element missing`);continue;}
     let dimensions=['x','y','width','height'];
-    if (['gate-title','runs-title','sum-title','rw-status'].includes(f.id)) dimensions=['x','y','height'];
-    if (['gate-button','runs-empty','sum-close','sum-view'].includes(f.id)) dimensions=['y','height'];
+    if (['gate-title','runs-title','sum-title','rw-status','ed-title','ed-name','ed-model'].includes(target)) dimensions=['x','y','height'];
+    if (['gate-button','runs-empty','sum-close','sum-view','ed-save','ed-test','mc-toggle','mc-cancel','mc-submit'].includes(target)) dimensions=['y','height'];
     for (const key of dimensions) {
       checks++;
       if (!Number.isFinite(measured.rect[key]) || Math.abs(measured.rect[key]-f.value.rect[key])>.75)
@@ -43,7 +47,7 @@ export function compare(facts, actual) {
 if (process.argv[1] && import.meta.url===pathToFileURL(resolve(process.argv[1])).href) {
   if (!process.argv[2]) throw Error('Usage: node pipeline/compare-ui.mjs <local-measurements.json>');
   const actual=JSON.parse(await readFile(process.argv[2],'utf8'));
-  const facts=(await Promise.all(['ui-facts.json','row-facts.json'].map(async file=>
+  const facts=(await Promise.all(['ui-facts.json','row-facts.json','editor-facts.json'].map(async file=>
     JSON.parse(await readFile(`src/automations/${file}`,'utf8'))))).flat();
   const {buildHash}=await import('../src/server.ts');
   assert.equal(actual.buildHash,await buildHash(),'Stale snapshot: recapture the current build');
