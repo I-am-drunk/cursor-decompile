@@ -34,9 +34,9 @@ export const field = (label: string, name: string, value = '', attrs = '') =>
   `<label class="field">${label}<input name="${name}" value="${esc(value)}" ${attrs}></label>`;
 export function shell(content: string, crumb = '', toolbar = ''): string {
   const destination=(name: string, glyph: string, path: string) =>
-    `<a href="${path}" ${path.startsWith('/automations')?'data-nav':''} aria-label="${name}" title="${name}" class="destination ${name===(crumb==='Run History'?'Run History':'Automations')?'selected':''}"><span class="rail-icon">${icon(glyph)}</span><span class="full-icon">${icon(glyph)}</span><span class="side-label">${name}</span></a>`;
+    `<a href="${path}" ${path.startsWith('/automations')?'data-nav':''} aria-label="${name}" title="${name}" class="destination ${name===(crumb==='Run History'?'Run History':'Automations')?'selected':''}"><span class="rail-icon">${icon(glyph)}</span><span class="side-label">${name}</span></a>`;
   return `<aside data-evidence="sidebar" class="shell-sidebar" aria-label="Main navigation"><div class="sidebar-surface">
-    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Toggle sidebar" aria-expanded="true"')}${btn(icon('search'), 'sidebar-search', 'icon side-label', 'aria-label="Search" disabled')}</div>
+    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Collapse sidebar" aria-expanded="true"')}${btn(icon('search'), 'sidebar-search', 'icon side-label', 'aria-label="Search" disabled')}</div>
     <nav class="side-nav">${destination('New Chat','send','/chat')}${destination('Automations','automation','/automations')}</nav>
     <div class="no-agents side-label">No Agents Yet</div><div class="account">
       ${destination('Settings','gear','/settings')}

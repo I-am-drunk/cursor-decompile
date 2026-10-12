@@ -39,6 +39,7 @@ try {
  const saved=await store.read();assert.equal(saved.automations[0].triggers[0].value,'25 10 * * 2');
  await capture('weekly');
  await page.click('[data-act=collapse]');
+ await page.waitForFunction(()=>document.getAnimations().length===0);
  await capture('compact');
  assert.equal(await page.locator('a[aria-label=Automations]').evaluate(e=>e.getBoundingClientRect().width),26);
  assert.equal(await page.locator('a[aria-label=Automations] svg:visible').evaluate(e=>e.getBoundingClientRect().width),14);

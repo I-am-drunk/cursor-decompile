@@ -42,7 +42,8 @@ Inspected references: [settings capture](../../facts/settings-navigation-capture
 - Hidden Search consumed rail header space and clipped the reopen control.
   Collapse now removes that space. Restored 26px compact targets, 8px icon/text
   spacing, captured background and bottom Settings placement. Removed
-  unsupported hover/focus expansion and motion rules.
+  unsupported hover/focus expansion and fade rules. Retained the owner-requested
+  180ms width easing and single-icon markup in coordination with [PR #29](https://github.com/I-am-drunk/cursor-decompile/pull/29).
 - New Chat uses an original paper-plane drawing matching the reference
   silhouette; the bot drawing fills its 14px box more closely.
 
