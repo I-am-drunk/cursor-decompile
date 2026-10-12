@@ -1,5 +1,6 @@
 import type { Automation, Run } from './model.ts';
 import { runDuration, runTime, shortAge } from './row-data.ts';
+import { parseRunStatuses } from './run-filter-state.ts';
 export const esc = (value: unknown): string => String(value ?? '').replace(/[&<>"']/g,
   c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 export const icon = (name: string): string => {
@@ -102,18 +103,20 @@ export function editor(a: Automation, modelName: string, errors: string[]): stri
     <p class="implementation-note">Local implementation · editor geometry is extracted/UNVERIFIED. Connections and execution require an adapter.</p></div>`;
 }
 export function runs(rows: Run[], scope: string, query: string, status: string, searchOpen: boolean, modelNames: Record<string,string> = {}, now = Date.now()): string {
-  const visible = rows.filter(r => (!status || r.status === status) && r.name.toLowerCase().includes(query.toLowerCase()));
+  const selected=parseRunStatuses(status);
+  const visible = rows.filter(r => (!selected.length || selected.includes(r.status)) && r.name.toLowerCase().includes(query.toLowerCase()));
   const counts = ([['succeeded',1],['failed',1],['succeeded',7],['failed',7]] as const)
-    .map(([s,days]) => rows.filter(r => r.status===s && Date.parse(r.createdAt)>=now-days*86400000).length);
+    .map(([s,days]) => visible.filter(r => r.status===s && Date.parse(r.createdAt)>=now-days*86400000).length);
   return `<div class="page runs"><header data-evidence="runs-header"><h1 data-evidence="runs-title">Run History</h1></header>
     <div class="runs-body"><div class="toolbar" data-evidence="runs-toolbar">${tabs(scope,'run-scope')}
     <div class="actions">${searchOpen ? `<input name="run-search" placeholder="Search runs..." aria-label="Search runs" value="${esc(query)}">` :
       btn(icon('search'),'run-search','icon','aria-label="Search" data-evidence="runs-search"')}
-      ${btn(icon('filter'),'filters',`icon ${status?'selected':''}`,'aria-label="Filter runs" data-evidence="runs-filter"')}</div></div>
+      ${btn(icon('filter')+(selected.length?'<span class="rf-badge" data-evidence="rf-badge">1</span>':''),'filters',`icon rf-filter ${status?'selected':''}`,'aria-label="Filter runs" data-evidence="runs-filter"')}</div></div>
     <div class="stats" data-evidence="runs-stats">${['Successful · 24h','Failed · 24h','Success 7d','Failed 7d'].map((s,i) =>
-      `<div class="stat card" data-evidence="stat-${i}"><div>${s}</div><strong>${counts[i]}</strong></div>`).join('')}</div>
+      `<div class="stat card" data-evidence="stat-${i}"><div>${s}</div><strong data-evidence="rf-count-${i}">${counts[i]}</strong></div>`).join('')}</div>
     <div class="runs-table card" data-evidence="${visible.length?'rw-card':'runs-card'}"><div role="table" aria-label="Run history" data-evidence="${visible.length?'rw-table':'runs-table'}">
-      ${!visible.length ? `<div class="runs-empty"><h3 data-evidence="runs-empty">${query||status?'No Results Found':'No Runs Yet'}</h3></div>` : runTable(visible,modelNames,now)}
+      ${!visible.length ? query||status?`<div class="runs-empty filtered"><div class="rf-empty-content"><h3 data-evidence="rf-empty">No Results</h3><div class="rf-hint" data-evidence="rf-hint">Try different filters</div></div></div>`:
+      '<div class="runs-empty"><h3 data-evidence="runs-empty">No Runs Yet</h3></div>' : runTable(visible,modelNames,now)}
     </div></div></div>${rows.some(r=>r.fixture)?'<p class="implementation-note">Reference-derived or synthetic fixture — not a live local execution.</p>':''}</div>`;
 }
 export const dialog = (title: string, content: string, footer = '') =>

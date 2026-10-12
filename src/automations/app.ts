@@ -4,6 +4,7 @@ import { btn, dialog, editor, esc, field, gate, icon, link, list, runs, runSumma
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
 import { TriggerController } from './trigger-controller.ts';
+import { RunFilterController } from './run-filter-controller.ts';
 import { unsavedDialog } from './preset-view.ts';
 import { editorToolbar, savedEditor } from './editor-view.ts';
 import { modelSuffix, savedEditorFixture } from './editor-state.ts';
@@ -26,6 +27,7 @@ async function api<T>(path: string, method = 'GET', data?: unknown): Promise<T> 
   return result as T;
 }
 function openModal(kind: string, id = '') {
+  runFilter.close();
   triggerUi.close();
   if(editUi.panel)editUi.close();
   if (!modal) returnFocus = document.activeElement as HTMLElement;
@@ -33,9 +35,12 @@ function openModal(kind: string, id = '') {
 }
 function closeModal() { modal = ''; overlays.innerHTML = ''; returnFocus?.focus(); }
 const editUi=new EditorController({form:()=>form,render,changed:()=>{dirty=true;},
-  closeOther:()=>{triggerUi.close();closeModal();},notify:toast,overlays,api});
+  closeOther:()=>{runFilter.close();triggerUi.close();closeModal();},notify:toast,overlays,api});
 const triggerUi=new TriggerController({form:()=>form,render,changed:()=>{dirty=true;},
-  closeOther:()=>{editUi.close();closeModal();},notify:toast,overlays,fixture:editorFixture});
+  closeOther:()=>{runFilter.close();editUi.close();closeModal();},notify:toast,overlays,fixture:editorFixture});
+const runFilter=new RunFilterController({value:()=>params().get('status')??'',render,overlays,
+  closeOther:()=>{triggerUi.close();editUi.close();closeModal();},notify:toast,
+  setValue:values=>{const url=new URL(location.href);if(values.length)url.searchParams.set('status',values.join(','));else url.searchParams.delete('status');history.replaceState(null,'',url);}});
 function activateDialog() {
   const d=overlays.querySelector('dialog')!;
   d.addEventListener('cancel',e=>{e.preventDefault();closeModal();pendingPath='';});
@@ -73,6 +78,7 @@ function runRows(): Run[] {
   return state.runs.filter(r=>!id||r.automationId===id);
 }
 function loadRoute() {
+  runFilter.reset();
   triggerUi.reset();
   const id = routeId();
   if (id && id !== 'runs' && id !== 'new') {
@@ -167,6 +173,7 @@ function renderModal() {
       ${link('Captured trigger controls','/automations/editor-fixture?fixture=saved-editor&controls=triggers','button')}
       ${link('Preset and validation captures','/automations/editor-fixture?fixture=saved-editor&controls=presets','button')}
       ${link('Unconnected Linear and MCP','/automations/editor-fixture?fixture=saved-editor&controls=connections','button')}
+      ${link('Run filter acceptance','/automations/runs?fixture=observed-failure&controls=filters','button')}
       ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
       ${btn('Export layout measurements','export')}</div>`;
   }
@@ -174,6 +181,7 @@ function renderModal() {
   activateDialog();
 }
 async function action(command: string) {
+  if(runFilter.handle(command))return;
   if(triggerUi.handle(command))return;
   if(await editUi.handle(command))return;
   const [kind, id = ''] = command.split(':');
@@ -273,6 +281,7 @@ window.addEventListener('popstate',()=>{
 });
 document.addEventListener('keydown',e=>{
   if (e.altKey && e.shiftKey && e.code==='KeyE') {e.preventDefault();void exportMeasurements();return;}
+  if(runFilter.key(e))return;
   if(triggerUi.key(e))return;
   if(editUi.key(e))return;
   if(titleEditing&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();titleEditing=false;render();return;}
@@ -294,6 +303,7 @@ document.addEventListener('keydown',e=>{
   }
 });
 document.addEventListener('pointerdown',e=>{
+  runFilter.pointer(e.target as Node);
   triggerUi.pointer(e.target as Node);
   editUi.pointer(e.target as Node);
   if(modal==='run-menu'&&!overlays.contains(e.target as Node)&&!returnFocus?.contains(e.target as Node)) closeModal();
@@ -310,12 +320,13 @@ async function boot() {
   }
 }
 async function exportMeasurements() {
-  const captureState=params().get('controls')==='connections'?(editUi.panel?editUi.captureConnectionState():triggerUi.captureConnectionState()):
+  const captureState=params().get('controls')==='filters'?runFilter.captureState():
+    params().get('controls')==='connections'?(editUi.panel?editUi.captureConnectionState():triggerUi.captureConnectionState()):
     params().get('controls')==='presets'?(modal==='unsaved'?'unsaved-dialog':triggerUi.capturePresetState()):
     triggerUi.panel?triggerUi.captureState():editUi.panel?editUi.captureState():
     params().get('controls')==='triggers'?triggerUi.captureState():editorFixture()?'saved-editor':
     modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
-  if(!triggerUi.panel&&!editUi.panel&&modal!=='run'&&modal!=='run-menu'&&modal!=='unsaved') closeModal();
+  if(!runFilter.open&&!triggerUi.panel&&!editUi.panel&&modal!=='run'&&modal!=='run-menu'&&modal!=='unsaved') closeModal();
   await new Promise<void>(r=>requestAnimationFrame(()=>r()));
   const build=await api<{hash:string}>('/api/build');
   const elements=[...document.querySelectorAll<HTMLElement>('[data-evidence]')].map(e=>{
