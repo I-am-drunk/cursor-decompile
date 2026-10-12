@@ -66,4 +66,11 @@ forms, and the model/parameter picker. Preview its reference-derived fixture
 at `/automations/editor-fixture?fixture=saved-editor`. Configuration values
 stay in the private local store (0600); API state and copied definitions use
 opaque references. No provider is authorized and no configured command runs.
-Trigger forms and unobserved variants remain original, unverified designs.
+Preset/provider trigger forms and unobserved variants remain unverified.
+
+The [trigger-control follow-up](facts/automations-trigger-verification.md)
+adds the measured Add Trigger menu, Scheduled choices and custom-cron popup.
+Preview at `/automations/editor-fixture?fixture=saved-editor&controls=triggers`.
+Use Enter to stage a local cron edit, Escape to discard it, and Save to persist.
+Preset defaults and provider-specific forms are not reference-verified;
+no scheduler, execution or provider authorization is connected.

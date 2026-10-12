@@ -135,3 +135,30 @@ The additional nine states check 434 measured properties; total checks: 737.
 The source gate reproduces all property pins and both catalogues, including
 their original element indexes or API model definitions. It does not certify
 provider logos, font glyphs, focus rings, uncaptured forms, or authorization.
+
+### Trigger-control comparisons
+
+Open `/automations/editor-fixture?fixture=saved-editor&controls=triggers`
+at the same **1270 × 764 CSS px, DPR 2** viewport. Keep the fixture unchanged.
+Export with **Alt+Shift+E** to `artifacts/<state>-measurements.json`:
+
+| State | Action |
+|---|---|
+| `trigger-baseline` | Fresh fixture; Save disabled and switch off |
+| `add-trigger` | Click Add Trigger; leave search empty |
+| `scheduled-submenu` | Press Down, then Right; Hourly receives focus |
+| `schedule-picker` | Escape twice; click the existing `0 0 1 1 *` |
+| `trigger-dismissed` | Escape; focus returns to the existing cron control |
+
+The five states add **255** checks, for **992** across nineteen states.
+The comparator checks geometry, copy, input values, clean/disabled state,
+overlay dismissal and final focus. It rejects wrong fixture URLs, stale
+build hashes and wrong viewports. Re-export all states after runtime edits.
+For the earlier failed-run table, move the pointer outside the row before
+exporting (click its Run History heading): the pinned row is not hovered.
+
+No new live reference calls are required by this gate. Default `npm run check`
+remains account/network-free. The local cron validator, preset defaults and
+Enter-to-stage/Escape-to-discard policy have regression tests but are not
+claims about unobserved reference save behavior. Full preset/provider forms
+and native focus-ring/font/icon raster parity remain outside this subset.

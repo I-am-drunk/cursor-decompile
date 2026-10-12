@@ -3,6 +3,7 @@ import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model
 import { btn, dialog, editor, esc, field, gate, icon, link, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
+import { TriggerController } from './trigger-controller.ts';
 import { editorToolbar, savedEditor } from './editor-view.ts';
 import { modelSuffix, savedEditorFixture } from './editor-state.ts';
 import type { EditorModel, McpProvider } from './editor-state.ts';
@@ -24,13 +25,16 @@ async function api<T>(path: string, method = 'GET', data?: unknown): Promise<T> 
   return result as T;
 }
 function openModal(kind: string, id = '') {
+  triggerUi.close();
   if(editUi.panel)editUi.close();
   if (!modal) returnFocus = document.activeElement as HTMLElement;
   modal = kind; editId = id; renderModal();
 }
 function closeModal() { modal = ''; overlays.innerHTML = ''; returnFocus?.focus(); }
 const editUi=new EditorController({form:()=>form,render,changed:()=>{dirty=true;},
-  closeOther:closeModal,notify:toast,overlays,api});
+  closeOther:()=>{triggerUi.close();closeModal();},notify:toast,overlays,api});
+const triggerUi=new TriggerController({form:()=>form,render,changed:()=>{dirty=true;},
+  closeOther:()=>{editUi.close();closeModal();},notify:toast,overlays,fixture:editorFixture});
 function activateDialog() {
   const d=overlays.querySelector('dialog')!;
   d.addEventListener('cancel',e=>{e.preventDefault();closeModal();pendingPath='';});
@@ -68,6 +72,7 @@ function runRows(): Run[] {
   return state.runs.filter(r=>!id||r.automationId===id);
 }
 function loadRoute() {
+  triggerUi.reset();
   const id = routeId();
   if (id && id !== 'runs' && id !== 'new') {
     const found = editorFixture() && id==='editor-fixture' ? savedEditorFixture() :
@@ -157,6 +162,7 @@ function renderModal() {
       ${link('Observed empty Run History','/automations/runs','button')}${link('Synthetic run states','/automations/runs?fixture=runs','button')}
       ${link('Reference-derived failed run','/automations/runs?fixture=observed-failure','button')}
       ${link('Reference-derived saved editor','/automations/editor-fixture?fixture=saved-editor','button')}
+      ${link('Captured trigger controls','/automations/editor-fixture?fixture=saved-editor&controls=triggers','button')}
       ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
       ${btn('Export layout measurements','export')}</div>`;
   }
@@ -164,6 +170,7 @@ function renderModal() {
   activateDialog();
 }
 async function action(command: string) {
+  if(triggerUi.handle(command))return;
   if(await editUi.handle(command))return;
   const [kind, id = ''] = command.split(':');
   if(kind==='edit-title'){titleEditing=true;render();app.querySelector<HTMLInputElement>('[name="name"]')?.focus();return;}
@@ -231,6 +238,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('input',e=>{
   const input=e.target as HTMLInputElement;
+  if(triggerUi.input(input))return;
   if(editUi.input(input))return;
   if (input.name === 'list-search') { query=input.value; page=1; render(); return; }
   if (input.name === 'run-search') { runQuery=input.value; render(); return; }
@@ -261,6 +269,7 @@ window.addEventListener('popstate',()=>{
 });
 document.addEventListener('keydown',e=>{
   if (e.altKey && e.shiftKey && e.code==='KeyE') {e.preventDefault();void exportMeasurements();return;}
+  if(triggerUi.key(e))return;
   if(editUi.key(e))return;
   if(titleEditing&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();titleEditing=false;render();return;}
   const target=e.target as HTMLElement;
@@ -281,6 +290,7 @@ document.addEventListener('keydown',e=>{
   }
 });
 document.addEventListener('pointerdown',e=>{
+  triggerUi.pointer(e.target as Node);
   editUi.pointer(e.target as Node);
   if(modal==='run-menu'&&!overlays.contains(e.target as Node)&&!returnFocus?.contains(e.target as Node)) closeModal();
 });
@@ -296,18 +306,22 @@ async function boot() {
   }
 }
 async function exportMeasurements() {
-  const captureState=editUi.panel?editUi.captureState():editorFixture()?'saved-editor':
+  const captureState=triggerUi.panel?triggerUi.captureState():editUi.panel?editUi.captureState():
+    params().get('controls')==='triggers'?triggerUi.captureState():editorFixture()?'saved-editor':
     modal==='run-menu'?'failed-run-menu':modal==='run'?'failed-run-summary':referenceFixture()?'failed-run-list':routeId()==='runs'?'runs':'upgrade';
-  if(!editUi.panel&&modal!=='run'&&modal!=='run-menu') closeModal();
+  if(!triggerUi.panel&&!editUi.panel&&modal!=='run'&&modal!=='run-menu') closeModal();
   await new Promise<void>(r=>requestAnimationFrame(()=>r()));
   const build=await api<{hash:string}>('/api/build');
   const elements=[...document.querySelectorAll<HTMLElement>('[data-evidence]')].map(e=>{
     const rect=e.getBoundingClientRect(), computed=getComputedStyle(e);
     return {id:e.dataset.evidence,rect:{x:rect.x,y:rect.y,width:rect.width,height:rect.height},
-      text:e.textContent,style:Object.fromEntries([...computed,'border-radius','padding','margin'].map(k=>[k,computed.getPropertyValue(k)]))};
+      text:e.textContent,value:'value' in e?(e as HTMLInputElement).value:null,
+      attributes:Object.fromEntries([...e.attributes].map(a=>[a.name,a.value])),
+      style:Object.fromEntries([...computed,'border-radius','padding','margin'].map(k=>[k,computed.getPropertyValue(k)]))};
   });
   const measurement={buildHash:build.hash,captureState,captureDate:new Date().toISOString(),url:location.href,
-    viewport:{width:innerWidth,height:innerHeight,devicePixelRatio},elements};
+    viewport:{width:innerWidth,height:innerHeight,devicePixelRatio},elements,
+    focus:(document.activeElement as HTMLElement)?.dataset.evidence??null};
   const url=URL.createObjectURL(new Blob([JSON.stringify(measurement,null,2)],{type:'application/json'}));
   const anchor=document.createElement('a'); anchor.href=url;
   anchor.download=`local-automations-${captureState}.json`; anchor.click();

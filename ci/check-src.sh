@@ -15,4 +15,7 @@ if [ "${1:-}" = "--reference" ]; then
   for state in saved-editor tools-menu mcp-menu mcp-browse mcp-url mcp-command mcp-json model-picker model-options; do
     node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
   done
+  for state in trigger-baseline add-trigger scheduled-submenu schedule-picker trigger-dismissed; do
+    node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
+  done
 fi
