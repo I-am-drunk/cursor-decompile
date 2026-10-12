@@ -23,8 +23,6 @@ const files: Record<string, [string, string]> = {
   '/settings/live-view.ts':['settings/live-view.ts','application/javascript'],
   '/settings/schema.ts':['settings/schema.ts','application/javascript'],
   '/settings/routes.ts':['settings/routes.ts','application/javascript'],
-  '/settings/linear-ui.ts':['settings/linear-ui.ts','application/javascript'],
-  '/live-settings.css':['settings/live.css','text/css'],
   '/shell/sidebar.ts': ['shell/sidebar.ts','application/javascript'],
   '/sidebar.css': ['shell/sidebar.css','text/css'],
   '/settings.css': ['settings/settings.css','text/css'],
@@ -182,7 +180,7 @@ export function createApp(store: Store, options:AppOptions={}) {
         res.writeHead(200, { 'Content-Type': file[1], 'Cache-Control': 'no-store' });
         return res.end(content);
       }
-      if (['/','/chat','/search'].includes(path) || /^\/automations(?:\/[\w-]+)?$/.test(path)) {
+      if (['/','/chat'].includes(path) || /^\/automations(?:\/[\w-]+)?$/.test(path)) {
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
         return res.end(await readFile(new URL('index.html', root)));
       }

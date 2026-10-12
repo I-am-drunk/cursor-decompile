@@ -68,12 +68,13 @@ P3 inference [#22](https://github.com/I-am-drunk/cursor-decompile/pull/22) merge
 P4 MCP [#23](https://github.com/I-am-drunk/cursor-decompile/pull/23) completes
 this ordered product series, not whole-reference parity.
 
-## UI SETTINGS CARVE — four-section product settings
+## UI SETTINGS CARVE — owner correction in progress
 
-Agent A replaces settings with Linear connection, MCP connectors, Accounts
-and General; deletes legacy dashboard/upsell/download and T3 settings UI.
-Registry CRUD, local session/sign-out and preferences work; Linear connection
-request is an honest persisted placeholder pending agent D's backend.
-[Implementation, handoff and validation](docs/SETTINGS-CARVE.md).
-71 app/reader + 6 MCP tests and local Chromium desktop/mobile smoke pass.
-Historical evidence is unchanged; new panel parity remains UNVERIFIED.
+Four retained sections now use captured rows/headings instead of the invented
+index, tables and registry forms. Standalone search and Profile were deleted;
+the disconnected chat gate links to Linear connection.
+[Source mapping, file audit, validation and blockers](docs/SETTINGS-CARVE.md).
+71 root + 6 MCP tests and Chromium checks pass. Not ready to ship: original
+search/connected-chat captures and a real Linear account/chat backend are
+missing; the strict repository-wide branding scan also remains nonzero.
+Search/Connect remain disabled. No connected-chat or whole-page parity claim.

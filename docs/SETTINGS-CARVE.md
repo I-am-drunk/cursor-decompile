@@ -1,54 +1,67 @@
-# Settings product carve
+# Settings correction — not ready to ship
 
-This slice implements agent A of [MASTER-PLAN.md](MASTER-PLAN.md), section 4.
-The `/settings` index and navigation contain exactly Linear connection,
-MCP connectors, Accounts and General, at `/settings/linear`, `/settings/mcp`,
-`/settings/accounts` and `/settings/general`.
+The owner superseded the prior index/table design with copy-first, chisel-only.
+`/settings` opens Linear connection, with exactly four navigation entries:
+Linear connection, MCP connectors, Accounts, General. No index cards, Profile
+button, account tables, connection-request simulation or responsive redesign.
 
-The old dashboard, privacy/profile preview, subscription upsell, download
-promotion, spending panel and T3 settings component are deleted. Their page
-and module URLs return 404. Workspace entry links point to the new routes.
-The existing backend settings storage/API keys remain compatible with the
-server and MCP management package; they are not additional settings pages.
+## Source mapping
 
-## Working controls and backend handoff
+- Frame, typography, section heading, card and rows: the original
+  [settings capture](../facts/settings-navigation-capture.md) and
+  [property pins](../src/settings/ui-facts.json), especially `st-title`,
+  `st-profile-head`, `st-profile`, `st-email-row`, `st-first` and `st-save`.
+  Row padding is 12px 16px, gap 20px, minimum height 55px; inputs are 28px.
+  Deleting preceding sections moves retained rows upward without new spacing.
+- General's three retained preference labels/fields: owner-selected
+  [reloaded screenshot](../artifacts/settings/reloaded.png). As
+  [the original report](../facts/settings-functional.md) explains, this image
+  is a local implementation capture, not independent vendor evidence.
+- Accounts: captured Email row and Log Out copy; runtime local identity.
+- Linear: Linear / Requires connection / Connect copy from
+  [the connection capture](../facts/automations-linear-capture.md). The four
+  section names are OWNER_REQUIREMENT, not captured vendor headings.
+- MCP: No MCP servers configured / New Connection copy; the
+  [saved-editor custom MCP form](../facts/automations-saved-editor.md) is reused
+  directly. The invented registry fields, permissions and bindings panels are
+  removed. Registry APIs remain available. The adapter saves URL/command,
+  arguments, environment and one private header; multiple headers fail visibly.
+- Shell: [expanded capture](../artifacts/shell/reference-expanded.png) supports
+  top-right search placement. Standalone `/search`, Profile and Local preview
+  destinations are removed. The existing sidebar's other geometry is unchanged.
+- Chat: center placement, Connect to Linear and underlined accent Linear are
+  OWNER_REQUIREMENT. The title inherits existing 20px/28px typography and the
+  accent uses captured settings link color #055180. This is an adaptation,
+  not certification against an original chat empty-state capture.
 
-- Linear: Connect Linear persists a connection request in the existing
-  `integrations.linearEnabled` field. Cancel persists the inverse. Neither
-  action authenticates with Linear. The empty account table never presents
-  a request or stored legacy credential as an authenticated identity.
-  Agent D replaces `src/settings/linear-ui.ts` with its real account/flow
-  adapter once its API is available; no speculative API is called today.
-- MCP: existing registry list, add/edit/delete, connection test and scoped
-  automation bindings remain functional. The add-custom-server form saves
-  through `/api/mcp-servers`; permissions remain under an expandable panel.
-- Accounts: empty Linear account table plus the actual local session identity
-  and working sign-out. Multiple Linear accounts require agent D's registry.
-- General: validated display name, timezone, retention and concurrency values
-  persist through `/api/settings`. Scheduling and retention remain deferred
-  to the server lane and are described as saved defaults in the UI.
+## Remaining acceptance blockers
 
-No runtime dependencies added. The original settings frame, colors, spacing,
-cards and controls are reused. New panels and responsive geometry are
-**UNVERIFIED** against a reference; historical captured metadata is retained
-unchanged and is not evidence of parity for these replacement panels.
+Search-open behavior and the connected chat/empty-state captures are absent
+from the supplied files. The private `reference/settings` directory is also
+absent. Requested their locations; no substitute interaction was invented.
+Search is disabled pending that evidence. Linear Connect is disabled because
+this branch has no account registry, OAuth flow or connected chat runtime.
+`/chat` consequently renders only the disconnected gate, and saved intent or
+credentials never count as an authenticated account. Connected chat remains
+unimplemented. These disabled states are limitations, not captured behavior.
 
-## Validation
+The strict repository-wide `cursor` scan is not green: historical evidence
+metadata, catalogue text/IDs, source-reader paths, CSS properties and MCP
+pagination protocol keys remain outside the listed exception directories.
+The correction is not eligible for shipping or a ready PR until the owner
+acceptance checks, missing interactions and peer review are complete.
 
-Node 24: `npm run check` passes strict TypeScript, 71 app/reader tests,
-6 MCP tests, existing metadata validation and diff whitespace checks.
-The route test follows the served browser import graph, exercises all four
-settings pages and the index, and checks deleted pages/assets return 404.
+## Audit and validation
 
-A local Chromium smoke test used an isolated temporary data directory:
-index has four entries; all four pages render; profile and timezone persist;
-Linear request/cancel survives reload; custom MCP creation, reload and deletion
-work; Accounts shows the current identity and signs out. No browser exceptions.
-Desktop 1270×764 and mobile 390×844 checked; no mobile horizontal overflow.
-Temporary screenshots are outside the repository, not captured evidence.
+Audited the 19 files in 4909bca and the correction diff. Removed the invented
+index, account tables, Linear intent adapter, live stylesheet, custom registry
+form, permission panel, binding form and stale grants link. Prior deletions
+of dashboard pages, inference UI and obsolete routes remain. Schemas and
+server-side stores remain compatible. Tests now assert the reduced UI/routes.
 
-Branding audit: no brand names in the replacement settings UI. A literal
-repository-wide case-insensitive search is not a product-branding test:
-CSS uses `cursor`, MCP pagination uses `cursor`/`nextCursor`, and reference
-readers/captured metadata retain source names and URLs. The automation lane
-owns remaining catalog/runtime branding outside these settings components.
+Node 24: strict TypeScript, 71 root tests, 6 MCP tests and metadata validation
+pass. Chromium at 1270x764 checks all four sections, visible local links,
+55px rows, 12px/16px padding, 20px gap and 28px inputs, saved timezone reload,
+custom MCP dialog/create/reload, search 404, centered gate/link and logout.
+Local screenshots are ignored under `artifacts/correction/`; they are not new
+reference captures. Raw source and whole-page pixel parity remain unverified.

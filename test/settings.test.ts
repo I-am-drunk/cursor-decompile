@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import { liveSettings } from '../src/settings/live-view.ts';
 import { defaultSettings } from '../src/settings/schema.ts';
 import { settingsSections, isSettingsRoute, titles } from '../src/settings/routes.ts';
-import { linearAccounts } from '../src/settings/linear-ui.ts';
 import { createApp } from '../src/server.ts';
 import { Store } from '../src/store.ts';
 import { signIn } from './http-helper.ts';
@@ -11,21 +10,22 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-test('settings index and navigation expose exactly the four product sections', () => {
+test('settings navigation exposes exactly the four product sections', () => {
   assert.deepEqual(Object.values(titles), ['Linear connection', 'MCP connectors', 'Accounts', 'General']);
   const index = liveSettings(defaultSettings(), null);
-  assert.equal((index.match(/class="card index-section"/g) ?? []).length, 4);
+  assert.equal((index.match(/href="\/settings\//g) ?? []).length, 4);
+  assert.doesNotMatch(index, /index-section|<table|<details/);
   for (const section of settingsSections) {
     const html = liveSettings(defaultSettings(), section);
     assert.equal((html.match(/aria-current="page"/g) ?? []).length, 1);
-    assert.match(html, new RegExp(`<h1>${titles[section]}</h1>`));
+    assert.match(html, new RegExp(`<h2>${titles[section]}</h2>`));
     for (const [, href] of html.matchAll(/href="([^"]+)"/g))
-      assert.ok(href === '/automations' || isSettingsRoute(href!));
+      assert.ok(href === '/chat' || isSettingsRoute(href!));
     assert.doesNotMatch(html, /Upgrade|Billing|Spending|Privacy Mode|Desktop|Inference/);
   }
   const settings = defaultSettings(); settings.account.displayName = '<script>alert(1)</script>';
   assert.doesNotMatch(liveSettings(settings, 'general'), /<script>/);
-  assert.match(linearAccounts(), /No Linear accounts connected/);
+  assert.match(liveSettings(settings, 'linear'), /Requires connection/);
 });
 
 test('settings pages and browser module graph resolve; removed routes and assets return 404', async t => {
@@ -48,6 +48,6 @@ test('settings pages and browser module graph resolve; removed routes and assets
       await module(new URL(relative!, base + path).pathname);
   }
   await module('/settings/live-app.ts');
-  for (const path of ['/dashboard', '/dashboard/settings', '/dashboard/integrations', '/dashboard/spending', '/settings/inference', '/settings/integrations', '/settings/account', '/settings/automations', '/settings/unknown', '/settings-app.ts', '/settings-view.ts', '/inference/settings-ui.ts'])
+  for (const path of ['/search', '/settings/linear-ui.ts', '/live-settings.css', '/dashboard', '/dashboard/settings', '/dashboard/integrations', '/dashboard/spending', '/settings/inference', '/settings/integrations', '/settings/account', '/settings/automations', '/settings/unknown', '/settings-app.ts', '/settings-view.ts', '/inference/settings-ui.ts'])
     assert.equal((await send(path)).status, 404, path);
 });
