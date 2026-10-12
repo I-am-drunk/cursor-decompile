@@ -17,7 +17,7 @@
 .ed-trigger-row.tr-row{display:grid;grid-template-columns:20px minmax(0,1fr) 24px;gap:8px;border-radius:8px}
 .tr-row>.tr-clock{display:flex;align-items:center;justify-content:center;height:24px}.tr-clock svg{width:14px;height:14px}
 .tr-row .tr-schedule-label{width:105.167px;flex-shrink:0}.tr-row .ed-cron{display:flex;align-items:center;gap:6px;border:1px solid transparent}
-.tr-row .ed-cron svg{width:12px;height:12px;margin-right:-2px}.tr-row .ed-cron span{letter-spacing:0}
+.tr-row .ed-cron svg{width:12px;height:12px;margin-right:-2px}.tr-row .ed-cron span{letter-spacing:0;white-space:nowrap}
 .tr-row .ed-cron[data-reference-cron] span{width:48px}
 .tr-row .icon{opacity:0}.tr-row:hover .icon,.tr-row:focus-within .icon{opacity:1}
 [data-act="tr-add"]>svg{margin:0}

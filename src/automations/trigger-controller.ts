@@ -74,7 +74,7 @@ export class TriggerController {
   input(input:HTMLInputElement):boolean {
     if(!this.panel)return false;
     if(input.name==='trigger-search'){this.query=input.value;this.panel='add-trigger';this.render();return true;}
-    if(input.name==='cron-expression'){this.value=input.value;this.error='';return true;}
+    if(input.name==='cron-expression'){this.value=input.value;this.error='';this.render();return true;}
     return false;
   }
   key(event:KeyboardEvent):boolean {
