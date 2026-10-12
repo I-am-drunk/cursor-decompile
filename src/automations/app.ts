@@ -61,7 +61,8 @@ async function save() {
   if (busy) return; busy = true;
   try {
     const saved = await api<Automation>('/api/automations','POST',form);
-    state = await api<State>('/api/state'); form = saved; dirty = false;
+    state.automations = [...state.automations.filter(a=>a.id!==saved.id),saved];
+    form = saved; dirty = false;
     const destination = pendingPath || `/automations/${saved.id}`; pendingPath = '';
     navigate(destination,true); toast('Saved locally.');
   } catch (e) { errors = [(e as Error).message]; closeModal(); render(); }
@@ -167,7 +168,7 @@ async function action(command: string) {
   } else if (kind === 'confirm-delete') {
     const a=state.automations.find(a=>a.id===id); if (!a) return;
     await api(`/api/automations/${id}?revision=${a.revision}`,'DELETE');
-    state=await api<State>('/api/state'); closeModal(); render();
+    state.automations=state.automations.filter(a=>a.id!==id); closeModal(); render();
   } else if (kind === 'test') {
     if (dirty) { toast('Save changes before testing.'); return; }
     await api(`/api/automations/${form.id}/runs`,'POST',{});

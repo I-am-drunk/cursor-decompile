@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.ts",
     "check": "sh ci/check-src.sh",
-    "test": "node --test pipeline/read.test.mjs test/*.test.ts"
+    "test": "node --test pipeline/read.test.mjs test/*.test.ts test/*.test.mjs"
   },
   "devDependencies": {
     "@types/node": "24.0.0",

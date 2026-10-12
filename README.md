@@ -53,3 +53,4 @@ of whole-page pixel parity. No captured bundles, fonts, credentials or
 account details are served by the local server.
 
 Private comparison workflow: [pipeline/README.md](pipeline/README.md).
+Results and remaining deviations: [verification report](facts/automations-verification.md).

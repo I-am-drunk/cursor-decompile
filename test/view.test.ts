@@ -13,6 +13,9 @@ test('views escape user content and expose actual empty/loading-free structure',
   assert.match(runs([],'team','','',false),/data-evidence="runs-card"/);
   assert.match(gate(),/Upgrade to unlock Automations/);
   assert.match(shell(gate()),/Local preview/);
+  const unsafe={...a,triggers:[{id:'"><img src=x>',kind:'Schedule' as const,event:'Cron',value:'0 9 * * *'}]};
+  assert.doesNotMatch(editor(unsafe,'Model',[]),/<img/);
+  assert.match(editor(unsafe,'Model',[]),/&quot;&gt;&lt;img/);
 });
 test('list scopes, stable enabled-first ordering and pagination',()=>{
   const rows=Array.from({length:12},(_,i)=>({...draft(),id:`id-${i}`,name:`Name ${i}`,enabled:i===11}));

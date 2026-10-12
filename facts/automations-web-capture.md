@@ -24,7 +24,8 @@ The browser viewport was **1270 × 764 CSS px, DPR 2**, light theme.
 
 ## Resource coverage and limits
 
-The initial web HAR has 313 entries; the multi-route HAR has 650 entries.
+The initial web HAR has 313 entries; the multi-route HAR has 650 entries,
+including 504 JS requests (165 unique URLs) and 25 CSS requests (13 unique URLs).
 All recorded JS/CSS response bodies are present. These are bounded capture
 windows, not a claim to include future polling or every product state.
 `routes/inventory.json` pins each URL/method/status/body/hash; its
@@ -53,3 +54,6 @@ viewports/themes and icon/font raster parity remain **UNVERIFIED**.
 Our local adapter, validation, persistence and fixture scenarios are **DESIGN**,
 not captured Cursor network behavior. There is no second execution scheduler.
 The custom font and vendor implementation are not redistributed.
+
+See the [verification report](automations-verification.md) for measured local
+comparisons, exercised interactions and explicit implementation omissions.

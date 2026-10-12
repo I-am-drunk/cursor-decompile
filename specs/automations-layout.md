@@ -45,3 +45,13 @@ editor and its `Add Tool or MCP` state, using the metadata above. Compare curren
 labels/order with D01–D08 and record differences; do not silently treat the
 2026-03-05 demo as today's product. Sign-in, account permissions, current DOM/
 computed styles, and same-state screenshots remain unmet.
+
+On 2026-10-12, direct Twilight computer control supplied authenticated upsell
+and empty Run History captures, including computed styles. See the
+[capture report](../facts/automations-web-capture.md) and
+[measured-subset verification](../facts/automations-verification.md).
+This capture uses owner-requested, gitignored `reference/automations/`.
+T3 connectivity is not required to reproduce that workflow. A plan-enabled
+reference account is still needed for current list/editor/MCP screenshots.
+The local implementation and passing subset checks do not waive those gaps
+or the independent peer acceptance requirement.

@@ -15,7 +15,7 @@ export const icon = (name: string): string => {
   return `<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.3">${paths[name] ?? paths.bot}</svg>`;
 };
 export const btn = (label: string, act: string, cls = '', attrs = '') =>
-  `<button type="button" class="${cls}" data-act="${act}" ${attrs}>${label}</button>`;
+  `<button type="button" class="${esc(cls)}" data-act="${esc(act)}" ${attrs}>${label}</button>`;
 export const link = (label: string, path: string, cls = '') =>
   `<a class="${cls}" href="${esc(path)}" data-nav>${label}</a>`;
 export const field = (label: string, name: string, value = '', attrs = '') =>
@@ -106,7 +106,7 @@ export function runs(rows: Run[], scope: string, query: string, status: string, 
     <div class="runs-table card" data-evidence="runs-card"><div role="table" aria-label="Run history" data-evidence="runs-table">
       ${!visible.length ? `<div class="runs-empty"><h3 data-evidence="runs-empty">${query||status?'No Results Found':'No Runs Yet'}</h3></div>` :
         `<div class="run-row table-header" role="row"><span>Automation</span><span>Status</span><span>Started</span></div>${visible.map(r =>
-          `<button class="run-row" data-act="run:${r.id}"><span>${esc(r.name)}${r.fixture?' · Fixture':''}</span><span class="status ${r.status}">${esc(r.status)}</span><span>${new Date(r.createdAt).toLocaleString()}</span></button>`).join('')}`}
+          `<button class="run-row" data-act="run:${esc(r.id)}"><span>${esc(r.name)}${r.fixture?' · Fixture':''}</span><span class="status ${esc(r.status)}">${esc(r.status)}</span><span>${new Date(r.createdAt).toLocaleString()}</span></button>`).join('')}`}
     </div></div></div></div>`;
 }
 export const dialog = (title: string, content: string, footer = '') =>

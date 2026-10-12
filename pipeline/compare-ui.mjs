@@ -3,7 +3,12 @@ import { readFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 export function compare(facts, actual) {
-  const isRuns=new URL(actual.url).pathname==='/automations/runs';
+  const url=new URL(actual.url), isRuns=url.pathname==='/automations/runs';
+  assert.ok(isRuns || (url.pathname==='/automations' && url.searchParams.get('state')==='upgrade'),'Wrong reference state');
+  if (isRuns) {
+    assert.ok(!url.searchParams.get('fixture') && !url.searchParams.get('status'),'Expected unfiltered non-fixture runs');
+    assert.ok(!url.searchParams.get('scope') || url.searchParams.get('scope')==='team','Expected Team runs');
+  }
   const chosen=facts.filter(f=>f.source?.element!==undefined &&
     (isRuns ? !f.id.startsWith('gate-') : f.id.startsWith('gate-')));
   const mismatches=[]; let checks=0;
