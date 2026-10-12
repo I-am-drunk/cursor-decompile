@@ -48,10 +48,11 @@ time/select controls, icons, and full raster parity are **UNVERIFIED**.
 
 ## Validation
 
-Strict app TypeScript, 75 app/reader tests and evidence metadata checks pass.
+Fresh-clone full gate passes: strict app/MCP TypeScript, 75 app/reader tests,
+6 MCP tests, 748 evidence metadata records and whitespace checks.
 Real headless Chrome at 1270×764 checks preset/time/day/zone edits, custom
 validation/Apply, compact icons, hover, drag/drop cleanup and HTML 404s.
-The final PR records the fresh-clone full gate, including the MCP package.
+The browser gate also passes against the fresh clone.
 
 Repeat the browser gate with an existing Playwright install and Chrome:
 
