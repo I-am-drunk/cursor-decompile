@@ -73,3 +73,10 @@ test('run filter measurements reject a mismatched selection URL',()=>{
   s.url=s.url.replace('status=running','status=failed');
   assert.throws(()=>compare([f],s),/Wrong filter selection/);
 });
+test('settings comparison requires the right panel and explicit sanitized fixture',()=>{
+  const f={...fact,id:'st-side',captureState:'settings-account'};
+  const s={...snapshot(),captureState:'settings-account',url:'http://localhost/dashboard/settings?fixture=settings-navigation',elements:[{id:'st-side',...fact.value}]};
+  assert.deepEqual(compare([f],s).mismatches,[]);
+  assert.throws(()=>compare([f],{...s,url:'http://localhost/dashboard?fixture=settings-navigation'}),/Wrong settings panel/);
+  assert.throws(()=>compare([f],{...s,url:'http://localhost/dashboard/settings'}),/explicit settings fixture/);
+});

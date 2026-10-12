@@ -6,7 +6,7 @@ one visible state or interaction per PR; claim the exact slice on #1.
 | Order | Lane | Surface / first slice | Acceptance evidence |
 |---|---|---|---|
 | 1 | C-AUTOMATIONS | Captured web subset complete; retain gated/connected and desktop acceptance gaps | authenticated state captures; [layout](specs/automations-layout.md) and [handoff](specs/linear-as-integration.md) |
-| 2 | C-SETTINGS | next opener: settings entry/navigation and account/team panel, then one unconnected provider panel | read-only capture first; no settings mutations or authorization; measured UI facts |
+| 2 | C-SETTINGS | Navigation/account opener verified; next: one unconnected provider panel | read-only capture first; no settings mutations or authorization; measured UI facts |
 | 3 | C-SHELL | window, sidebar, command palette, navigation | route/state/keyboard captures |
 | 4 | C-AGENTS | agent list, conversation, tool results, review, projects | loading/empty/populated/error states and interactions |
 | 5 | C-EDITOR | files, tabs, search, source control, terminal, diff | pane layouts and keyboard behavior |
@@ -90,7 +90,7 @@ checks (all 1,736 preserved) and 456 raw-source pins pass.
 ## Captured-web acceptance closure — 2026-10-12
 
 The [closure audit](facts/automations-acceptance-closure.md) adds seven run-filter
-states: 51 tests, 2,778 measured checks, 551 source pins. Every earlier 2,157
+states: 51 tests, 2,678 measured checks, 551 source pins. Every earlier 2,157
 check is preserved. The web captured-state backlog is complete, not whole-lane
 pixel parity. No new runs, saves, authorization or fixture mutations occurred.
 
@@ -100,8 +100,22 @@ current desktop gate geometry is still UNVERIFIED. Neither is counted as a
 passing Automations web comparison. Gated populated lists, connected/execution,
 alternate themes/viewports and independent raster acceptance also remain open.
 
-Next thin slice: **C-SETTINGS navigation shell and account/team first**.
-Capture the settings entry, selected navigation and account/team panel with
-AX/JSON/PNG; implement only observed read-only navigation. No settings changes,
-account creation, billing or provider authorization. Then capture one
-unconnected provider/integration panel separately.
+## Settings navigation/account opener — 2026-10-12
+
+[PR #18](https://github.com/I-am-drunk/cursor-decompile/pull/18), the
+[settings opener](facts/settings-navigation-verification.md), captures
+entry/navigation, Privacy/Profile, the account menu and overview without
+changing any account settings. The original shell implements observed
+navigation and uses only synthetic identity and read-only controls.
+Five new comparison states add 998 checks. Total: 55 tests, **3,676 checks**,
+745 source pins. All 2,157 baseline and 521 filter checks are preserved.
+A machine-summed gate corrects #17's prose arithmetic: 2,678, not 2,778.
+
+No team selector was observed on the captured Free account; team/admin panels
+remain UNVERIFIED, not declared absent from the product. Lower settings,
+global menu parity, connected providers and full raster acceptance stay open.
+
+Next thin slice: **C-SETTINGS Integrations: one unconnected provider panel**.
+Open Integrations read-only, capture navigation/empty configuration and one
+provider's pre-authorization panel before implementation. No Connect, Install,
+Save, billing, account creation, authorization, or execution actions.

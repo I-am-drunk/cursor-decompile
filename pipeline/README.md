@@ -226,7 +226,31 @@ select Running → `runs-running`; add Failed → `runs-multiple-status`;
 deselect Failed and dismiss both menus → `runs-filtered-empty`; reopen
 Filter, Clear all filters and dismiss → `runs-cleared`.
 
-These add 621 checks: **2,778 across 55 states**, preserving all 2,157.
+These add 521 checks: **2,678 across 55 states**, preserving all 2,157.
 The gate rejects wrong selection URLs, stale builds and wrong viewports.
 Desktop PNG/AX/metadata are an explicit audit, not a DOM/pixel comparison;
 see the [disposition](../facts/automations-acceptance-closure.md).
+
+### Settings navigation / account opener
+
+The settings server route is `/dashboard/settings?fixture=settings-navigation`.
+At 1270 × 764 CSS px, DPR 2, use Alt+Shift+E for these exports:
+
+| State | Action |
+|---|---|
+| `settings-account` | Fresh account route; move the pointer to its heading |
+| `settings-user-menu` | Open User menu |
+| `settings-dismissed` | Escape; focus returns to User menu |
+| `settings-overview` | Click Overview |
+| `settings-returned` | Tab to Settings, Enter; pointer remains over Overview |
+
+Downloads use `local-settings-<state>.json`; copy to
+`artifacts/<state>-measurements.json`, retaining paired PNGs and AX snapshots.
+The optional source checker expects `reference/settings/` beside
+`reference/automations/`. No account-changing action is required.
+
+Five settings states add **998** checks: **3,676 across 60 states**. The final
+`measurement-summary.mjs` pass sums current-build comparisons and asserts
+2,157 baseline + 521 filters + 998 settings. It corrects the earlier prose
+arithmetic for #17 (2,678, not 2,778); no checks were lost. The settings entry
+menu is captured but only the dashboard shell/account states are compared.

@@ -27,4 +27,8 @@ if [ "${1:-}" = "--reference" ]; then
   for state in runs-baseline runs-filter runs-status runs-running runs-multiple-status runs-filtered-empty runs-cleared; do
     node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
   done
+  for state in settings-account settings-user-menu settings-overview settings-returned settings-dismissed; do
+    node pipeline/compare-ui.mjs "artifacts/$state-measurements.json"
+  done
+  node pipeline/measurement-summary.mjs
 fi
