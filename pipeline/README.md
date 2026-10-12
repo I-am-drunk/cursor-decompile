@@ -56,3 +56,36 @@ Run `node --test pipeline/read.test.mjs`. Eight tests cover these probes plus
 empty Unicode regex matches, bounded output, UTF-8 validation, numeric/regex
 arguments, and absence of filesystem writes. This validates the reader's own
 contract; it certifies no Cursor UI facts.
+
+## Original Automations implementation checks
+
+`npm run check` runs strict TypeScript, the reader/model/store/HTTP/view
+regressions, negative comparator tests, fact-schema validation and diff checks.
+It requires no account, vendor assets or network. It explicitly does **not**
+claim a live-browser comparison when private snapshots are absent.
+
+For the private same-state comparison:
+
+1. Keep captures in ignored `reference/automations/`, with paths specified in
+   `src/automations/ui-facts.json`.
+2. Run the app, open `/automations?state=upgrade` and `/automations/runs` in
+   Twilight at **1270 × 764 CSS px, DPR 2**, light theme, expanded sidebar.
+3. For each state, open **Local preview → Export layout measurements**.
+   Save those downloads as `artifacts/upgrade-measurements.json` and
+   `artifacts/runs-measurements.json`. Keep corresponding screenshots private.
+4. Run `sh ci/check-src.sh --reference`.
+
+The optional pass hashes every cited raw artifact, verifies measured values
+and byte-range anchors, then checks current-build geometry (0.75px tolerance),
+selected typography, radius and copy. Missing or stale snapshots fail.
+Font glyphs/text widths, custom icons, sidebar identity and unobserved
+editor/list states are **not** certified. Screenshots still need visual review;
+this is a measured-subset gate, not a whole-page pixel-diff claim.
+
+The server deliberately cannot serve `reference/`, `artifacts/` or its
+private store. The HAR captures are sensitive; never upload them in a PR.
+
+`ci/github-workflow.example.yml` is an optional hosted-CI template, not an
+enabled workflow. Publishing `.github/workflows/` was rejected because the
+available GitHub token lacks `workflow` scope. Local checks remain runnable
+without changing account permissions.
