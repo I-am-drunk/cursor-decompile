@@ -1,3 +1,4 @@
+import { SettingsStore } from './settings/store.ts';
 import { createServer } from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { readFile } from 'node:fs/promises';
@@ -9,6 +10,10 @@ import { parseAutomation } from './automations/model.ts';
 import { RequestError, Store } from './store.ts';
 const root = new URL('./', import.meta.url);
 const files: Record<string, [string, string]> = {
+  '/settings/live-app.ts':['settings/live-app.ts','application/javascript'],
+  '/settings/live-view.ts':['settings/live-view.ts','application/javascript'],
+  '/settings/schema.ts':['settings/schema.ts','application/javascript'],
+  '/live-settings.css':['settings/live.css','text/css'],
   '/shell/sidebar.ts': ['shell/sidebar.ts','application/javascript'],
   '/sidebar.css': ['shell/sidebar.css','text/css'],
   '/settings-app.ts': ['settings/settings-app.ts','application/javascript'],
@@ -39,10 +44,12 @@ const files: Record<string, [string, string]> = {
   '/catalog.json': ['automations/catalog.json', 'application/json'],
   '/style.css': ['automations/style.css', 'text/css'],
 };
+for(const value of Object.values(files)) if(value[0].endsWith('.ts')) files['/'+value[0]]=value;
 export async function buildHash() {
   const hash = createHash('sha256');
   hash.update(await readFile(new URL('index.html',root)));
   hash.update(await readFile(new URL('settings/index.html',root)));
+  hash.update(await readFile(new URL('settings/live.html',root)));
   for (const [path] of Object.values(files)) hash.update(await readFile(new URL(path, root)));
   return hash.digest('hex');
 }
@@ -60,7 +67,9 @@ async function body(req: IncomingMessage): Promise<unknown> {
   try { return JSON.parse(Buffer.concat(chunks).toString()); }
   catch { throw new RequestError(400, 'Expected JSON.'); }
 }
-export function createApp(store: Store) {
+export interface AppOptions { settings?:SettingsStore }
+export function createApp(store: Store, options:AppOptions={}) {
+  const settings=options.settings??new SettingsStore(store.file+'.settings');
   return createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
@@ -71,6 +80,8 @@ export function createApp(store: Store) {
       if (!['GET', 'HEAD'].includes(req.method ?? '') &&
           (req.headers['x-local-request'] !== '1' || (req.headers.origin && req.headers.origin !== origin)))
         throw new RequestError(403, 'Same-origin local request required.');
+      if(path==='/api/settings'&&req.method==='GET')return json(res,200,await settings.read());
+      if(path==='/api/settings'&&req.method==='PATCH')return json(res,200,await settings.update(await body(req)));
       if (path === '/api/state' && req.method === 'GET') return json(res, 200, await store.read());
       if (path === '/api/build' && req.method === 'GET') return json(res, 200, { hash: await buildHash() });
       if(path.startsWith('/api/configurations')) {
@@ -100,7 +111,11 @@ export function createApp(store: Store) {
       if (match?.[2] && req.method === 'POST') return json(res, 200, await store.start(match[1]!));
       if (path.startsWith('/api/')) throw new RequestError(404, 'Unknown endpoint.');
       if (req.method !== 'GET' && req.method !== 'HEAD') throw new RequestError(405, 'Method not allowed.');
-      if(['/settings','/settings/account','/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending'].includes(path)){
+      if(/^\/settings(?:\/(account|inference|integrations|mcp|automations))?$/.test(path)){
+        res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
+        return res.end(await readFile(new URL('settings/live.html',root)));
+      }
+      if(['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending'].includes(path)){
         res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(new URL('settings/index.html',root)));
       }
