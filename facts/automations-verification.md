@@ -37,3 +37,5 @@ These are tests of our implementation, **not observations of gated Cursor UI**.
 - Alternate viewport/theme parity and independent peer acceptance remain open.
 
 Run `sh ci/check-src.sh --reference` to reproduce the private measured subset.
+Hosted CI is not enabled; see the template and permission note in
+[pipeline/README.md](../pipeline/README.md).

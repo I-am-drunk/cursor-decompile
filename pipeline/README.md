@@ -84,3 +84,8 @@ this is a measured-subset gate, not a whole-page pixel-diff claim.
 
 The server deliberately cannot serve `reference/`, `artifacts/` or its
 private store. The HAR captures are sensitive; never upload them in a PR.
+
+`ci/github-workflow.example.yml` is an optional hosted-CI template, not an
+enabled workflow. Publishing `.github/workflows/` was rejected because the
+available GitHub token lacks `workflow` scope. Local checks remain runnable
+without changing account permissions.
