@@ -1,0 +1,20 @@
+/* Measured trigger subset; original icons and non-captured variants remain DESIGN. */
+.tr-pop{position:fixed;z-index:9;background:var(--card);border-radius:14px;border:0;box-shadow:0 0 0 1px var(--line),0 12px 28px #0002;font:13px/18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.08px}
+.tr-menu{width:280px;overflow:hidden}.tr-search{display:flex;align-items:center;height:43px;padding:6px 14px 7px;border-bottom:1px solid var(--line)}
+.tr-search>span{width:24px;flex-shrink:0}.tr-search svg{width:14px;height:14px}
+.tr-search input,.tr-cron-input input{display:block;min-width:0;width:100%;height:18px;padding:0;border:0;border-radius:4px;background:transparent;font:inherit;letter-spacing:inherit}
+.tr-options{padding:6px 0}.tr-option{display:flex;align-items:center;height:30px;padding:0 14px;cursor:pointer;outline-offset:-2px}
+.tr-option:hover,.tr-option:focus,.tr-option[aria-selected=true]{background:#eee}.tr-symbol{width:24px;flex-shrink:0;display:flex;align-items:center}.tr-symbol svg{width:14px;height:14px}
+.tr-label{flex:1;min-width:0;height:18px}.tr-chevron{width:34px;flex-shrink:0;text-align:center;color:var(--muted)}
+.tr-schedules{width:200px;padding:6px 0}.tr-schedules button{display:flex;align-items:center;text-align:left;width:100%;height:30px;padding:0 14px;border-radius:0;font:inherit}
+.tr-schedules button>span{display:block;width:100%;height:18px}.tr-schedules button:focus{background:#eee;outline-offset:-2px}
+.tr-cron{width:204px;padding:6px 0}.tr-cron-title{height:28px;display:flex;align-items:center;padding:0 14px;font-size:12px;line-height:16px;color:var(--muted)}
+.tr-cron-input{height:30px;display:flex;align-items:center;padding:0 14px}
+.tr-cron-hint{height:18px;padding:0 14px;color:var(--muted)}.tr-cron-hint>span{font-size:11px;line-height:14px}
+.tr-dates{padding:4px 14px;min-height:64px;color:var(--muted)}.tr-dates>div{height:14px;font-size:11px;line-height:14px}
+.tr-empty,.tr-error{padding:8px 14px;font-size:12px;line-height:16px}.tr-error{color:#a32828}
+.ed-trigger-row.tr-row{display:grid;grid-template-columns:20px minmax(0,1fr) 24px;gap:8px}
+.tr-row>.tr-clock{display:flex;align-items:center;justify-content:center;height:24px}.tr-clock svg{width:14px;height:14px}
+.tr-row .tr-schedule-label{width:105.167px;flex-shrink:0}.tr-row .ed-cron{display:flex;align-items:center;gap:6px;border:1px solid transparent}
+.tr-row .ed-cron svg{width:12px;height:12px}.tr-row .ed-cron span{font-family:monospace;letter-spacing:0}
+.tr-row .icon{opacity:0}.tr-row:hover .icon,.tr-row:focus-within .icon{opacity:1}

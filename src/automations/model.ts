@@ -36,7 +36,7 @@ export function validate(a: Automation): string[] {
   if (a.enabled && !a.triggers.length) errors.push('Add a trigger before activating.');
   if (a.repositories.some(r => !/^[\w.-]+\/[\w.-]+$/.test(r))) errors.push('Use owner/repository.');
   for (const t of a.triggers) {
-    if (t.kind === 'Schedule' && !validCron(t.value)) errors.push('Use a five-field cron expression.');
+    if (t.kind === 'Schedule' && !validCron(t.value)) errors.push('Use numeric cron fields or a supported @ alias.');
     if (!events[t.kind].includes(t.event)) errors.push('Choose a supported trigger event.');
   }
   if (a.triggers.filter(t => t.kind === 'Webhook').length > 1) errors.push('Only one webhook trigger is allowed.');
@@ -50,13 +50,18 @@ export function validate(a: Automation): string[] {
   return errors;
 }
 export function validCron(value: string): boolean {
-  const parts = value.trim().split(/\s+/), ranges = [59, 23, 31, 12, 7];
-  return parts.length === 5 && parts.every((part, index) => part.split(',').every(piece => {
+  // DESIGN: bounded local syntax validation, not a scheduler or vendor parser.
+  const text=value.trim();
+  if(['@hourly','@daily','@midnight','@weekly','@monthly','@yearly','@annually'].includes(text))return true;
+  const parts=text.split(/\s+/),ranges=[[0,59],[0,23],[1,31],[1,12],[0,7]];
+  if(parts.length===6||parts.length===7)ranges.unshift([0,59]);
+  if(parts.length===7)ranges.push([1970,9999]);
+  return parts.length>=5 && parts.length<=7 && parts.every((part, index) => part.split(',').every(piece => {
     const match = /^(\*|\d+(?:-\d+)?)(?:\/(\d+))?$/.exec(piece);
-    if (!match || (match[2] && Number(match[2]) < 1)) return false;
+    if (!match || (match[2] && (!Number.isSafeInteger(Number(match[2])) || Number(match[2]) < 1))) return false;
     if (match[1] === '*') return true;
-    const nums = match[1]!.split('-').map(Number), min = index === 2 || index === 3 ? 1 : 0;
-    return nums.every(n => n >= min && n <= ranges[index]!) && (nums.length < 2 || nums[0]! <= nums[1]!);
+    const nums=match[1]!.split('-').map(Number),[min,max]=ranges[index]!;
+    return nums.every(n=>n>=min!&&n<=max!) && (nums.length<2||nums[0]!<=nums[1]!);
   }));
 }
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);

@@ -5,6 +5,9 @@ export const esc = (value: unknown): string => String(value ?? '').replace(/[&<>
 export const icon = (name: string): string => {
   const paths: Record<string, string> = {
     search: '<circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 4 4"/>',
+    clock: '<circle cx="8" cy="8" r="6"/><path d="M8 4v4H5"/>',
+    plug: '<path d="M5 2v4m6-4v4M4 6h8v3a4 4 0 0 1-8 0ZM8 13v3"/>',
+    chevron: '<path d="m3 6 5 5 5-5"/>',
     filter: '<path d="M2 4h12M4 8h8M6 12h4"/>',
     bot: '<rect x="3" y="5" width="10" height="9" rx="2"/><path d="M8 1v4M6 8v3m4-3v3"/>',
     plus: '<path d="M8 2v12M2 8h12"/>', arrow: '<path d="M4 12 12 4M4 4h8v8"/>',
