@@ -58,5 +58,24 @@
       "devicePixelRatio": 2
     },
     "captureDate": "2026-10-12"
+  },
+  {
+    "id": "SH04",
+    "property": "retained sidebar width motion",
+    "value": "180ms cubic-bezier(.22,1,.36,1)",
+    "label": "OWNER_REQUIREMENT",
+    "source": {
+      "path": "docs/verification/motion-audit.md",
+      "sha256": "0001e26d8fd2f1fb4850094e56beecb847bad3e49a5dda397c91049fecf535ba"
+    },
+    "referenceVersion": "Owner audit directive 2026-10-12; historical reference duration remains SH03",
+    "route": "/automations",
+    "state": "explicit expand/collapse",
+    "viewport": {
+      "width": 1270,
+      "height": 764,
+      "devicePixelRatio": 2
+    },
+    "captureDate": "2026-10-12"
   }
 ]

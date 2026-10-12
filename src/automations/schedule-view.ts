@@ -11,7 +11,7 @@ export function scheduleRow(t:Trigger):string {
     ${btn(`${scheduleLabels[index]} ${icon('chevron')}`,`sc-open:${t.id}`,'sc-frequency sc-chip','aria-haspopup="dialog" aria-expanded="false"')}${day}${time}
     ${s.kind==='custom'?btn(esc(t.value),`sc-custom:${t.id}`,'sc-cron sc-chip','aria-haspopup="dialog"'):''}
     ${s.kind==='daily'||s.kind==='weekly'?zoneButton(s.timeZone,`sc-zone:${t.id}`):''}</div>
-    ${btn(icon('close'),`remove-trigger:${t.id}`,'icon','aria-label="Remove trigger"')}</div>`;
+    ${btn(icon('trash'),`remove-trigger:${t.id}`,'icon','aria-label="Remove trigger"')}</div>`;
 }
 export function frequencyMenu(t?:Trigger):string {
  return `<div class="tr-pop tr-schedules sc-presets" role="dialog" aria-label="Schedule frequency">${scheduleLabels.map((label,i)=>btn(`<span>${label}</span>${t?.schedule?.kind===scheduleKinds[i]?icon('check'):''}`,`sc-preset:${i}`,'','')).join('')}</div>`;

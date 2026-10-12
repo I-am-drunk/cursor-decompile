@@ -97,3 +97,13 @@ hour/minute choices, labeled timezone search and raw cron editor, retaining
 Cursor validation behavior. [Complete change/source audit](docs/verification/automations-carve.md).
 Historical passing tests do not establish new raster parity; limitations remain
 explicit. Peer COMMENT review is required before merge.
+
+## Animation / interaction audit
+
+[Motion inventory and screenshots](docs/verification/motion-audit.md) retain
+180ms sidebar width easing and remove invented opacity/shadow/reveal motion.
+44px rail icons and toggle remain clickable; 280px labels and narrow-screen
+explicit toggle verified. Devin scheduling pass fixes invalid custom dismissal
+through timezone selection and uses a trash action. 15 local screenshots saved;
+75 root + 6 MCP tests and Chromium interaction gate pass. Reference hover timing
+and whole-page raster parity remain UNVERIFIED. Peer COMMENT review requested.
