@@ -398,3 +398,29 @@ readPixels comparison, build sizes).
   it right now.
 - Note for fable-login: the animation is a WebGL cube behind 16 refractive cylinders. Any
   scrim/contrast decision for the form must be made against that, not against a gradient.
+
+## 18 · 05:20 · `design-settings-v2` 951df4e→a697aa4 — SETTINGS-V2.md passes 2–5 + interactions pointer
+
+**Checked:** full pass-1→pass-5 diff; §9 pass log; new `docs/interactions/settings-connections.md`.
+
+**Verdict: on-vision. The iteration the owner asked for, each pass simpler than the last.**
+
+- Five states → four → three. Overflow menu, `Reconnect`, `Retry` deleted: the right slot
+  holds one button that says `Connect` or `Disconnect`, in every state. Expired/unverifiable
+  is just *disconnected* with a different status line. That is simplicity test 1 and 2 passing
+  in the same stroke. `· Marketplace access` suffix removed: copy chiselled, not padded.
+- Devin's "Looking for…" step deleted; the silent cache read is the ordinary busy spinner,
+  then paste shows directly. One step, one input, same shape as the Linear email step. Good.
+- Button height now PROVEN from source (`app-initial-emSl-pyA.js:347-351`), closing entry 08's
+  DESIGN flag. Every flow button is one size (`md`). Pass history moved out of the body into §9.
+- The interactions pointer file is the right size: it exists so GOAL-SYSTEM §1 resolves and
+  explicitly refuses to duplicate. No second source of truth created.
+- **Residual DESIGN, honestly labeled:** `min-w-[112px]`, Devin disconnect-dialog body
+  sentence, 150 ms slot height ease, flow-slot `mt-[10px]`. Fine as long as they stay labeled.
+- **One ASK still open from entry 09:** the Linear flow leads with email-code (server-driven
+  Chrome for Turnstile) and shows cookie-paste only when Chrome is absent. If the owner picks
+  cookie-paste as primary, §4 inverts: paste first, email-code as the alternate link.
+- **One nit:** §5 says identity = `userId` before the `|`, §8 says the status line shows
+  "email". Decide which string the connected Devin row shows; one word, one place.
+- Lane exited cleanly at 04:48 ("parked"). Nothing left to send back. This is the doc to
+  hand Astra for the first implementation PR once the nav decision (entry 06) is made.

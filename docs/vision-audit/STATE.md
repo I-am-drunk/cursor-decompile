@@ -14,7 +14,7 @@ settings-v2 pass 2, decisions) restarted at 04:00 with nothing landed yet.
 | 1 | UI quality, copy-first | Doc-before-code holding across all lanes. UI-EXTRACTION-MAP pins the sidebar to captured constants and names the first-pass inventions to never repeat. DEVIN-PORT-MAP inventories all 19 Devin feature files with citations. | Raycast "exact" vs "instant" still unbudgeted; light-mode palette confirmed NOT in source (NOTES 02, 16). |
 | 2 | Connector packages w/ skills | Thesis nailed in CONNECTOR-PACKAGES; packages = Devin plugins (CONNECTORS-PAGE-SPEC §7). Devin cloud now has a Create-Plugin dialog + manifest editor captured (NOTES 14) = our authoring UX, copy it. | Settings nav naming still split across two specs (NOTES 01, 06). |
 | 3 | Linear as brain, Devin-shaped server | SERVER-FROM-DEVIN is the only server plan; T3-derived ARCHITECTURE is superseded and should be closed (NOTES 13). Linear chat loop VERIFIED live. | Scheduler format decided in prose (RRULE+tz) but three docs still differ (NOTES 15). Runs-vs-native-Loops question open (NOTES 10). |
-| 4 | Simple settings | SETTINGS-V2 = one list, two rows (Linear, Devin), one big button each. Exactly the brief. | Nav still 5 entries in CONNECTORS-PAGE-SPEC; collapse to ≤3 (NOTES 06, 08). |
+| 4 | Simple settings | SETTINGS-V2 pass 5 = one list, two rows, three states, one button per row (Connect or Disconnect). Exactly the brief; lane parked clean. | Nav still 5 entries in CONNECTORS-PAGE-SPEC; collapse to ≤3 (NOTES 06, 08). |
 | 5 | Speed | LOGIN-PAGE-SPEC §1 budget exists; raycast lane has live shaders + geometry in hand. | Budget predates the WebGL source; needs ms/KB numbers in the raycast contract (NOTES 02). |
 
 ## Contradictions to resolve first (Runner, in this order)
@@ -48,7 +48,7 @@ settings-v2 pass 2, decisions) restarted at 04:00 with nothing landed yet.
 | ref-raycast-animation | 97eb399 | on-vision; budget missing; light palette = DESIGN |
 | ref-atsu | bf11753 | capture OK; **152 MB, no index**; lane crashed, restart |
 | plan-devin-mashup | c30282c | 4 of 5 specs on-vision; LOGIN superseded |
-| design-settings-v2 | 56311b0 | **on-vision**, best doc tonight |
+| design-settings-v2 | a697aa4 | **on-vision**, 5 passes, 3 states, one button; ready for Astra (NOTES 18) |
 | plan-ui-extraction | aeb5b19 local / 24bbd22 origin | on-vision; **origin truncated** |
 | plan-devin-port | 2630d27 local / 991d4ae origin | on-vision evidence; scope unbounded; **origin truncated** |
 | plan-server-architecture | 97f6018 | superseded by SERVER-FROM-DEVIN; close |
