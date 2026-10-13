@@ -559,6 +559,8 @@ account-managed plugins, the "Practical options" verdict table, ACP lifecycle RP
 - **fable-projects is hung, not working.** Its transcript stopped at 05:38:58; the process is
   alive (etime 1 h 09) with one socket open to the gateway on port 8787 and nothing else.
   That is a request the gateway never answered. The runner only notices death, not silence.
+  (06:00 update: it died at 06:00:02 with the same `300s wall-clock budget` error after a
+  21-minute silent request; 52 tool calls, zero writes. Relaunched at escalation 8.)
   FIX → Runner: add a transcript-mtime watchdog (no transcript write in 10 min → kill and
   resume with `--resume <session>`). Together with entry 20b this is the whole fix.
 - **ref-raycast-animation draft grew 5 → 22 lines**: an evidence map (claim IDs C/G/W/S/Q/F/H/L
