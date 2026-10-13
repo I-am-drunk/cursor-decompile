@@ -1,4 +1,4 @@
-# SETTINGS V2 — one linear list of connections (2026-10-13, pass 2)
+# SETTINGS V2 — one linear list of connections (2026-10-13, pass 3)
 
 > Branch `design-settings-v2`. Interaction doc (GOAL-SYSTEM §1); no implementation. Supersedes
 > `SETTINGS-SIMPLIFICATION.md` where they differ. Owner directive (VISION-BRIEF §4): settings is
@@ -66,24 +66,23 @@ Pass 1 marked the 32px height as GAP. It is now PROVEN (`lg: h-[32px]`, emSl-pyA
 
 ## 3. States — one table for every row
 
-Four states. Pass 1 had five with three different buttons; the owner asked for two.
+Three states. The button has two labels. Everything else is the status line.
 
 | State | Label | Status line | Button |
 |---|---|---|---|
-| disconnected | `Connect <Provider> Account` | `Not connected` | `Connect` primary |
+| disconnected | `Connect <Provider> Account` | `Not connected` · or `Session expired` · or `Could not verify` (both `text-text-orange`) | `Connect` primary |
 | busy | unchanged | `Connecting…` | spinner, disabled |
 | connected | `<Provider> Account` | `<identity> · Verified <relative time>` | `Disconnect` secondary |
-| needs attention | `<Provider> Account` | `Session expired` or `Could not verify` (`text-text-orange`) | `Connect` primary |
 
-- Strings `Not connected`, `Connecting…`, `Connect`, `Disconnect`, `Connected` are Devin's
-  (PROVEN en). `Session expired` / `Could not verify` are LINEAR-CONNECTION §7.3.
-- `Connect` in *needs attention* reruns the provider's flow with identity prefilled; on success
-  the secret is replaced in place (same account id, LINEAR-CONNECTION §7.1). This is what
-  Devin's `Reconnect` menu item did; here the big button does it, so no menu.
-- There is no `Retry`. A transient error shows `Could not verify`; the health tick retries on
-  its own (LINEAR-CONNECTION §4). The user only ever sees Connect or Disconnect.
+- Pass 2 had a fourth state, *needs attention*. It was *disconnected* with a different status
+  line and the same button, so it is now a status line, not a state.
+- Strings `Not connected`, `Connecting…`, `Connect`, `Disconnect` are Devin's (PROVEN en).
+  `Session expired` / `Could not verify` are LINEAR-CONNECTION §7.3.
+- `Connect` after expiry reruns the provider flow with identity prefilled; the secret is
+  replaced in place, same account id (LINEAR-CONNECTION §7.1). No `Reconnect`, no `Retry`:
+  transient errors are retried by the health tick (§4), the user sees Connect or Disconnect.
 - Loading (first paint): label + skeleton status `h-3.5 w-40` (PROVEN ConnectionsSection
-  :785) + disabled `Connect`. No empty state exists: zero accounts = disconnected rows.
+  :785) + disabled `Connect`. No empty state: zero accounts = disconnected rows.
 
 ## 4. Row 1 — Linear: email-code flow
 
@@ -107,18 +106,21 @@ Four states. Pass 1 had five with three different buttons; the owner asked for t
 ## 5. Row 2 — Devin: session capture for the marketplace
 
 Connected = the server holds the owner's Devin desktop session token and the account layer
-answered. The token is `devin-session-token$<JWT>`, sent as `X-Api-Key` and `metadata.apiKey`
-on Connect-RPC POSTs to `server.codeium.com`. VERIFIED live 2026-10-12. No OAuth exists; the
-token is read from the desktop app's HTTP cache, or pasted.
+answered. Token `devin-session-token$<JWT>`, sent as `X-Api-Key` and `metadata.apiKey` on
+Connect-RPC POSTs to `server.codeium.com`. VERIFIED live 2026-10-12. No OAuth; the token is
+read from the desktop app's HTTP cache, or pasted.
 
-`Connect` hides the button and mounts the flow slot:
+`Connect` first tries the cache silently (≤3s, row shows *busy*). Found → verify. Not found →
+the slot mounts with the paste step. One step, one input, like Linear's email step.
 
 | Step | Slot content | Server |
 |---|---|---|
-| Find | `Looking for the Devin desktop app…` + spinner, ≤3s | `captureDevinToken()` reads `~/Library/Application Support/Devin/Cache/Cache_Data/*` for `devin-session-token%24` |
-| Paste (only if Find fails) | `Open the Devin desktop app and sign in, then try again.` · link `Paste a session token instead` → masked input · `Continue` · `Cancel` | `connectDevin(token)` |
-| Verify | status `Connecting…` | `GetAccountManagedPlugins` 200 → connected; email = `userId` before the `\|` |
+| (silent) | row *busy* | `captureDevinToken()` reads `~/Library/Application Support/Devin/Cache/Cache_Data/*` for `devin-session-token%24` |
+| Paste | `Paste your Devin session token` · masked input autofocus · `Continue` · `Cancel` · note `text-text-secondary`: `Open the Devin desktop app and sign in, then connect again to skip this.` | `connectDevin(token)` |
+| Verify | row *busy* | `GetAccountManagedPlugins` 200 → connected; identity = `userId` before the `\|` |
 
+- Pass 2 showed a `Looking for the Devin desktop app…` step and hid paste behind a link. The
+  lookup is under 3s, so it is the ordinary busy spinner; paste is shown directly, one click less.
 - Inline errors, same place as Linear: `Token not accepted` · `Could not reach Devin`.
 - Health tick reuses `GetAccountManagedPlugins`; 401 → `Session expired`. Same interval as
   Linear (LINEAR-CONNECTION §4) so both rows behave as one system.
@@ -184,3 +186,4 @@ need none never appear on this page.
 |---|---|
 | 1 | Linear list, two rows, Devin geometry, five states, overflow menu with Reconnect |
 | 2 | Five states → four. Overflow menu, `Reconnect`, `Retry` deleted: one button, two labels. Devin paste step hidden behind a link. `· Marketplace access` suffix removed. Button height PROVEN. |
+| 3 | Four states → three: *needs attention* folded into *disconnected* as a status line. Devin `Looking for…` step deleted; cache lookup is the ordinary busy spinner, paste shown directly. |
