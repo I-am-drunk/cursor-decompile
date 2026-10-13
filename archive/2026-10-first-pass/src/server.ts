@@ -112,7 +112,7 @@ export function createApp(store: Store, options:AppOptions={}) {
         return res.end(await readFile(new URL('auth/login.html',root)));
       }
       if(req.method==='GET'&&!files[path]&&!path.startsWith('/api/')&&
-          !['/','/login'].includes(path)&&!/^\/settings(?:\/|$)/.test(path)&&
+          !['/','/login','/chat'].includes(path)&&!/^\/settings(?:\/|$)/.test(path)&&
           !/^\/automations(?:\/[\w-]+)?$/.test(path)){
         res.writeHead(404,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});
         return res.end(await readFile(new URL('not-found.html',root)));

@@ -4,7 +4,7 @@ export const weekdays=['Sunday','Monday','Tuesday','Wednesday','Thursday','Frida
 export const hours=Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`);
 export function makePreset(index:number):Trigger|undefined {
   const kind=presetKinds[index];if(!kind)return;
-  // Wall-time metadata is local policy, not Cursor's wire protocol or a scheduler.
+  // Wall-time metadata is local policy, not the reference product’s wire protocol or a scheduler.
   return {id:crypto.randomUUID(),kind:'Schedule',event:'Cron',
     value:['0 * * * *','0 9 * * *','0 9 * * 1','0 13 1 * *'][index]!,
     schedule:{kind,time:'09:00',day:1,timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone}};

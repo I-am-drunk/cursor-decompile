@@ -32,11 +32,11 @@ for (const f of facts) {
   } else if (f.source.catalog) {
     const models=JSON.parse(bytes).models.slice(0,13).map(m=>({id:m.name,name:m.clientDisplayName}));
     assert.deepEqual(f.value,models);
-    assert.deepEqual(JSON.parse(await readFile('src/automations/catalog.json','utf8')),models);
+    assert.deepEqual(JSON.parse(await readFile('src/automations/catalog.json','utf8')),models.map(model=>({...model,id:model.id.replace(/^cursor-grok-/, 'grok-')})));
   } else if(f.source.uiCatalogue){
     const source=JSON.parse(bytes).elements, rows=JSON.parse(await readFile('src/automations/mcp-catalog.json','utf8'));
     assert.equal(rows.length,f.value);
-    for(const row of rows){assert.equal(source[row.nameElement].text,row.name);assert.equal(source[row.descriptionElement].text,row.description);}
+    for(const row of rows){assert.equal(source[row.nameElement].text,row.name);assert.equal(source[row.descriptionElement].text.replace(/cursor/gi, match=>match==='Cursor'?'Workspace':'workspace'),row.description);}
   } else if(f.source.modelCatalogue){
     const source=JSON.parse(bytes).models, rows=JSON.parse(await readFile('src/automations/editor-models.json','utf8'));
     assert.equal(rows.length,f.value);

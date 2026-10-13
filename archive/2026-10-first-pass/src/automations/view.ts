@@ -5,6 +5,8 @@ export const esc = (value: unknown): string => String(value ?? '').replace(/[&<>
   c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 export const icon = (name: string): string => {
   const paths: Record<string, string> = {
+    send: '<path d="M2 2.5h12L8 14V7.5L2 2.5Z"/>',
+    automation: '<rect x="1.5" y="4.5" width="13" height="10" rx="2"/><path d="M8 1v3.5M5.5 8v3m5-3v3"/>',
     gear: '<path d="M6 1h4l1 3 3 1v4l-3 1-1 3H6l-1-3-3-1V5l3-1Z"/><circle cx="8" cy="7" r="2"/>',
     person: '<circle cx="8" cy="5" r="3"/><path d="M2 15v-2a6 6 0 0 1 12 0v2"/>',
     search: '<circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 4 4"/>',
@@ -18,7 +20,6 @@ export const icon = (name: string): string => {
     menu: '<circle cx="3" cy="8" r=".7"/><circle cx="8" cy="8" r=".7"/><circle cx="13" cy="8" r=".7"/>',
     code: '<path d="m5 4-4 4 4 4m6-8 4 4-4 4M9 2 7 14"/>',
     check: '<path d="m3 8 3 3 7-7"/>', close: '<path d="m4 4 8 8M12 4l-8 8"/>',
-    trash: '<path d="M2 4h12M6 4V2h4v2M4 4l1 10h6l1-10M7 6v6m2-6v6"/>',
     sidebar: '<rect x="2" y="3" width="12" height="10" rx="1"/><path d="M6 3v10"/>',
     eye: '<path d="M1 8q7-10 14 0-7 10-14 0Z"/><circle cx="8" cy="8" r="2"/>',
     edit: '<path d="M8 3H2v11h11V8M7 9l1-3 5-5 2 2-5 5-3 1Z"/>',
@@ -36,7 +37,7 @@ export function shell(content: string, crumb = '', toolbar = ''): string {
     `<a href="${path}" ${path.startsWith('/automations')?'data-nav':''} aria-label="${name}" title="${name}" class="destination ${name===(crumb==='Run History'?'Run History':'Automations')?'selected':''}"><span class="rail-icon">${icon(glyph)}</span><span class="side-label">${name}</span></a>`;
   return `<aside data-evidence="sidebar" class="shell-sidebar" aria-label="Main navigation"><div class="sidebar-surface">
     <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Collapse sidebar" aria-expanded="true"')}${btn(icon('search'), 'sidebar-search', 'icon side-label', 'aria-label="Search" disabled')}</div>
-    <nav class="side-nav">${destination('New Chat','edit','/chat')}${destination('Automations','bot','/automations')}</nav>
+    <nav class="side-nav">${destination('New Chat','send','/chat')}${destination('Automations','automation','/automations')}</nav>
     <div class="no-agents side-label">No Agents Yet</div><div class="account">
       ${destination('Settings','gear','/settings')}
   </div></div></aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
