@@ -1,0 +1,63 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: run the live test suite
+        run: npm test
+
+  live-server:
+    # Only when a PR actually changes server code. Skips cleanly while the
+    # post-restart src/ is still empty (specs only).
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: detect code changes
+        id: changes
+        run: |
+          git fetch -q origin "${{ github.base_ref }}"
+          if git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep -qE '^(src/|mcp/|server|package(-lock)?\.json)'; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: boot the server and probe it
+        if: steps.changes.outputs.code == 'true'
+        run: |
+          set -e
+          ENTRY=""
+          for c in src/server.ts src/serve.ts server.ts mcp/server.ts; do
+            [ -f "$c" ] && ENTRY="$c" && break
+          done
+          if [ -z "$ENTRY" ]; then
+            echo "no server entry yet — nothing to live-run (specs only). OK."
+            exit 0
+          fi
+          echo "booting $ENTRY"
+          node "$ENTRY" & SRV=$!
+          sleep 4
+          for port in 4317 3000 4173 8080; do
+            if curl -sf -m 3 "http://127.0.0.1:$port/" -o /dev/null; then echo "LIVE on :$port"; kill $SRV; exit 0; fi
+          done
+          echo "server did not answer on any expected port"; kill $SRV; exit 1
