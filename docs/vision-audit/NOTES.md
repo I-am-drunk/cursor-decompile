@@ -588,3 +588,26 @@ cylinders; camera FOV 35°, z 16.54; cube 7³ at z −9; group rotation .73 rad)
 - Still missing: the budget line (entry 17). The draft now has enough geometry to state the
   hand-written end state: one cube program, one glass program, 16 instanced cylinders, one
   half-float target. Write the KB/ms targets next to that sentence.
+
+## 26 · 06:18 · `ref-raycast-animation` draft, 58 lines — color math, transmission math, first perf numbers
+
+**Checked:** §Color math (H/D/R cosine field, two-segment lerp over color3→color2→color1,
+`pow(color, 3)`, no sRGB decode, CSS-pixel resolution uniform even at DPR 2), §Transmission
+(roughness .35, blur 2.88, IOR 1.5, chromatic aberration 3; six samples × RGB = 18 fetches per
+fragment, hash grain seeded per pixel), lane log 06:14 perf trace.
+
+**Verdict: on-vision. This is the "mathematical derivation" the brief asked for, written down.**
+
+- The cube field is four lines of trig and one lerp. That is small enough to hand-write in a
+  fragment shader with no library. The glass pass is the only expensive part and the doc now
+  names exactly why (18 texture fetches per visible glass fragment, DPR 2, half-float target).
+- **First "instant" evidence, from the lane log, not yet in the doc:**
+  live raycast.com: ParseHTML 17 ms, parseOnBackground 81 ms, EvaluateScript 226 ms.
+  proof: parseOnBackground 7.8 ms, ParseHTML 0.4 ms. That is the order-of-magnitude the owner
+  wants. FIX → put this table in the doc with method (Chrome trace, which machine, DPR), and
+  add gz bytes next to it. Then the budget line (entry 17) writes itself from measured numbers
+  rather than from my guess.
+- The CSS-pixel resolution quirk ("preserve this") is the kind of detail that makes a copy
+  pixel-same instead of nearly-same. Keep it in the contract as a MUST.
+- Nothing invented. The lane still refuses a light palette. Fable-login can design against
+  this doc now; it no longer needs to wait for the proof to be "done".
