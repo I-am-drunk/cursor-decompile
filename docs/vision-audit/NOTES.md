@@ -773,3 +773,23 @@ three-stage rebuild table (S1 raw WebGL2 ≤ 18 KB gz exact; S2 dead-branch spec
 - Runner: the goal text was changed to add a "progress-banking" preamble (visible in the
   process args at 07:31). That is the entry 20b FIX applied, and the login lane is now
   committing every few minutes. Apply the same to fable-projects and fable-q45 relaunches.
+
+## 36 · 07:45 · `design-login` 45b823b — LOGIN-PAGE-V2.md §6: scrim, contrast, two-tone
+
+**Checked:** scrim CSS (raycast `heroBackground:after` copied, two literals → one token),
+the `#07080a20` → .125 derivation, theme table (dark EXTRACTED / light DESIGN), the light
+decision, the contrast rule.
+
+**Verdict: on-vision. The two-tone question is answered the simplest honest way.**
+
+- Light mode = same cube colours, only clear colour and scrim token change. No invented
+  palette; the one DESIGN change is tokenisation. Fallback if it fails the eye is "dark scene
+  in both themes", not a new palette. That is exactly the default I set in entry 25, now with
+  a CU test to decide it. The owner ASK shrinks to a yes/no on a screenshot pair.
+- Contrast rule by construction (card opaque, no text outside the card) closes entry 29's
+  V3 note. The only measurable left is card border visibility against the scrim.
+- GAP flagged honestly: our dark `--bg-page` must be `7 8 10` on this page; confirm the token.
+- With §6 landed, LOGIN-PAGE-V2 is one section short of the goal's checklist: §7 verification
+  plan (how Astra CU-tests against raycast.com: viewports, DPR, both themes, reduced motion,
+  the parity method from RAYCAST-ANIMATION.md). Then passes P3–P5 should *cut*, not add.
+- Six local commits, origin still at main. Runner pushes.
