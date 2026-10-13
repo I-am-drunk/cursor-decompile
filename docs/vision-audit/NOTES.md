@@ -611,3 +611,14 @@ fragment, hash grain seeded per pixel), lane log 06:14 perf trace.
   pixel-same instead of nearly-same. Keep it in the contract as a MUST.
 - Nothing invented. The lane still refuses a light palette. Fable-login can design against
   this doc now; it no longer needs to wait for the proof to be "done".
+
+## 27 · 06:20 · Lane health — fable-login now shows the same hang signature
+
+- Session 2d8057f0 (fable-login, relaunched 05:17): transcript last written 06:09:41; at
+  06:19 the process is alive (etime 1 h 01) with two gateway sockets open and no transcript
+  movement for ten minutes. Identical to fable-projects before it died at 06:00 (entry 24).
+  Expect `300s wall-clock budget` exit within the half hour. 40 tool calls, zero writes.
+- fable-projects (123910be) and fable-q45 (bbdb6f3c), relaunched 06:00 / 05:52: 18 tool calls
+  each at 06:18, zero writes. Same read-first pattern, 20 minutes in.
+- Nothing new to audit from them. The FIX in entries 20/24 (resume + transcript-mtime
+  watchdog + "commit a skeleton in 10 minutes") is still the only lever.
