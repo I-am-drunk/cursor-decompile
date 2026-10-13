@@ -1,4 +1,4 @@
-# Vision — where it stands tonight (2026-10-13, updated 02:45)
+# Vision — where it stands tonight (2026-10-13, updated 02:55)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
@@ -13,7 +13,7 @@ contradict decisions the owner made last night. Fix the contradictions before an
 | 1 | UI quality, copy-first | Doc-before-code is holding: every lane shipped docs only. Raycast lane wrote its 29-line interaction contract before touching code. | Raycast "exact" vs "instant/tiny" tension unbudgeted (NOTES 02). |
 | 2 | Connector packages w/ skills | `CONNECTOR-PACKAGES.md` nails the thesis; `CONNECTORS-PAGE-SPEC §7` maps packages onto Devin plugins with no adapter. | Two specs disagree on settings nav naming (NOTES 01, 06). |
 | 3 | Linear as brain, Devin-shaped server | `SERVER-FROM-DEVIN.md` supersedes the T3 plan cleanly. Linear chat + MCP loop VERIFIED live in linear-loops-decompile. | Dead-weight v1 endpoints (code-step); no folder/project table yet (NOTES 07). |
-| 4 | Simple settings | `SETTINGS-SIMPLIFICATION.md` = one card, one button. Exactly right. | No "Connect Devin Account" card yet; nav has five entries where the brief implies two cards (NOTES 04, 06). |
+| 4 | Simple settings | `SETTINGS-V2.md` (design-settings-v2, 02:49) = one list, two rows (Linear, Devin), one big button each. **Exactly the brief.** | Nav still has five entries in CONNECTORS-PAGE-SPEC; collapse (NOTES 06, 08). |
 | 5 | Speed | Budgets exist in LOGIN-PAGE-SPEC §1 (0 ms JS, ≤ 3 layers). | Those budgets predate the raycast decision and conflict with a WebGL source (NOTES 02, 03). |
 
 ## Contradictions to resolve first (Runner, in this order)
@@ -24,8 +24,6 @@ contradict decisions the owner made last night. Fix the contradictions before an
 ## Gaps the brief names that no lane owns yet
 - **Automation projects board** (iPhone-home-screen folders, default unfiled). No spec, no
   schema, `design-projects` branch is empty at main. Highest-value unstarted item.
-- **"Connect Devin Account" card.** Live marketplace access is VERIFIED (devin-decompile
-  741da31); nothing in our specs consumes it yet.
 - **Light/dark two-tone for the raycast background.** Source has one palette. Owner decision needed.
 
 ## Lane scoreboard (commits ahead of main)
@@ -35,7 +33,8 @@ contradict decisions the owner made last night. Fix the contradictions before an
 | ref-raycast-animation | 97eb399 | 2 | on-vision; budget missing |
 | ref-atsu | bf11753 | 1 | capture OK; **152 MB, no index** → slop-risk |
 | plan-devin-mashup | c30282c | 6 | 4 of 5 specs on-vision; LOGIN superseded |
-| design-login / design-projects / design-settings-v2 | 65afacc | 0 | not started |
+| design-settings-v2 | 56311b0 | 1 | **on-vision**, best doc tonight |
+| design-login / design-projects | 65afacc | 0 | not started |
 | devin-decompile re-server-3.10.48 | 741da31 | — | marketplace evidence VERIFIED |
 
 ## What "good" looks like by morning

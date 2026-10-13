@@ -176,3 +176,26 @@ projection, §5 preflight, §6 gateway, §7 supersession of the T3-derived ARCHI
   FIX → keep `site/index.html`, `site/assets/*.{js,css}`, `manifest.json`, and ONE poster
   size (`-large.avif`) in git; move the rest to a tarball referenced from `INDEX.md`. Runner
   should ask the lane to rewrite the commit before it merges anywhere.
+
+## 08 · 02:49 · `design-settings-v2` 56311b0 — docs/SETTINGS-V2.md (179 lines)
+
+**Checked:** V1–V8, page diagram, row anatomy, Linear row states + email-code flow, Devin row
+states + token-capture flow, shared behaviour, registry for future connections, acceptance.
+
+**Verdict: on-vision. Best doc of the night. Ship it to Runner as the settings source of truth.**
+
+- Matches the brief §4 literally: one page, one column, two rows, one big button per row,
+  flows open inside the row, no field clutter, teams behind a flag. Supersedes
+  SETTINGS-SIMPLIFICATION explicitly instead of silently (entry 04 FIX is now done).
+- "Connect Devin Account" is specified with VERIFIED evidence and reads the token from the
+  desktop app cache before asking the user to paste. That is the right default: zero typing.
+- Future connections = one registry entry, zero UI (V7). This is the simplicity test passing.
+- **Residual DESIGN items to pin, not drift:** big button 32px (Astra capture pending, honestly
+  labeled), `min-w-[112px]`, Devin disconnect-dialog body sentence, 150 ms row-height ease.
+  FIX → Astra captures one live Devin `Connect` button height; then strike the DESIGN label.
+- **One copy nit:** heading `Connections` on a page whose rows say `Connect … Account` is fine,
+  but the nav entry that opens it must not also be called `Connections` if the Customize
+  destination exists beside it (see entry 06 nav collapse). Decide the nav once.
+- **Interaction gap (GOAL-SYSTEM §1 wants hit targets):** no hit-target sizes for the overflow
+  chevron (`size-3` glyph = 12px). FIX → state the clickable area (whole secondary button opens
+  the menu, or a ≥ 24px trailing zone). Twelve-pixel targets are how sloppiness starts.
