@@ -1,6 +1,6 @@
 # AUTOMATION PROJECTS — the board (iPhone-home-screen model for automations)
 
-Status: **pass 5 — fixed 78px card, folder subtitle, contradiction sweep.** Branch `design-projects`. Fable, 2026-10-13. Owner's
+Status: **pass 6 — shadows, scrim, ring, folder tint pinned to Devin tokens.** Branch `design-projects`. Fable, 2026-10-13. Owner's
 flagship. Law: GOAL-SYSTEM §1 — nothing here is implemented until every state, transition, timing
 and copy string below is filled. Evidence labels: VERIFIED > OBSERVED > EXTRACTED > DOCUMENTED >
 DESIGN (ours). GAP = missing evidence, never permission to invent.
@@ -67,7 +67,7 @@ re-flow the row's three columns into two lines; we add nothing.
 | 2 | Line 1 | `flex gap-2.5`: 16px source glyph in an 18px box (`py-px`) · name 13px/18px medium, one-line truncate, tooltip only when clamped · `Disabled` / `Personal` badges `shrink-0` | EXTRACTED L89–L96 |
 | 3 | Line 2 | 13px/18px `text-text-secondary` truncate: `creator · <channel>` (channel in `text-text-accent-primary`) or creator alone | EXTRACTED L97–L99 |
 | 4 | Line 3 | `flex items-center justify-between` `mt-1`: left = 91×20 sparkline (null / 91×20 skeleton / flat centerline / normalised 1.5px stroke, gradients from Devin §6.4) · right = 12px/16px secondary relative date, `—` for never, absolute tooltip | EXTRACTED L104–L113 |
-| 5 | Focus | `focus-visible:ring-2 ring-ring` on the card, identical to row | EXTRACTED pattern |
+| 5 | Focus | `focus-visible:ring-2 focus-visible:ring-border-primary` on the card | EXTRACTED (Devin's ring pair, 7 + 4 uses in bundle) |
 
 Draggable surface = the whole card. Clicking without moving ≥4px follows the link (§4.1).
 
@@ -75,7 +75,7 @@ Draggable surface = the whole card. Clicking without moving ≥4px follows the l
 
 | # | Part | Spec | Evidence |
 |---|---|---|---|
-| 1 | Shell | same as 3.1 #1 but `bg-bg-secondary` at rest (a folder is a container; iOS tints the folder tile) | DESIGN, iOS DOCUMENTED |
+| 1 | Shell | same as 3.1 #1 but `bg-bg-wash` at rest (`248 248 248` light / `25 25 25` dark — one step below the elevated frame; iOS tints the folder tile) | token EXTRACTED (`index.css` L22, L84); use DESIGN |
 | 2 | Line 1 | 16px folder glyph (lucide `Folder`) · project name 13px/18px medium truncate · count badge `<n>` using Devin `Badge` | DESIGN reusing Devin `Badge` |
 | 3 | Line 2 | 13px secondary: member names joined by ` · `, truncated (a folder always has ≥2 members, §5.3) | DESIGN (replaces iOS 3×3 mini-icon preview; we have 16px glyphs, not icons) |
 | 4 | Line 3 | left = **summed** sparkline of members (bucket-wise sum, same renderer) · right = most recent `last_invocation_at` across members | DESIGN reusing renderer |
@@ -110,12 +110,12 @@ open A, drag the card out (sheet closes, §5.4), drop on B. One fewer mode, zero
 | Moment | Property | From → to | Duration | Curve | Evidence |
 |---|---|---|---|---|---|
 | pickup | ghost `transform: scale` | 1 → 1.03 | 120ms | `cubic-bezier(.22,1,.36,1)` | curve OBSERVED (Cursor sidebar); values DESIGN |
-| pickup | ghost `box-shadow` | none → `0 8px 24px rgba(0,0,0,.18)` (dark `.45`) | 120ms | same | DESIGN |
+| pickup | ghost `box-shadow` | none → `shadow-L3` (`0 10px 15px -3px rgb(0 0 0/.1), 0 4px 6px -2px #0000000d`; dark alpha .3) | 120ms | same | EXTRACTED token (`index.css` L70, L105) |
 | pickup | ghost `opacity` | 1 → .92 | 120ms | same | iOS DOCUMENTED translucency; value DESIGN |
 | pickup | origin cell `opacity` | 1 → .4 | 120ms | same | DESIGN |
 | pickup | `cursor` | default → `grabbing` on `<html>` | 0 | — | desktop convention |
 | drag | ghost position | = pointer − grab offset | 0 lag, per `pointermove` | none | iOS DOCUMENTED (icon stays under finger) |
-| enter target | target `ring`, `bg-tint-secondary` | off → on | 120ms | same | DESIGN |
+| enter target | target `ring-2 ring-border-primary`, `bg-tint-secondary` | off → on | 120ms | same | tokens EXTRACTED (Devin's own focus ring is `ring-2 ring-border-primary`); duration DESIGN |
 | leave target | same | on → off | 80ms | `ease-out` | DESIGN (leave faster than enter) |
 | drop | ghost `transform` | current → target card centre, scale 1.03 → .6 | 180ms | same | iOS DOCUMENTED (icon flies into folder) |
 | drop | ghost `opacity` | .92 → 0 | 180ms, last 60ms | `ease-in` | DESIGN |
@@ -166,9 +166,9 @@ removed **automatically** (iOS DOCUMENTED) — immediate, with the folder card f
 
 | Moment | Spec | Timing | Evidence |
 |---|---|---|---|
-| open | sheet grows from the folder card's rect to a centred panel `max-w-[720px]`, `max-h-[70vh]`, `rounded-lg border-border-secondary bg-bg-elevated`; board behind gets `bg-black/40` dim | 260ms `cubic-bezier(.22,1,.36,1)` on transform (scale + translate from source rect) and opacity 0→1 over the first 120ms; dim 150ms linear | iOS geometry DOCUMENTED; curve OBSERVED; values DESIGN |
+| open | sheet grows from the folder card's rect to a centred panel `max-w-[720px]`, `max-h-[70vh]`, `rounded-lg border-border-secondary bg-bg-elevated`; `shadow-L4`; board behind gets Devin's `bg-bg-scrim` (`0 0 0/.12` light, `.32` dark) | 260ms `cubic-bezier(.22,1,.36,1)` on transform (scale + translate from source rect), opacity over the first 120ms; scrim = Devin `fade-in` 150ms ease-out | iOS geometry DOCUMENTED; scrim, shadow, fade EXTRACTED (`index.css` L49, L71, L246); 260ms DESIGN |
 | content | title row: folder glyph · inline-editable name · count · `…` (Rename, Remove project) · close ×. Below: the **same grid** (§2) of member cards | — | — |
-| close | reverse of open, 200ms; dim 150ms | Escape · click dim · × | iOS DOCUMENTED |
+| close | reverse of open, 200ms; scrim fades 300ms (Devin's dialog exit `transition-opacity duration-300`) | Escape · click scrim · × | iOS DOCUMENTED; scrim exit EXTRACTED (`IssuesSection.tsx` L193) |
 | drag out | pick up a member and move the pointer onto the dim: the sheet closes (200ms) and the drag continues on the board in `dragging`; drop anywhere → unfiled, drop on a card/folder → §4.1 commit | iOS DOCUMENTED; no timer (pass 4) |
 | URL | `?project=<id>` via router replace; deep-linkable; refresh re-opens without motion | DESIGN (matches Devin's `replace` policy §6.1) |
 | run view | while open, the global run view filters to `project_id` (VISION: "the global run view's context") | — | — |
@@ -292,7 +292,7 @@ Event log rows: `project.created`, `project.renamed`, `project.removed`, `automa
 | jiggle / edit mode | none; drag is always live | a mode is a cost the mouse doesn't need |
 | drop-onto-icon makes a folder | same | the one iOS idea the owner asked for |
 | hover over folder, dwell → opens (peek) | **cut**; drop on the folder card moves in; open the folder to drop at a position | one fewer mode; §4.1 explains the no-loss argument |
-| folder opens as sheet over blurred home | same geometry; 40% dim, no blur | blur fights Cursor's flat chrome and costs frames |
+| folder opens as sheet over blurred home | same geometry; Devin's `bg-bg-scrim` (12% light, 32% dark), no blur | blur fights the flat chrome and costs frames; the scrim token already exists |
 | displaced icons slide aside | nothing slides; drag changes membership only | no reorder in v1 → nothing to displace |
 | auto-named folder ("Productivity") | `Untitled project`, name field selected | no taxonomy to guess from |
 | empty folder vanishes | same | — |
@@ -304,7 +304,11 @@ Event log rows: `project.created`, `project.renamed`, `project.removed`, `automa
 §4.2 is the single source of truth for every duration and curve. Two curves exist in the whole
 feature: `cubic-bezier(.22,1,.36,1)` (Cursor's captured ease, used for everything that moves
 toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 (leave), 120
-(pickup, enter, fade), 150 (dim), 180 (drop), 200 (close), 220 (return), 260 (open).
+(pickup, enter, fade), 150 (scrim in), 180 (drop), 200 (close), 220 (return), 260 (open), 300
+(scrim out). Devin's bundle ships exactly three motion tokens — `menu-in` 120ms
+`cubic-bezier(.16,1,.3,1)`, `fade-in` 150ms ease-out, sheet exit 300ms ease-in-out — and every
+visual token we touch (`shadow-L3/L4`, `bg-bg-scrim`, `bg-bg-wash`, `ring-border-primary`,
+`bg-tint-secondary`) is theirs. Nothing in this feature introduces a colour or shadow.
 
 ## 14. Open questions for Runner / owner
 
@@ -327,3 +331,6 @@ toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 
   reference removed; Backspace-to-close dropped.
 - pass 5 (2026-10-13): card height fixed at 78px from Devin's own line metrics; folder
   subtitle rule simplified (folders always have ≥2 members); read-through for stale references.
+- pass 6 (2026-10-13): ghost shadow → `shadow-L3`, sheet → `shadow-L4`, dim → `bg-bg-scrim`,
+  folder tint → `bg-bg-wash`, target/focus ring → `ring-border-primary`, scrim in/out → Devin's
+  150/300ms. DESIGN labels on those rows replaced by EXTRACTED with `index.css` line refs.
