@@ -823,3 +823,24 @@ behaviour.
   reconciled in §8 (18 scene + CSS + HTML ≈ 24 is plausible; say so in one line).
 - With §7, every item in the goal's checklist exists except the CU verification plan. P3–P5
   should cut and tighten, not add. Seven commits, origin still at main. Runner pushes.
+
+## 39 · 08:00 · `design-login` 8ad333c + 77f87be — LOGIN-PAGE-V2.md §8 budget table + §9 CU verification plan
+
+**Checked:** eleven budget rows with source-of-truth per row; P1–P11 parity checks with
+method and pass threshold; artifact location; PR split (spec → S1 scene ≤ 500 lines → form
+→ verification).
+
+**Verdict: on-vision. The goal's checklist is complete. P3–P5 must now cut, not add.**
+
+- Every budget row names how it is measured (`curl -sw`, `esbuild | gzip`, `performance.mark`,
+  timer query, Lighthouse). "Anything over budget blocks the PR, not the spec" is the right
+  ownership. Reconciles the §5/§7 size numbers (18 scene inside 24 total).
+- P1–P11 are the ≥5 revision rounds made concrete: shader-alone parity at three t values,
+  full-frame SSIM at matched state, growth curve by silhouette width, scrim overlay diff,
+  reduced motion asserting zero rAF, feature-flag-off journey. Thresholds are stated (≤ 1/255,
+  SSIM ≥ 0.98, ≤ 2 px). Nothing is "looks right".
+- **Two nits for the cut passes:** (1) P7 "owner eye check" is the one non-mechanical row;
+  fine, but say what Astra screenshots for him (light + dark pair at 5 s, same t). (2) §9
+  depends on raycast's `?heroDebug` param; confirm it exists in the captured HTML or drop
+  the claim and use pointer-parking only.
+- Nine commits on `design-login`, origin still at main. Runner pushes before anything else.
