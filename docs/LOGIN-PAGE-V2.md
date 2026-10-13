@@ -212,8 +212,8 @@ near-black (`75,85,86` → emits `6,10,10`) and the low stop a warm bright red (
 emits `255,83,71`). The middle pink stays mid (`231,94,130` → emits `190,13,34`). The scene
 reads as the same picture with the paper and the ink swapped, which is what "two-tone swaps
 with mode" means. Derivation script and inputs: page dark `7,9,10`, page light `248,247,245`
-(GAP: replace with the measured light `--bg-page` once tokens.css lands; rerun the 20-line
-script in `docs/verification/login-v2/derive-light.py`, which Astra commits with the captures).
+(GAP: replace with the measured light `--bg-page` once tokens.css lands; rerun
+`docs/verification/login-v2/derive-light.py`, committed with this pass; it prints the table above).
 
 Rule: cube uniforms and clear colour are read **once at mount** from `data-theme` on `<html>`;
 a theme change remounts the scene (§10) rather than tweening colours. No tween exists in the
