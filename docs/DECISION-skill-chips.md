@@ -1,6 +1,6 @@
 # DECISION — Skill chips on the chat composer
 
-Status: pass 1. Branch `design-decisions`. Owner delegated 2026-10-13.
+Status: pass 3. Branch `design-decisions`. Owner delegated 2026-10-13.
 Question: should `/chat` show removable chips for attached connector-package skills (cf.
 Cursor @-mention pills, Devin playbook pills, Linear skill mentions)?
 

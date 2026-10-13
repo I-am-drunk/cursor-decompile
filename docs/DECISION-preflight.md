@@ -1,6 +1,6 @@
 # DECISION — Preflight code step (Devin "Preflight check") in v1
 
-Status: pass 1. Branch `design-decisions`. Owner delegated 2026-10-13.
+Status: pass 2. Branch `design-decisions`. Owner delegated 2026-10-13.
 Question: SERVER-FROM-DEVIN §5 floated "store the `code_step` field but enforce `enabled:false`"
 for v1. Should v1 **store-but-disable**, **ship enabled**, or **cut** it?
 
@@ -52,7 +52,8 @@ Both are **cost controls for metered multi-tenant sessions**. The feature is exp
 against recent or sample events, a secrets picker gated on an org permission, a snapshot
 environment selector and a network policy. That is the apparatus of an enterprise platform
 protecting its compute, not a core part of the automations mental model. Devin's own guide
-lists it fourth of four core concepts and marks it optional.
+lists it as one of four core concepts (Trigger · Conditions · Preflight · Action) and is the
+only one marked optional.
 
 ## 3. What Cursor does
 
