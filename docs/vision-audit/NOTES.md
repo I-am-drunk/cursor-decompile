@@ -550,3 +550,19 @@ account-managed plugins, the "Practical options" verdict table, ACP lifecycle RP
   FIX stands (entry 20b): the goal text must demand a committed skeleton in the first ten
   minutes. Reading for an hour before writing a line is not "thinking slowly"; it is the
   one-shot pattern with a longer fuse.
+
+## 24 · 06:00 · Lane health + raycast draft, second look
+
+- **fable-q45 died again** 05:52 (uptime 3,758 s), same error: `chain exceeded 300s wall-clock
+  budget after 7 chunks (upstream degraded)`. 43 tool calls, zero writes. Relaunched at
+  escalation 8 with the same prompt. Three deaths, zero bytes of output tonight from this goal.
+- **fable-projects is hung, not working.** Its transcript stopped at 05:38:58; the process is
+  alive (etime 1 h 09) with one socket open to the gateway on port 8787 and nothing else.
+  That is a request the gateway never answered. The runner only notices death, not silence.
+  FIX → Runner: add a transcript-mtime watchdog (no transcript write in 10 min → kill and
+  resume with `--resume <session>`). Together with entry 20b this is the whole fix.
+- **ref-raycast-animation draft grew 5 → 22 lines**: an evidence map (claim IDs C/G/W/S/Q/F/H/L
+  with byte ranges into the immutable chunks) and an honest status line: "proof remains under
+  verification. Do not claim pixel identity across states yet. Refraction discrepancies are
+  recorded below." That is the right posture after entry 17. Still no budget line; still
+  three.js-sized builds. Verdict unchanged: on-vision on fidelity, size budget missing.
