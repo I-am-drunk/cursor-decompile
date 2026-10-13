@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-13",
+  "esbuild": "0.25.12",
+  "deterministicBuild": true,
+  "proofGzipBytes": 12752,
+  "files": {
+    "proof.html": {
+      "bytes": 43823,
+      "sha256": "900b0a98e9a2a7e64fbcc80cd5bb4a8d2d325beadbbffc4db2b25a82f2bb4072"
+    },
+    "proof.js": {
+      "bytes": 42422,
+      "sha256": "501799bffdede2b0f001dc7ca22dff3cfc0ec98686442b8fc04312eb33618458"
+    },
+    "background.js": {
+      "bytes": 41892,
+      "sha256": "d959f5052947a1895b314ef08f7cfca335eaff895932808fa2c4b3792ef45101"
+    },
+    "renderer.mjs": {
+      "bytes": 9521,
+      "sha256": "3543c9369a90e4aa8ccb0d3168cb8ee5ef086e6f4a9a408ce57bc4bc80c02a53"
+    },
+    "background.mjs": {
+      "bytes": 3614,
+      "sha256": "a5e0632e78432b42f96ed6af797001eaafec50116ed9e81a4b4a5369430a6c4f"
+    },
+    "theme.mjs": {
+      "bytes": 761,
+      "sha256": "b0e29f660d50e32e1310af6e4e1745c8770b4da27624851f505797ef9909df61"
+    },
+    "proof-entry.mjs": {
+      "bytes": 719,
+      "sha256": "74ec9471cbefd0dc545bfe007a22a5b516644276a5199b507b2f8ef61395c6de"
+    },
+    "build.sh": {
+      "bytes": 896,
+      "sha256": "cbb0ae56e667535790f8585def18b8c90b25c759fe443cdeb436503cd2e56de6"
+    },
+    "manifest.json": {
+      "bytes": 15979,
+      "sha256": "f9aa3dc0f27ab07796e9fbb05f5d4d0d4cf05796a27d87dba5e9b0277c11aef2"
+    },
+    "runtime-manifest.json": {
+      "bytes": 20718,
+      "sha256": "73ee94243360015a0c5035882085efd795a73dbdc62a54da1073e0f4cffaa609"
+    }
+  },
+  "pixelComparisons": 21,
+  "differingChannels": 0,
+  "sourcePaletteShader": "captured shader without theme branch"
+}
