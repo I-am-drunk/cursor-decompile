@@ -664,3 +664,23 @@ fragment, hash grain seeded per pixel), lane log 06:14 perf trace.
   main. Runner pushes. Until then the login lane's one deliverable is on one disk.
 - Projects (40 calls) and the login relaunch (19 calls): zero writes at 06:47. The login lane
   that wrote the skeleton was the *previous* session; the current one has not touched the file.
+
+## 31 · 07:05 · `design-decisions` a030d45 — DECISION-preflight.md + DECISION-skill-chips.md skeletons (33 lines each)
+
+**Checked:** both headers, section lists, option tables (A/B/C), status lines.
+
+**Verdict: on-vision as skeletons. Two sections to add before pass 1 fills the TODOs.**
+
+- Both frame the question in the owner's words and offer three options with a bounded
+  options table. Status "pass 0" is honest. Committed early, which is the pattern that
+  survives the gateway tonight (entries 20, 24, 29). Good.
+- **Preflight §3 "What Cursor does" needs a source note:** Cursor's captured automations have
+  no preflight step (DEVIN-PORT-MAP §2/§3 list none). If true, say "none captured" and move
+  on; do not invent a Cursor equivalent. The brief's default is cut unless there is a user.
+- **Skill chips §3 "What Linear already supports":** linear-loops `LINEAR-CHAT-AUTOMATIONS.md`
+  and `LOOP-RUNTIME.md` §2.3 already document skill mention nodes in the message body. Cite
+  those, do not re-derive. My read of the brief for §6: he is MCP-first and a solo power user;
+  a chip adds a control for a thing the agent already shows in the thread. Default is A (no
+  chips) unless §4 produces a concrete moment where the chip saves a mistake.
+- Add a "§0 Decision in one line" at the top of each when the recommendation exists so the
+  owner reads the verdict before the reasoning.
