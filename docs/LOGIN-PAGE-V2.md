@@ -195,17 +195,29 @@ replaced by one token (DESIGN: tokenisation is the only change):
 (`#07080a20` = alpha 0x20/255 = .125; `#07080a` = raycast `--grey-900` = our dark `--bg-page`,
 which must be set to `7 8 10` on this page. GAP: confirm our dark `--bg-page` value.)
 
-| Theme | Scene clear colour | Cube colours | Scrim token | Status |
-|---|---|---|---|---|
-| dark | `rgb(7,9,10)` (source) | source c1–c3 | `--bg-page` dark = `#07080a` | EXTRACTED |
-| light | `--bg-page` light | **source c1–c3 unchanged** | `--bg-page` light | DESIGN |
+Two tones, both theme-bound (owner directive 2026-10-13):
 
-Light decision (answers OQ1): there is no extracted light palette and we do not invent one.
-The only thing that changes is the clear colour and the scrim token. The colour field is
-`pow(color,3)` of pinks/reds and stays legible on a light page because the rods refract it
-over the page colour, not over black. Astra CU-tests both; if light fails the owner's eye,
-the fallback is **dark scene in both themes** (the card still follows the theme), not a new
-palette.
+| Tone | What it is | Dark (EXTRACTED) | Light (DERIVED) |
+|---|---|---|---|
+| A page | scene clear colour, scrim ends, page behind the card | clear `#07090a`, scrim/page `#07080a` | both = light `--bg-page` (one value; the one-step source split is not reproduced) |
+| B field | the three shader uniforms c1 c2 c3 | `244,254,255` · `255,122,152` · `184,2,50` | `75,85,86` · `231,94,130` · `255,175,166` |
+
+How light tone B was derived (and why it is not invented): the shader emits `pow(c/255, 3)`
+on a linear canvas, so what the eye sees is the cubed stop. For each stop take the emitted
+colour in OKLab, keep hue and chroma, and mirror lightness about the page: `L' = L_dark-page +
+L_light-page − L`. Convert back and take the cube root to get the uniform, so the shader stays
+verbatim and only three numbers change. Result: the field inverts its tonal order. On dark the
+high stop is near-white and the low stop is near-black red; on light the high stop is a cool
+near-black (`75,85,86` → emits `6,10,10`) and the low stop a warm bright red (`255,175,166` →
+emits `255,83,71`). The middle pink stays mid (`231,94,130` → emits `190,13,34`). The scene
+reads as the same picture with the paper and the ink swapped, which is what "two-tone swaps
+with mode" means. Derivation script and inputs: page dark `7,9,10`, page light `248,247,245`
+(GAP: replace with the measured light `--bg-page` once tokens.css lands; rerun the 20-line
+script in `docs/verification/login-v2/derive-light.py`, which Astra commits with the captures).
+
+Rule: cube uniforms and clear colour are read **once at mount** from `data-theme` on `<html>`;
+a theme change remounts the scene (§10) rather than tweening colours. No tween exists in the
+source; none is added.
 
 Contrast rule: card text ≥ 4.5:1 is guaranteed by tokens; outside the card there is no text.
 So the only measurable is that the card border remains visible: `--border-secondary` on
