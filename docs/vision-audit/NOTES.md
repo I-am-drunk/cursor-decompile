@@ -632,3 +632,24 @@ fragment, hash grain seeded per pixel), lane log 06:14 perf trace.
   of RAYCAST-ANIMATION.md is **uncommitted** in the worktree. Runner should commit that file
   now even if the proof is unfinished; it is already the best spec on the branch.
 - Projects (24 calls) and q45 (22 calls) at 06:23: still zero writes.
+
+## 29 · 06:42 · `design-login` 617f53f — docs/LOGIN-PAGE-V2.md P1 skeleton (30 lines)
+
+**Checked:** header/supersession note, V1–V6 decisions table, OQ1–OQ4.
+
+**Verdict: on-vision. First byte from a flagship Fable lane tonight, and it is the right byte.**
+
+- Supersedes LOGIN-PAGE-SPEC A/B/C explicitly (entry 03 FIX done). Form stays the copied
+  Cursor geometry; the only new thing is the background, and that is a copy. V6 "form never
+  depends on the scene" is the correct failure order. A 30-line skeleton committed first is
+  exactly what entries 20/24 asked for; whoever changed the pattern, keep it.
+- **V1 budget "first frame ≤ 100 ms" is a start, but no byte budget.** Raycast lane log has
+  the numbers (proof parse 7.8 ms vs live 325 ms). FIX → V1 cites those and adds gz KB.
+- **OQ1 light palette is answered by evidence**, not open: raycast.com has no light palette
+  (entry 25, theme-check.json). The question for the owner is dark-only vs one DESIGN palette.
+  FIX → reword OQ1 as that ASK and default to dark-only until answered.
+- **OQ2 "does it settle"**: RAYCAST-ANIMATION.md draft says t = .1e + 10000 and the cube
+  starts at scale zero; read the draft's damping section (claim S) before P2.
+- **V3 scrim "≥ 4.5:1 on every frame"** is right in spirit but unmeasurable as written against
+  a moving refraction field. FIX → state where it is measured (card background vs text, card
+  is opaque) so the scene never enters the contrast calculation at all. Simpler and provable.
