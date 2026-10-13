@@ -169,7 +169,7 @@ removed **automatically** (iOS DOCUMENTED) — immediate, with the folder card f
 | open | sheet grows from the folder card's rect to a centred panel `max-w-[720px]`, `max-h-[70vh]`, `rounded-lg border-border-secondary bg-bg-elevated`; `shadow-L4`; board behind gets Devin's `bg-bg-scrim` (`0 0 0/.12` light, `.32` dark) | 260ms `cubic-bezier(.22,1,.36,1)` on transform (scale + translate from source rect), opacity over the first 120ms; scrim = Devin `fade-in` 150ms ease-out | iOS geometry DOCUMENTED; scrim, shadow, fade EXTRACTED (`index.css` L49, L71, L246); 260ms DESIGN |
 | content | title row: folder glyph · inline-editable name · count · `…` (Rename, Remove project) · close ×. Below: the **same grid** (§2) of member cards | — | — |
 | close | reverse of open, 200ms; scrim fades 300ms (Devin's dialog exit `transition-opacity duration-300`) | Escape · click scrim · × | iOS DOCUMENTED; scrim exit EXTRACTED (`IssuesSection.tsx` L193) |
-| drag out | pick up a member and move the pointer onto the scrim: the sheet closes (200ms) and the drag continues on the board in `dragging`; drop anywhere → unfiled, drop on a card/folder → §4.1 commit | iOS DOCUMENTED; no timer (pass 4) |
+| drag out | pick up a member and move the pointer onto the scrim: the sheet closes (200ms) and the drag continues on the board in `dragging`; drop anywhere → unfiled, drop on a card/folder → §4.1 commit | 200ms | iOS DOCUMENTED; no timer (pass 4) |
 | URL | `?project=<id>` via router replace; deep-linkable; refresh re-opens without motion | DESIGN (matches Devin's `replace` policy §6.1) |
 | run view | while open, the global run view filters to `project_id` (VISION: "the global run view's context") | — | — |
 
