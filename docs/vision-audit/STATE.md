@@ -1,11 +1,11 @@
-# Vision — where it stands tonight (2026-10-13, updated 05:00)
+# Vision — where it stands tonight (2026-10-13, updated 05:40)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
 ## One line
 Planning is strong and on-vision; **zero product code exists yet**. Three spec contradictions
-remain, two pushed branches are truncated stubs, and the four Fable design lanes (login, projects,
-settings-v2 pass 2, decisions) restarted at 04:00 with nothing landed yet.
+remain, two pushed branches are truncated stubs, settings-v2 finished five passes and is ready for Astra, and the three
+other Fable design lanes (login, projects, decisions) have died repeatedly with no output.
 
 ## Status by the five things the owner cares about
 
@@ -24,6 +24,7 @@ settings-v2 pass 2, decisions) restarted at 04:00 with nothing landed yet.
 4. **Scheduler format.** RRULE + per-schedule IANA tz, Devin's storage shape; cron only via a proven adapter. State it once in SERVER-FROM-DEVIN §1; park Cursor's raw-cron input as v2 (NOTES 15).
 
 ## Housekeeping that blocks a clean morning
+- **Three Fable design lanes are dying silently.** fable-login (3×), fable-projects, fable-q45 exit 1 with only a START line in their logs; zero files touched in 2 h. fable-settings on the same runner worked. Runner: capture stderr, run one in the foreground, split the goals (NOTES 20). **This is the night's biggest risk.**
 - **Truncated pushes:** `origin/plan-devin-port` (65 lines) and `origin/plan-ui-extraction` (141 lines) are stubs; the real docs (1,268 / 267 lines) are only in local worktree commits 2630d27 / aeb5b19. Force-push with lease (NOTES 12).
 - **Stray files:** untracked copies of both maps sit in the `design-decisions` working tree. Delete.
 - **atsu tree is 161 MB in git.** Lane recovered and wrote README + three docs (good); still needs the one-poster-size rewrite before any merge (NOTES 07, 19).

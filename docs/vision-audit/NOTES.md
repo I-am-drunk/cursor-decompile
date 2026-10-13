@@ -449,3 +449,30 @@ interaction ledger, switcher spring reconstruction, README scope, evidence 16–
 - **One caution for fable-projects:** the spring switcher (k700/c42, 344 ms derived) is the
   most seductive thing in the ledger. The board's folder-open should copy iOS, not atsu.
   Atsu motion is a review question, not a parts bin. The doc itself says so; hold it to that.
+
+## 20 · 05:40 · Lane health — the three flagship Fable design lanes are producing nothing
+
+**Checked:** `/tmp/goals/watcher.log`, `fable-{login,projects,q45}.log` sizes and contents,
+process table, lane worktrees (`/tmp/wt-login`, `/tmp/wt-proj`, main checkout on
+`design-decisions`).
+
+**Verdict: slop-risk for the night, not for any doc. Runner must look at this before anything else.**
+
+- `fable-login` has died three times (04:04, 04:38, 05:17; exit 1; uptimes 161 s, 2,047 s,
+  2,311 s). `fable-projects` and `fable-q45` died once each at 04:49 after ~58 min. In every
+  case the lane log holds only its `START` line (32–37 bytes). No file in any of the three
+  worktrees has changed; no commit; `design-login` and `design-projects` are still at main.
+- Compare: `fable-settings` on the same runner produced five committed passes and parked clean
+  at 04:48. So the runner works; these three goals are dying without writing anything.
+- These are the brief's two highest-value unstarted items (login around raycast; the
+  automation-projects board) plus the two owner-delegated decisions. Two hours of wall clock
+  with zero output is the one thing that makes the morning read "nothing happened."
+  Correction after reading goalrun.py: stderr is already merged into the log. So the `claude -p`
+  process ran 30–40 min, printed nothing, and exited 1. In `-p` mode output arrives only at the
+  end, so a kill or a swallowed API error leaves an empty log.
+  FIX → Runner: run the lanes with `--output-format stream-json --verbose` so progress lands in
+  the log as it happens; check `claude_session_watchdog.sh` (73 CPU-min tonight) is not killing
+  long sessions; run one of the three in the foreground once; and split the goal (e.g. fable-projects → "board
+  layout + card" first, drag lifecycle second). Do not keep relaunching the same prompt with
+  escalation 9; that is the runner equivalent of a mega-PR.
+- Until this is fixed the STATE "gaps" list is not shrinking, whatever the other lanes do.
