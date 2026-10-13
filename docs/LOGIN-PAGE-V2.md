@@ -304,7 +304,8 @@ The login route is a React page. Two components, no shared state, no context, no
 
 | Component | Owns | Does not own |
 |---|---|---|
-| `LoginPage` | form state (§4), fetches, redirect | anything visual about the scene |
+| `LoginPage` | theme read, reduced-motion read, which scene branch renders | form state, anything visual about the scene |
+| `LoginCard` | form state (§4), fetches, redirect | the scene, the scrim |
 | `RaycastScene` | one `<canvas>`, one WebGL2 context, the rAF loop, pointer listener | theme, layout, any DOM outside its canvas |
 
 Theme is a prop, read by the page from `document.documentElement.dataset.theme` once per
