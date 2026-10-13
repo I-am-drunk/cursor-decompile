@@ -116,3 +116,71 @@ Source of every pixel: Cursor's captured instructions editor token `@Send to Sla
 | Empty filter | menu closes; `/text` stays raw | DESIGN |
 | ↑ ↓ Enter / click | selects; Esc closes | standard |
 | No packages attached | `/` does nothing; no menu, no empty state | DESIGN, avoids an empty popover |
+
+### 7.2 The token
+
+| Property | Value | Source |
+|---|---|---|
+| Shape | inline, flows with text; one line; `/` + skill title (`/Triage new issues`) | D06 `@Send to Slack`; `/` DESIGN (Linear slash-mention) |
+| Fill / text | same accent-tinted background and accent text Cursor uses for the `@` token; exact hex and radius are taken from the authenticated editor capture, not the demo frames | D06 shows shape only; measure in `facts/automations-saved-editor.md` pass |
+| Padding | 0 2px, radius 4px, font = composer body font | DESIGN until measured |
+| Leading icon | none; the skill icon is in the menu row and the hover card only | D06 token has no icon |
+| Hover (300 ms delay) | card: icon · title · package name · Linear `AgentSkill.description` (or "No description yet" while Linear has not generated one) · `N tools` | DESIGN; copy from V7 fields |
+| Click | places caret after the token; does not open the menu | D06 behaviour unverified; DESIGN |
+| Backspace at token end | deletes the whole token in one keystroke (atomic) | Cursor behaviour unverified; standard token editor behaviour |
+| Serialisation | stored as `/<slug>`; rendered as token when the slug resolves to a skill in an attached package | §5.3 `mention` contract |
+| Unresolved slug | plain text, no token, no error; the agent will see literal text | DESIGN; mirrors Devin `@skills:` text behaviour |
+| Max per message | unlimited in the editor; §5.3 cap (24,000 chars) applies at send and drops `always` first, so mentions always survive | §5.3 |
+
+### 7.3 Header package line
+
+Lives in the conversation header, right of the title, where the Cursor shell shows the model
+label on a conversation (OBSERVED C-SHELL capture; exact slot confirmed at carve time).
+
+| State | Copy | Source |
+|---|---|---|
+| One package | `Linear · 8 tools · 5 skills` | counts from package card §10 row |
+| Several | `Linear, Classroom · 14 tools · 9 skills` | DESIGN |
+| Connection missing | `Classroom · Requires connection` in warning colour, click → package card | A17 pill copy |
+| None attached | line hidden | DESIGN |
+| Hover on `5 skills` | popover listing skills: icon · title · mode badge (`always` / `mention`) | §10 Skills list anatomy |
+| Click | → `/settings/packages/<id>` | §10 |
+
+Nothing in the header is removable. Attaching or detaching a package happens in the package
+card, exactly as §10 defines today.
+
+### 7.4 States, timings, empty/error/loading
+
+| State | Behaviour | Source |
+|---|---|---|
+| Menu open | opens on the keystroke, no animation; closes on Esc, click-out, or selection | D05 shows a static open menu; no motion captured, so none |
+| Menu loading | skills are already in memory (package list loads with the page); no spinner | DESIGN, avoids a loading state |
+| Menu empty after filter | closes; nothing rendered | §7.1 |
+| Package detached while token present | token falls back to plain text on next render; no toast | DESIGN, same path as unresolved slug |
+| Skill over budget at send | the send still goes; run log line `Skill <title> dropped: over budget`, shown in the transcript as a system line | §5.3 |
+| Keyboard only | `/` → type → ↓/↑ → Enter; token is one caret stop | standard |
+| Hit targets | menu row 34px high (Devin MCP selector row height, §10 table); token hover target = token box | Devin §11.2 row height |
+
+## 8. Open questions (none block the decision)
+
+1. Trigger character: `/` (Linear) vs `@` (Cursor). `/` is chosen so the same keystroke works
+   in native Linear chat and here. Change to `@` only if the authenticated Cursor capture
+   shows `@` also reserved for files or tools in the chat composer.
+2. Exact token colour, radius and font come from the authenticated editor capture
+   (`facts/automations-saved-editor.md` has no mention token yet). Until measured: DESIGN.
+3. Whether the header slot already holds a model label in the carved shell; if yes the
+   package line goes to its right, separated by the same dot.
+
+## 9. Evidence
+
+- OBSERVED: `facts/automations-launch-demo.md` D05 (`@` menu grouped Actions / MCP Servers),
+  D06 (inline `@Send to Slack` token), D08 (tools panel rows).
+- DOCUMENTED: Devin `product-guides/skills.md` §Mention a skill (`@skills:name`, one active
+  skill at a time, auto-invocation); `creating-playbooks.md` §Macros, blue-pill tip.
+- VERIFIED: Linear `AgentSkill{title, description, body, icon, color}` schema and
+  `agentSkill*` public ops (`linear-loops-decompile/extracts/linear-official/AGENT-API.md`,
+  `schema.graphql` 1361ff); MASTER-PLAN V7 slash-mention / `?skill=<id>`.
+- Prior positions: CONNECTOR-PACKAGES §5.4 ("chat UI shows a skill chip per active skill"),
+  §10 row "Chat page" (DESIGN, needs owner acceptance), MASHUP-PLAN §3.8 and §8 Q5.
+- Supersedes: this decision replaces the §5.4 / §10 chip sentences; CONNECTOR-PACKAGES is
+  edited to point here.
