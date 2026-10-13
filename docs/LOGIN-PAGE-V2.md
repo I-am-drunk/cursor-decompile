@@ -229,3 +229,26 @@ throws. No CSS animation anywhere on the page, so nothing else needs the media q
 
 `document.hidden` → cancel rAF; resume with the clock paused (source demand-mode behaviour).
 Form submit success → cancel rAF (page is being replaced).
+
+## 8. Instant-load budget (hard numbers)
+
+Measured on the login route, cold cache, Chrome 130, M1 Air, loopback server.
+
+| Metric | Target | Source of truth |
+|---|---|---|
+| HTML response (form + CSS + scene module inlined) | ≤ 24 KB gz; ≤ 1 request before first frame | `curl -sw %{size_download}` with `Accept-Encoding: gzip` |
+| Scene module alone | S1 ≤ 18 KB gz, S2 ≤ 12 KB gz | `esbuild --minify \| gzip -9 \| wc -c` |
+| Reduced-motion/fallback PNG (AVIF) | ≤ 60 KB each, 2 files, lazy (only loaded when used) | file size |
+| First Contentful Paint | ≤ 50 ms after HTML | Performance panel |
+| First scene frame | ≤ 100 ms after HTML | `performance.mark` in module, reported in CU run |
+| Shader compile (both programs) | ≤ 30 ms | `performance.measure` around `linkProgram` |
+| Steady-state JS per frame | ≤ 1.5 ms (S1), ≤ 1.0 ms (S2) | 30 s trace, p95 |
+| GPU frame time at 1512×982 DPR 2 | ≤ 6 ms | `EXT_disjoint_timer_query_webgl2` where available, else trace |
+| Long tasks during cube growth (0–3 s) | 0 tasks > 50 ms | trace |
+| Layout shift | CLS 0 (card is in HTML, fixed size) | Lighthouse |
+| Form interactive | at first paint (no JS needed to type) | manual |
+
+How the build meets it: no framework, no bundler runtime, one ES module inlined by the
+server; shaders as template literals; geometry generated in ≈ 40 lines (box + 16 cylinders
+via `drawArraysInstanced`); one render target for transmission (1024²) sized once; uniforms
+updated in place. Anything over budget blocks the PR, not the spec.
