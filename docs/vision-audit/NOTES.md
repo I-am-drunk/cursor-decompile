@@ -694,3 +694,31 @@ fragment, hash grain seeded per pixel), lane log 06:14 perf trace.
 - `design-login` 617f53f and `design-decisions` a030d45 are still local-only. Runner has not
   pushed in over 40 minutes. If the machine reboots, the night's two Fable deliverables vanish.
 - Login relaunch (41 calls) and q45 relaunch (23 calls): zero writes at 07:13.
+
+## 33 · 07:20 · `design-login` 5c090b0 — LOGIN-PAGE-V2.md P2: extracted raycast facts (35 lines added)
+
+**Checked:** §2 config table (scene, cubeShader, cube mesh, cubeInteraction, glass, distortion,
+loop, canvas, postProcessing), the cube fragment shader transcription, hero CSS overlay, and
+the closing "what this means for us" paragraph.
+
+**Verdict: on-vision. Independent extraction that agrees with the raycast lane's numbers.**
+
+- Every number in §2 matches RAYCAST-ANIMATION.md (entries 25–26): camera z 16.54 / fov 35,
+  cube 7³ at z −9, 16 cylinders r .5 h 15, roughness .35, blur 2.88, IOR 1.5, CA 3, colors
+  #f4feff / #ff7a98 / #b80232. Two lanes reaching the same values from the same source is
+  the evidence hierarchy working. Fable-login did not wait for Astra; it read the source.
+- **New facts the raycast draft does not yet have:** pointer parallax (rotation = pointer × .3,
+  damp .5), `frameloop` stops forever at 200 s, `preserveDrawingBuffer`, cube grows from
+  scale 0 via `damp3` smoothTime 1. The 200 s stop answers OQ2. Cross-cite both ways.
+- **Size facts now written down:** scene chunk 115 KB raw / 32 KB gz, three.js r123 chunk
+  943 KB / 247 KB gz. That is the "heavy" the owner complained about, quantified. V1's budget
+  should be stated against it: our target is the 32 KB chunk minus React/R3F, not the 247 KB.
+  FIX → V1: "≤ 30 KB gz total, no three.js; first frame ≤ 50 ms" with these two numbers as
+  the baseline row.
+- **"(a) is the moment people remember"** is a design judgment, labeled as such in prose. It
+  is right: the cube growing from scale 0 over ~3 s is the load animation; the glass field is
+  the background. Keep that framing; it tells P3 what to make instant (the first frame of the
+  spring) and what can stream in (the glass pass).
+- **One caution:** pointer parallax on a login form is a decision (OQ3), not a copy. The
+  captured page is a hero, ours is a form. Default: keep it; it costs nothing and is exact.
+- Still unpushed (origin at main). Runner.
