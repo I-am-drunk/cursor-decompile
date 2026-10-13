@@ -1,6 +1,6 @@
 # AUTOMATION PROJECTS — the board (iPhone-home-screen model for automations)
 
-Status: **pass 3 — drag machine collapsed to six states.** Branch `design-projects`. Fable, 2026-10-13. Owner's
+Status: **pass 4 — board default, timer-free drag-out, one create call.** Branch `design-projects`. Fable, 2026-10-13. Owner's
 flagship. Law: GOAL-SYSTEM §1 — nothing here is implemented until every state, transition, timing
 and copy string below is filled. Evidence labels: VERIFIED > OBSERVED > EXTRACTED > DOCUMENTED >
 DESIGN (ours). GAP = missing evidence, never permission to invent.
@@ -142,8 +142,8 @@ recomputed on scroll.
 
 ### 5.1 Create by collision
 
-Drop automation A on automation B → `POST /projects {name}` then `PATCH` both automations with
-the new `project_id`. Optimistic: the folder card appears at B's cell instantly, named
+Drop automation A on automation B → one call, `POST /projects {name, automation_ids:[A,B]}`
+(§11), both moved in the same transaction. Optimistic: the folder card appears at B's cell instantly, named
 **`Untitled project`**, with its name field in **inline edit, selected** (iOS opens the folder
 and selects the auto-name; we skip the open — the folder card itself is the edit surface).
 Enter/blur commits; Escape keeps `Untitled project`. Empty name on commit → reverts to
@@ -169,8 +169,8 @@ removed **automatically** (iOS DOCUMENTED) — immediate, with the folder card f
 |---|---|---|---|
 | open | sheet grows from the folder card's rect to a centred panel `max-w-[720px]`, `max-h-[70vh]`, `rounded-lg border-border-secondary bg-bg-elevated`; board behind gets `bg-black/40` dim | 260ms `cubic-bezier(.22,1,.36,1)` on transform (scale + translate from source rect) and opacity 0→1 over the first 120ms; dim 150ms linear | iOS geometry DOCUMENTED; curve OBSERVED; values DESIGN |
 | content | title row: folder glyph · inline-editable name · count · `…` (Rename, Remove project) · close ×. Below: the **same grid** (§2) of member cards | — | — |
-| close | reverse of open, 200ms; dim 150ms | Escape · click dim · × · `Backspace` with nothing focused | iOS DOCUMENTED |
-| drag out | picking up a member and leaving the sheet rect for 300ms closes the sheet (200ms) and the drag continues on the board, now `over-nothing`; drop → unfiled | iOS DOCUMENTED | 
+| close | reverse of open, 200ms; dim 150ms | Escape · click dim · × | iOS DOCUMENTED |
+| drag out | pick up a member and move the pointer onto the dim: the sheet closes (200ms) and the drag continues on the board in `dragging`; drop anywhere → unfiled, drop on a card/folder → §4.1 commit | iOS DOCUMENTED; no timer (pass 4) |
 | URL | `?project=<id>` via router replace; deep-linkable; refresh re-opens without motion | DESIGN (matches Devin's `replace` policy §6.1) |
 | run view | while open, the global run view filters to `project_id` (VISION: "the global run view's context") | — | — |
 
@@ -240,7 +240,7 @@ the pointer (it is position, not animation).
 | Decision | Spec | Why |
 |---|---|---|
 | Toggle | icon-only segmented control `Board ⊞ · List ☰` in the toolbar right group, left of `Create automation`; Devin `SegmentedTabs variant="rounded"` | the toolbar already holds a segmented control; same component |
-| Default | **Board** for a workspace with ≥1 project; **List** (Devin truth) otherwise, until the user flips it | copy-first: nobody sees an invented surface before they asked for folders |
+| Default | **Board**, always (pass 4: owner calls this the flagship; a default that hides it is a hedge) | VISION-BRIEF "Automation projects"; list remains one click away |
 | Persistence | `localStorage automations.view = board|list`; URL `?view=list` overrides for a link | matches Devin's `replace` URL policy |
 | List additions | a `Project` facet in the existing metadata filter popover (key `project`, values = project names, same OR/AND rules §6.2); row subtitle gets ` · in <project>` after the channel when filed | zero new columns; the filter popover already exists |
 | Row menu | `Move to project ›` (§8.1) in both views | one menu, two views |
@@ -309,7 +309,7 @@ toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 
 
 ## 14. Open questions for Runner / owner
 
-1. Board default: proposal is list-until-first-project (§9). Confirm, or force board always.
+1. Board default: pass 4 sets board always (§9). Confirm.
 2. One level of folders only — confirm no nesting ever (spec assumes never).
 3. Dragging a card onto a card **inside** the open folder view: proposal = no-op (no sub-folders).
 4. Project colour/emoji: proposal = no in v1; name + count + member names only.
@@ -323,3 +323,6 @@ toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 
   SERVER-FROM-DEVIN §2–§3, motion-audit; reorder cut from v1.
 - pass 3 (2026-10-13): drag states 10 → 6; folder-peek (dwell-to-open while dragging) cut
   with the no-loss argument in §4.1; `over-card`/`over-folder` merged into `over-target`.
+- pass 4 (2026-10-13): board is the default view; drag-out of an open folder has no 300ms
+  timer (pointer on the dim closes it); collision create is one request; stale `over-nothing`
+  reference removed; Backspace-to-close dropped.
