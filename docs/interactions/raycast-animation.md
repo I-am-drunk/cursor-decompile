@@ -27,3 +27,11 @@ Source: reference/raycast/extracted/{config.json,offsets.json,cube-component.js,
 Optimization stages: first remove framework/hydration with the captured shader unchanged;
 then specialize dead material branches and replace general scene machinery only after
 matched-state visual comparison. Any approximation must be labeled and rejected as exact.
+
+Verification refinement: normalize live material state and refresh its compiled bindings
+before pixel comparisons; stale bindings produced invalid mismatch results. Preserve the
+captured instance transforms and instance-color shader path. A smaller renderer may copy
+only the matrix/quaternion methods it uses, retaining source arithmetic order. CSS page and
+fade ends are #07080a, distinct from the scene clear #07090a (live theme-check.json).
+
+Frame-order refinement (W/S/Q): the transmission callback renders the previous cube state before the cube callback updates scale, rotation and color time. Retain that previous state for the offscreen pass. Snapshot diagnostics set previous=current to compare static states. On the terminal frame, setFrameloop(never) resets the source clock before the cube callback: direct cube time becomes zero; glass time retains the terminal value.
