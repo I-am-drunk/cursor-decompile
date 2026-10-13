@@ -1,4 +1,4 @@
-# Vision — where it stands tonight (2026-10-13, updated 06:00)
+# Vision — where it stands tonight (2026-10-13, updated 06:15)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
@@ -35,8 +35,9 @@ other Fable design lanes (login, projects, decisions) have died repeatedly with 
 - **Automation projects board** (iPhone-home-screen folders, default unfiled). fable-projects
   started 03:50; `design-projects` still at main. No schema either: add `automation_folders` +
   `automations.folder_id` to SERVER-FROM-DEVIN §3 before any schema PR (NOTES 07).
-- **Light/dark two-tone raycast.** Source has one palette (confirmed 04:26). Light mode will be
-  DESIGN. Owner decision needed; lanes must not guess (NOTES 02, 16).
+- **Light/dark two-tone raycast.** Closed by evidence: raycast.com returns identical values under
+  both OS color schemes (theme-check.json). Light mode cannot be copied. ASK owner: dark-only v1
+  (exact) or one derived light palette labeled DESIGN. Default dark-only (NOTES 25).
 - **Our runs vs Linear native Loops.** Owner must pick. Default stays: our records (NOTES 10).
 - **v1 keep/hide/cut over Devin's automations surface.** DEVIN-PORT-MAP inventories everything
   (ACU limits, security profiles, Issues triage, consumption charts). Nobody has drawn the v1
