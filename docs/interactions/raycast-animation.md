@@ -28,6 +28,33 @@ Optimization stages: first remove framework/hydration with the captured shader u
 then specialize dead material branches and replace general scene machinery only after
 matched-state visual comparison. Any approximation must be labeled and rejected as exact.
 
+## Owner-directed theme adaptation (2026-10-13)
+
+This supersedes the earlier theme gap; documented before implementation.
+Two-tone means continuous shades between two RGB endpoints. D=(7,9,10)/255 from C;
+L=pow((244,254,255)/255,3) from C,Q. For final source pixel P, w=(.2126,.7152,.0722),
+u=clamp((dot(P,w)-dot(D,w))/(dot(L,w)-dot(D,w)),0,1).
+Dark=mix(D,L,u); light=mix(L,D,u). Light values are **derived**, not observed.
+Map after refraction, never the offscreen texture. Theme changes swap endpoints
+immediately, without remount, clock reset, compilation or transition. CSS fades use
+the background endpoint with source alpha 32/255. Diagnostic palette=source keeps
+original colors for direct comparisons.
+
+React props: theme='system'|'dark'|'light', motion='system'|'full'|'reduced',
+className?:string, onError?:(error:Error)=>void; defaults system/system.
+Canvas is aria-hidden with no tabIndex and pointer-events:none. Parent owns dimensions.
+ResizeObserver follows CSS size; mousemove uses window coordinates. Media-query,
+visibility, intersection and context-loss listeners update the runtime.
+Hidden/offscreen/zero-size surfaces cancel RAF; resume resets the previous timestamp.
+Stop after 200 seconds; theme changes still redraw. Reduced motion renders the state
+after 5 seconds of 60 Hz source updates once, disables pointer response, and redraws
+only on theme/size changes. This is a product adaptation. Full motion retains the
+original zero-scale reveal; instant refers to removing startup gates.
+Failure retains the CSS endpoint and reports onError without visible copy. Context
+restoration rebuilds resources and restarts the reveal. Cleanup cancels RAF, removes
+listeners/observers and releases GPU objects, supporting StrictMode setup/cleanup/setup.
+Diagnostic URL theme, palette, motion and t parameters introduce no visible controls.
+
 Verification refinement: normalize live material state and refresh its compiled bindings
 before pixel comparisons; stale bindings produced invalid mismatch results. Preserve the
 captured instance transforms and instance-color shader path. A smaller renderer may copy

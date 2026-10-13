@@ -2,7 +2,7 @@
 
 Captured 2026-10-13 on `ref-raycast-animation`. Scope: captured homepage background and standalone proof, not a login layout. Files are under `reference/raycast/`.
 
-Status: source analysis established; proof remains under verification. Do not claim pixel identity across states yet. Refraction discrepancies are recorded below.
+Status: source baseline matched at controlled wide/narrow states; final verification and derived theme evidence are recorded below. Exactness is conditional on matched frame history and rendering parameters.
 
 ## Evidence map
 
@@ -35,7 +35,7 @@ CSS overlay: bottom gradient #07080a20 at 0% and 90% to var(--grey-900) at 100%;
 
 Source C,Q: color1 RGB(244,254,255), hex #f4feff; color2 RGB(255,122,152), #ff7a98; color3 RGB(184,2,50), #b80232. Configured color4 RGB(255,22,42), #ff162a is unused. Scene clear RGB(7,9,10); CSS grey RGB(7,8,10).
 
-Both emulated OS color schemes returned the same values, root classes and body background. See evidence/theme-check.json. The captured homepage has no observed two-palette theme adaptation. A light login variant would require a separate design decision and cannot be described as copied from this build.
+Both emulated OS color schemes returned the same values, root classes and body background. See evidence/theme-check.json. The captured homepage has no observed two-palette theme adaptation. The owner directive requires a light palette. The two-tone palette below is derived from this build’s color math; it is in scope and is explicitly labeled as our adaptation.
 
 ## Color math
 
