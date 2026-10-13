@@ -1,11 +1,22 @@
 # DECISION — Preflight code step (Devin "Preflight check") in v1
 
-Status: pass 2. Branch `design-decisions`. Owner delegated 2026-10-13.
+Status: pass 3. Branch `design-decisions`. Owner delegated 2026-10-13.
 Question: SERVER-FROM-DEVIN §5 floated "store the `code_step` field but enforce `enabled:false`"
 for v1. Should v1 **store-but-disable**, **ship enabled**, or **cut** it?
 
 **Answer: cut it from v1.** No field, no route, no card, no modal. Reinstate as its own slice
 when a real automation of the owner's needs it (§6 names the trigger condition).
+
+## 0. The one-paragraph answer for the owner
+
+The brief called this "run a script before the agent starts, e.g. environment setup". That is
+the natural reading of the name, and it is wrong. Devin's Preflight check never touches the
+agent's machine. It is a tiny gatekeeper script that looks at the trigger event and says
+"run", "skip", or "run once per each of these N items". Environment setup in Devin lives
+elsewhere (machine snapshots, repo setup); in Cursor it is the Environment card with Command
+and Arguments fields (OBSERVED `facts/automations-saved-editor.md`). Our v1 has neither
+problem: triggers are cron and webhook, and the agent is Linear's, which brings its own
+environment. So there is nothing for this step to gate and nothing for it to set up. Cut it.
 
 ## 1. What it is (plain words)
 
@@ -118,9 +129,14 @@ run modal → test harness.
 
 ## 7. Interaction spec
 
-None. The decision is cut, so no UI, copy or state ships in v1. The import rule is the only
-behaviour: a Devin automation JSON carrying `code_step` is accepted and the key is dropped with
-one run-log line `Preflight check not supported; ignored`. Not a UI state.
+None. The decision is cut, so no UI, copy or state ships in v1. Two non-UI rules follow:
+
+| Rule | Behaviour |
+|---|---|
+| Import | A Devin automation JSON carrying `code_step` is accepted; the key is dropped; the import summary gains one line `Preflight check not supported in v1; ignored`. |
+| API | `PUT /automations/:id` with a `code_step` key → 400 `unknown field code_step`. No 422 `PreflightUnavailable`, no stored-but-disabled path. |
+
+Neither is a pixel. Nothing in `docs/interactions/` is needed for this decision.
 
 ## 8. Evidence
 
