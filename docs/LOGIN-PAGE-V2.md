@@ -134,3 +134,33 @@ the card never changes height. Exact server copy (EXTRACTED `src/auth/store.ts`)
 - 429 → `Too many attempts. Try again in a minute.` (DESIGN: server has no copy; GAP until added)
 
 No transitions on the form at all. The only motion on the page is the scene (§5).
+
+## 5. The scene, rebuilt to be instant (DESIGN, derived from §2)
+
+The raycast original costs ~280 KB gz of JS (three.js + R3F + drei + the chunk) and mounts
+after React hydration: first cube pixel lands at ≈ 1.2–1.8 s on a warm cache. Our target is
+**first cube pixel ≤ 100 ms after HTML arrives**, which rules out three.js entirely.
+
+What the picture actually is, mathematically:
+
+1. A camera at z 16.54, fov 35, looking at a 7-unit cube at z −9. Pixel-wise that is a
+   square ≈ 2 × 9.1 ÷ (25.54 × tan 17.5°) × H/2 ≈ 0.44·H tall, screen-centred, that only
+   ever rotates ≤ ±0.3 rad on x/y. The cube's face shader ignores UVs and samples
+   `gl_FragCoord`, so the face colour is a **screen-space** field; rotation only moves the
+   silhouette.
+2. Sixteen vertical glass rods tilted 42° refracting that field (ior 1.5, 6 samples each,
+   chromatic aberration 3, anisotropic blur 2.88). This is the expensive part: drei's
+   MeshTransmissionMaterial renders the scene to a 1024² target and then samples it 6× per
+   rod fragment per frame.
+
+Rebuild plan (three stages; Astra ships stage 1 first, parity-checked at each stage):
+
+| Stage | What | Size | JS/frame | Pixel-parity claim |
+|---|---|---|---|---|
+| S1 | Raw WebGL2, no framework: the extracted shaders verbatim, hand-rolled cube + instanced rods + transmission render target. One `<script type=module>` inlined in the login HTML. | ≤ 18 KB gz | ≤ 1.5 ms (M1) | **exact** (same GLSL, same uniforms, same `damp3`) |
+| S2 | Specialise dead branches of the transmission shader (no backside, no env map, no roughness map, flat/linear colour) | ≤ 12 KB gz | ≤ 1.0 ms | exact within 1/255 (branch removal, no maths change) |
+| S3 | Pre-warm: compile shaders in a `requestIdleCallback` before the canvas is attached; first frame drawn before `DOMContentLoaded` finishes | same | — | n/a (timing only) |
+
+Hard rule from `docs/interactions/raycast-animation.md`: any approximation (e.g. a 2D
+pre-rendered field, fewer rods, fewer samples) is **labelled and rejected as exact**. S1
+is the floor; nothing ships that is not at least S1.
