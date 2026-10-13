@@ -684,3 +684,13 @@ fragment, hash grain seeded per pixel), lane log 06:14 perf trace.
   chips) unless §4 produces a concrete moment where the chip saves a mistake.
 - Add a "§0 Decision in one line" at the top of each when the recommendation exists so the
   owner reads the verdict before the reasoning.
+
+## 32 · 07:15 · fable-projects hung again; login and decisions skeletons still unpushed
+
+- Session 123910be (fable-projects, relaunched 06:00): transcript frozen since 07:04:48, process
+  alive (etime 1 h 09) with two gateway sockets open. Same signature as entries 24 and 27;
+  expect a `300s wall-clock budget` exit. 55 tool calls, zero writes. This is the flagship
+  feature and it has now lost three sessions to the same failure with no mitigation applied.
+- `design-login` 617f53f and `design-decisions` a030d45 are still local-only. Runner has not
+  pushed in over 40 minutes. If the machine reboots, the night's two Fable deliverables vanish.
+- Login relaunch (41 calls) and q45 relaunch (23 calls): zero writes at 07:13.
