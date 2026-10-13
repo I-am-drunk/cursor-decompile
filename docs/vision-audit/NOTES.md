@@ -480,8 +480,7 @@ process table, lane worktrees (`/tmp/wt-login`, `/tmp/wt-proj`, main checkout on
   writing a line. Add one sentence to each goal: *write a 30-line skeleton of the doc and
   commit it within the first 10 minutes, then iterate.* fable-settings did exactly that
   (pass 1 at 02:49) and survived. A committed skeleton is also what the next relaunch resumes
-  from. The `risk-refused` on fable-projects needs a look at what the lane fetched last; if it
-  was an iOS reverse-engineering source, point it at Apple's public HIG instead.
+  from. The `risk-refused` on fable-projects: see entry 23 (false positive on a plain repo read).
 - Until this is fixed the STATE "gaps" list is not shrinking, whatever the other lanes do.
 
 ## 21 · 05:50 · devin-decompile `re-server-3.10.48` 70b9509/15c3052/741da31 — MARKETPLACE.md + CONNECTOR-BACKEND.md
@@ -534,3 +533,20 @@ account-managed plugins, the "Practical options" verdict table, ACP lifecycle RP
 - **Missing surface:** the automation-projects board has no route in §2 and no row in §3.
   The brief calls it the global run view's context. FIX → add `/automations` board mode (or
   `/projects`) as a §2 row marked DESIGN-pending-spec, so the build order knows it exists.
+
+## 23 · 05:55 · Follow-up to 20 — what the dead fable-projects session was doing when refused
+
+**Checked:** last three tool calls before the `risk-refused` synthetic error in session
+48ee4aef (fable-projects, died 04:49).
+
+- It was reading Devin's own decompiled spec (`DEVIN_AUTOMATIONS_DECOMPILED_SPEC.md` lines
+  320–379 and 1217–1240) and the i18n catalog via Bash `sed`/`python3`. Nothing about iOS.
+  The refusal landed on an ordinary read of a repo we own. So this was a gateway-side false
+  positive, not the lane fetching something it should not have. Entry 20's iOS guess is wrong;
+  striking it.
+- Of the three relaunched sessions (04:49/05:17), after ~60 min: projects 49 tool calls,
+  q45 43, login 32. **Still zero Write/Edit calls across all three.** The relaunch is
+  repeating the same read-everything-first pattern that died last time.
+  FIX stands (entry 20b): the goal text must demand a committed skeleton in the first ten
+  minutes. Reading for an hour before writing a line is not "thinking slowly"; it is the
+  one-shot pattern with a longer fuse.
