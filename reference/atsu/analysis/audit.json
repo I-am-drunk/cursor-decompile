@@ -1,0 +1,27 @@
+{
+  "hashes": 1077,
+  "anchors": 63,
+  "failures": [],
+  "capture_errors": [
+    {
+      "url": "https://atsu.moe/assets/.css",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://atsu.moe/assets/.gif.mp4",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "url": "https://atsu.moe/assets/image.png",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://atsu.moe/assets/moment.avif",
+      "error": "HTTP Error 404: Not Found"
+    }
+  ],
+  "mime_mismatches": [
+    "https://atsu.moe/apple-touch-icon-57x57.png",
+    "https://atsu.moe/apple_splash.png"
+  ]
+}

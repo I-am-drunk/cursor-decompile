@@ -1,0 +1,596 @@
+{
+  "url": "https://atsu.moe/",
+  "at": "2026-10-13T08:59:47.503Z",
+  "browser": "155.0.8059.40",
+  "assets": [
+    "https://atsu.moe/cdn-cgi/speculation",
+    "https://atsu.moe/fonts/bevan-latin.woff2",
+    "https://atsu.moe/fonts/domine-latin.woff2",
+    "https://atsu.moe/fonts/coiny-latin.woff2",
+    "https://atsu.moe/fonts/jersey10-latin.woff2",
+    "https://atsu.moe/fonts/metamorphous-latin.woff2",
+    "https://atsu.moe/fonts/orbitron-latin.woff2",
+    "https://atsu.moe/fonts/montserrat-latin.woff2",
+    "https://atsu.moe/fonts/montserrat-italic-latin.woff2",
+    "https://atsu.moe/assets/jsx-runtime-B-hcVAMW.js",
+    "https://atsu.moe/assets/index-C_nrIq9d.js",
+    "https://atsu.moe/z/script.js",
+    "https://atsu.moe/assets/react-DNa95sGW.js",
+    "https://atsu.moe/assets/useQuery-hMuCHTHT.js",
+    "https://atsu.moe/assets/apiError-BrHiOXLb.js",
+    "https://atsu.moe/assets/react-dom-Cix4fOWO.js",
+    "https://atsu.moe/assets/chunk-OB3PAWPO-C3b71G74.js",
+    "https://atsu.moe/assets/staticImages-CHo2Ao-l.js",
+    "https://atsu.moe/assets/hono-BeKjVcNn.js",
+    "https://atsu.moe/assets/queryKeys-B_JWd4jc.js",
+    "https://atsu.moe/assets/bundle-mjs-D7QTbxyK.js",
+    "https://atsu.moe/assets/pro-regular-svg-icons-Dnmsbuee.js",
+    "https://atsu.moe/assets/floating-ui.react-DyAJpbry.js",
+    "https://atsu.moe/assets/tooltip-2EO0bvkf.js",
+    "https://atsu.moe/assets/pro-solid-svg-icons-diUH_kwe.js",
+    "https://atsu.moe/assets/sheetClose-CD0Hxa1l.js",
+    "https://atsu.moe/assets/popupStackContext-D6CMzLOa.js",
+    "https://atsu.moe/assets/popupStackStyles-CfDDLT58.js",
+    "https://atsu.moe/assets/popup-DWZ4hzWt.js",
+    "https://atsu.moe/assets/useMediaQuery-D34ekj5u.js",
+    "https://atsu.moe/assets/useSheetState-CRY-xOgc.js",
+    "https://atsu.moe/assets/mobilePopup-BX-tN0qP.js",
+    "https://atsu.moe/assets/locale-Dyp2g2yR.js",
+    "https://atsu.moe/assets/useHaptics-8lmL0Rnm.js",
+    "https://atsu.moe/assets/pro-duotone-svg-icons-C0h0RAMQ.js",
+    "https://atsu.moe/assets/react-CTzMMUqR.js",
+    "https://atsu.moe/assets/spinner-HBNvrZXQ.js",
+    "https://atsu.moe/assets/scrollLink-B9M73TD3.js",
+    "https://atsu.moe/assets/reveal-CMDv-sQ5.js",
+    "https://atsu.moe/assets/enums-DizpUwof.js",
+    "https://atsu.moe/assets/mutation-DuoFFr75.js",
+    "https://atsu.moe/assets/useMutation-B-h8GQ8k.js",
+    "https://atsu.moe/assets/dist-tB7i8E8p.js",
+    "https://atsu.moe/assets/dist-CyJspSs3.js",
+    "https://atsu.moe/assets/username-Bb9M9AMf.js",
+    "https://atsu.moe/assets/confirmDialog-7j4C4HPj.js",
+    "https://atsu.moe/assets/middleware-ZXcm-2wU.js",
+    "https://atsu.moe/assets/buttonSpinner-CEvvriVn.js",
+    "https://atsu.moe/assets/booleanSwitch-bi3GYidu.js",
+    "https://atsu.moe/assets/constants-DB6H6L8i.js",
+    "https://atsu.moe/assets/useSearch-C1cdCspj.js",
+    "https://atsu.moe/assets/wrapper-kxvg780Q.js",
+    "https://atsu.moe/assets/getMangaHref-DDQB0xwU.js",
+    "https://atsu.moe/assets/actionSheet-C0BPfDRs.js",
+    "https://atsu.moe/assets/switcher-2Nn3mTgT.js",
+    "https://atsu.moe/assets/checkbox-DwjvFfDb.js",
+    "https://atsu.moe/assets/popoverTransition-CaLNbOgd.js",
+    "https://atsu.moe/assets/sheetActionGroup-Da_WH450.js",
+    "https://atsu.moe/assets/relativeTime-pWS12b3S.js",
+    "https://atsu.moe/assets/select-3F_iIqP9.js",
+    "https://atsu.moe/assets/sortable-BfY6rewr.js",
+    "https://atsu.moe/assets/getReadHref-ZA7mIwQf.js",
+    "https://atsu.moe/assets/nav-aGo5QKoI.js",
+    "https://atsu.moe/assets/nav-CDvoHP-j.css",
+    "https://atsu.moe/assets/index-Bvxf1Wq7.css",
+    "https://atsu.moe/assets/username-DGwp-AmT.css",
+    "https://atsu.moe/assets/wrapperConfig-Bgcz0XmO.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+    "https://atsu.moe/assets/workbox-window.prod.es5-Bd17z0YL.js",
+    "https://atsu.moe/z/api/send",
+    "https://atsu.moe/api/auth/me",
+    "https://atsu.moe/fonts/geist-latin.woff2",
+    "https://atsu.moe/api/home2/announcement",
+    "https://atsu.moe/favicon.ico",
+    "https://atsu.moe/api/home2/hotUpdates?offset=0&limit=12&types=Manga%2CManwha%2CManhua%2COEL%2COther&mediums=Comic%2CNovel&contentRatings=Safe%2CSuggestive%2CErotica",
+    "https://atsu.moe/api/home2/recentlyUpdated?offset=0&limit=12&types=Manga%2CManwha%2CManhua%2COEL%2COther&mediums=Comic%2CNovel&contentRatings=Safe%2CSuggestive%2CErotica",
+    "https://atsu.moe/api/home2/popular?timeframe=daily&offset=0&limit=12&types=Manga%2CManwha%2CManhua%2COEL%2COther&mediums=Comic%2CNovel&contentRatings=Safe%2CSuggestive%2CErotica",
+    "https://atsu.moe/assets/socialRoutes-B3icArtj.js",
+    "https://cdn.atsu.moe/static/posters/Xk9nduU0TsOXmDoK-large.avif",
+    "https://cdn.atsu.moe/static/posters/idyyn3EAENI7ibHd-large.avif",
+    "https://cdn.atsu.moe/static/posters/LE4fO4wcT1LPq50g-large.avif",
+    "https://cdn.atsu.moe/static/posters/YjubCUu7y6z9DA6g-large.avif",
+    "https://cdn.atsu.moe/static/posters/h7J2Rqw2wbberhuK-large.avif",
+    "https://cdn.atsu.moe/static/posters/drifXgPGbIBI4EhB-large.avif",
+    "https://cdn.atsu.moe/static/posters/ruynatGcovIP830Q-large.avif",
+    "https://cdn.atsu.moe/static/posters/E2K3KQILkJrqicTN-large.avif",
+    "https://cdn.atsu.moe/static/posters/AJ4fxLnWMvjyNO4B-large.avif",
+    "https://cdn.atsu.moe/static/posters/jjPRkgzrdj5FeABb-large.avif",
+    "https://cdn.atsu.moe/static/posters/iHlyDKa37uEskbsO-large.avif",
+    "https://cdn.atsu.moe/static/posters/xUEhg01NSQieqAg4-large.webp",
+    "https://cdn.atsu.moe/static/posters/ORUaec9n0QE29ZOk-large.avif",
+    "https://cdn.atsu.moe/static/posters/gyWuU7kLcEkHvkdP-large.avif",
+    "https://cdn.atsu.moe/static/posters/S9yRtj5B5TXxs642-large.avif",
+    "https://cdn.atsu.moe/static/posters/aGLcsmYEdqxzFPyb-large.avif",
+    "https://cdn.atsu.moe/static/posters/DegQO5NEX7O3x9L5-large.avif",
+    "https://cdn.atsu.moe/static/posters/kAoAOBprTv9ZKVFH-large.avif",
+    "https://cdn.atsu.moe/static/posters/vVz5IEkzQ06L6zOQ-large.avif",
+    "https://cdn.atsu.moe/static/posters/541hUN8pFmNJpBGy-large.avif",
+    "https://cdn.atsu.moe/static/posters/DnJ4U6xBLhIYnrAu-large.avif"
+  ],
+  "fonts": [
+    {
+      "family": "Geist",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Geist",
+      "status": "loaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Atkinson Hyperlegible",
+      "status": "unloaded",
+      "weight": "200 800"
+    },
+    {
+      "family": "Atkinson Hyperlegible",
+      "status": "unloaded",
+      "weight": "200 800"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Coiny",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Coiny",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Coiny",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Coiny",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Domine",
+      "status": "unloaded",
+      "weight": "400 700"
+    },
+    {
+      "family": "Domine",
+      "status": "unloaded",
+      "weight": "400 700"
+    },
+    {
+      "family": "Jersey 10",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Jersey 10",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Metamorphous",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Metamorphous",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Orbitron",
+      "status": "unloaded",
+      "weight": "400 900"
+    },
+    {
+      "family": "Anton",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Anton",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Anton",
+      "status": "unloaded",
+      "weight": "400"
+    }
+  ],
+  "heading": {
+    "tag": "H2",
+    "text": "Hot Updates",
+    "class": "min-w-0 truncate text-xl md:text-2xl text-foreground2",
+    "rect": {
+      "x": 140,
+      "y": 107,
+      "width": 137.265625,
+      "height": 32
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "24px",
+    "lineHeight": "32px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(249, 248, 246)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(249, 248, 246) none 3px",
+    "scale": "none"
+  },
+  "card": {
+    "tag": "A",
+    "text": "Manhua640.7KEveryone's Switching Classes! Who Dares Say the Swordsman Is a Trash Class?15m ago",
+    "class": "fine:hocus:[&_.poster]:outline-foreground coarse:active:scale-95 outline-none select-none fine:hocus:[&_.title]:text-foreground2",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 334.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) none 3px",
+    "scale": "none"
+  },
+  "title": {
+    "tag": "P",
+    "text": "Everyone's Switching Classes! Who Dares Say the Swordsman Is a Trash Class?",
+    "class": "mt-6 line-clamp-2 text-sm title",
+    "rect": {
+      "x": 140,
+      "y": 430.40625,
+      "width": 180,
+      "height": 40
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "14px",
+    "lineHeight": "20px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) none 3px",
+    "scale": "none"
+  },
+  "poster": {
+    "tag": "IMG",
+    "text": "",
+    "class": "poster outline-2 outline-transparent size-full block object-cover rounded-[inherit]",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 270.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "12px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgba(0, 0, 0, 0) solid 2px",
+    "scale": "none"
+  },
+  "cardHover": {
+    "tag": "A",
+    "text": "Manhua640.7KEveryone's Switching Classes! Who Dares Say the Swordsman Is a Trash Class?15m ago",
+    "class": "fine:hocus:[&_.poster]:outline-foreground coarse:active:scale-95 outline-none select-none fine:hocus:[&_.title]:text-foreground2",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 334.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) none 3px",
+    "scale": "none"
+  },
+  "posterHover": {
+    "tag": "IMG",
+    "text": "",
+    "class": "poster outline-2 outline-transparent size-full block object-cover rounded-[inherit]",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 270.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "12px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) solid 2px",
+    "scale": "none"
+  },
+  "titleHover": {
+    "tag": "P",
+    "text": "Everyone's Switching Classes! Who Dares Say the Swordsman Is a Trash Class?",
+    "class": "mt-6 line-clamp-2 text-sm title",
+    "rect": {
+      "x": 140,
+      "y": 430.40625,
+      "width": 180,
+      "height": 40
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "14px",
+    "lineHeight": "20px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(249, 248, 246)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(249, 248, 246) none 3px",
+    "scale": "none"
+  },
+  "cardFocus": {
+    "tag": "A",
+    "text": "Manhua640.7KEveryone's Switching Classes! Who Dares Say the Swordsman Is a Trash Class?15m ago",
+    "class": "fine:hocus:[&_.poster]:outline-foreground coarse:active:scale-95 outline-none select-none fine:hocus:[&_.title]:text-foreground2",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 334.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(153, 200, 255) none 1px",
+    "scale": "none"
+  },
+  "posterFocus": {
+    "tag": "IMG",
+    "text": "",
+    "class": "poster outline-2 outline-transparent size-full block object-cover rounded-[inherit]",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 270.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "12px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) solid 2px",
+    "scale": "none"
+  },
+  "search": {
+    "visible": true,
+    "focused": true,
+    "style": {
+      "tag": "INPUT",
+      "text": "",
+      "class": "w-full pl-48 pr-48 bg-transparent h-full outline-none text-foreground2 placeholder:text-foreground appearance-none",
+      "rect": {
+        "x": 432,
+        "y": 42,
+        "width": 576,
+        "height": 52
+      },
+      "fontFamily": "Geist, sans-serif",
+      "fontSize": "16px",
+      "lineHeight": "24px",
+      "fontWeight": "400",
+      "letterSpacing": "normal",
+      "color": "rgb(249, 248, 246)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px",
+      "transitionProperty": "all",
+      "transitionDuration": "0s",
+      "transitionTimingFunction": "ease",
+      "outline": "rgb(153, 200, 255) none 1px",
+      "scale": "none"
+    },
+    "afterArrow": {
+      "active": "<input id=\"desktop-fixed-search-input\" class=\"w-full pl-48 pr-48 bg-transparent h-full outline-none text-foreground2 placeholder:text-foreground appearance-none\" placeholder=\"Start typing to search\" aria-label=\"Search for series\" aria-controls=\"search-results-container\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" type=\"search\" value=\"witch\" name=\"search\" style=\"\">",
+      "selected": [
+        "The Young Witch Wants To Have Sex?!The Young Witch Wants to Have Sex!?Manga · Completed · 2020 · NAKAMURA Enjitsu"
+      ]
+    },
+    "escapeClosedImmediate": false,
+    "afterEscape": {
+      "tag": "INPUT",
+      "text": "",
+      "class": "w-full pl-48 pr-48 bg-transparent h-full outline-none text-foreground2 placeholder:text-foreground appearance-none",
+      "rect": {
+        "x": 432,
+        "y": 42,
+        "width": 576,
+        "height": 52
+      },
+      "fontFamily": "Geist, sans-serif",
+      "fontSize": "16px",
+      "lineHeight": "24px",
+      "fontWeight": "400",
+      "letterSpacing": "normal",
+      "color": "rgb(249, 248, 246)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px",
+      "transitionProperty": "all",
+      "transitionDuration": "0s",
+      "transitionTimingFunction": "ease",
+      "outline": "rgb(153, 200, 255) none 1px",
+      "scale": "none"
+    },
+    "closedForm": {
+      "opacity": "0",
+      "pointerEvents": "none"
+    },
+    "escapeClosed": true
+  },
+  "menu": [
+    {
+      "class": "translate-y-0 scale-100 opacity-100 w-380 origin-top transition-[transform_opacity] will-change-[transform_opacity] duration-150 ease-out",
+      "property": "all",
+      "duration": "0.15s",
+      "easing": "cubic-bezier(0, 0, 0.2, 1)"
+    }
+  ],
+  "preferences": "ATSUMARU\n\nHome\nUser lists\nCommunity\nGroups\nLeaderboard\nRules\n\nBROWSE\n\nAdvanced search\nPopular\nTrending\nRising\nHot updates\nRecently updated\nRecently added\nHot arrivals\nTop rated\nMost bookmarked\nMost talked about\nBinge-worthy\nHidden gems\nMost polarizing\nNovels\nRandom\n\nACCOUNT\n\nBookmarks\nNotifications\nSaved lists\nMy lists\nSafe\n18+\n⌘\nK\nSeries\nUsers\nSeries\nUsers\nLogin\nSign up\nCancel\nSeries\nUsers\nSeries\nUsers\nHave we met before?\n\nCreate an account to never lose your progress again\n\nTrack progress\n\nTrack your reading progress and continue reading from any device\n\nBookmark your favorite comics\n\nKeep track of your favorite comics and never miss a chapter\n\nComment, reply and upvote\n\nEngage with the community and share your thoughts on what you're reading\n\nNever miss a chapter\n\nGet notified when new chapters are added to your bookmarked series\n\nJoin the community\n\nTake part in the forums, follow other readers and see what everyone is reading\n\nCustomize your browsing experience\n\nSet and save filters to fine tune your browsing experience.\n\nCreate account\nLogin\n\nIt's completely free and always will be\n\nRising\nHot Arrivals\nMost Bookmarked\nDaily\nWeekly\nMonthly\nAll time\nDaily\nWeekly\nMonthly\nAll time\nSpotlight: Sci-Fi\nTop Lists\nMost Talked About\nDaily\nWeekly\nMonthly\nAll time\nDaily\nWeekly\nMonthly\nAll time\nRecently Added\nHot Lists\nNew Lists\nTop Rated\nHidden Gems\nBinge-Worthy\nMost Polarizing\nManga\n6.3\n729.4K\n\nMy Childhood Friend Has Grown Too Much\n\nManhwa\n9\n582.4K\n\nCooking Go\n\nManhwa\n8.5\n201.2K\n\nFirst Love Makeover Log\n\nNovel\n8.6\n112.3K\n\nMushoku Tensei: Jobless Reincarnation\n\nManga\n6.5\n689.6K\n\nMy Neighbor Lady Wants to Do XXX\n\nManga\n7.9\n710.7K\n\nMushoku Tensei: Jobless Reincarnation\n\nManhua\n7.2\n442.3K\n\nInfinite Evolution From Zero\n\nManhua\n6.8\n587K\n\nGoblin's Ascent: From Loser to Winner\n\nOEL\n3.4M\n\nShadow Slave\n\nManga\n6.6\n633.3K\n\nCross of Six Men\n\nManhwa\n6.7\n217.9K\n\nRooftop Swordmaster\n\nManhwa\n7.9\n297K\n\nThe Remarried Empress\n\nSee more\nSee all\nCustomize home\nSafe\n18+\n\nATSUMARU\n\nHome\nUser lists\nCommunity\nGroups\nLeaderboard\nRules\nPremium\nRequest series\nInstall\nWhat's new\nPrivacy policy\n\nBROWSE\n\nAdvanced search\nPopular\nTrending\nRising\nHot updates\nRecently updated\nRecently added\nHot arrivals\nTop rated\nMost bookmarked\nMost talked about\nBinge-worthy\nHidden gems\nMost polarizing\nNovels\nRandom\n\nACCOUNT\n\nSign up\nLogin\nForgot password\n\nSOCIAL MEDIA\n\nDiscord\nReddit\nTikTok\nContent preferences\nTypes\nManga\n\nJapanese comics\n\nManhwa\n\nKorean comics\n\nManhua\n\nChinese comics\n\nOEL\n\nOriginal English-language\n\nOther\n\nDoujinshi and indie webcomics\n\nFormat\nComics\n\nManga, manhwa, manhua & OEL\n\nNovels\n\nLight & web novels\n\nContent rating\nSafe\n\nAll-ages content suitable for all audiences.\n\nSuggestive\n\nHas elements of suggestive content.\n\nErotica\n\nContent of an erotic nature.\n\nPornographic\n\nExplicit sexual content.\n\nExcluded genres & tags\n\nNothing excluded. Your home feed shows everything.\n\nBrowse genres & tags\nSections\n\nAll sections shown.\n\nArrange sections\nReset to defaults\nSave",
+  "mobileHeading": {
+    "tag": "H2",
+    "text": "Hot Updates",
+    "class": "min-w-0 truncate text-xl md:text-2xl text-foreground2",
+    "rect": {
+      "x": 16,
+      "y": 89,
+      "width": 114.390625,
+      "height": 28
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "20px",
+    "lineHeight": "28px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(249, 248, 246)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(249, 248, 246) none 3px",
+    "scale": "none"
+  },
+  "mobile": {
+    "width": 390,
+    "scrollWidth": 390
+  }
+}

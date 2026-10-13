@@ -1,0 +1,599 @@
+{
+  "url": "http://127.0.0.1:8973/",
+  "at": "2026-10-13T09:04:13.854Z",
+  "browser": "155.0.8059.40",
+  "assets": [
+    "http://127.0.0.1:8973/fonts/bevan-latin.woff2",
+    "http://127.0.0.1:8973/fonts/coiny-latin.woff2",
+    "http://127.0.0.1:8973/fonts/domine-latin.woff2",
+    "http://127.0.0.1:8973/fonts/jersey10-latin.woff2",
+    "http://127.0.0.1:8973/fonts/metamorphous-latin.woff2",
+    "http://127.0.0.1:8973/fonts/montserrat-latin.woff2",
+    "http://127.0.0.1:8973/fonts/orbitron-latin.woff2",
+    "http://127.0.0.1:8973/fonts/montserrat-italic-latin.woff2",
+    "http://127.0.0.1:8973/assets/index-C_nrIq9d.js",
+    "http://127.0.0.1:8973/z/script.js",
+    "http://127.0.0.1:8973/assets/jsx-runtime-B-hcVAMW.js",
+    "http://127.0.0.1:8973/assets/useQuery-hMuCHTHT.js",
+    "http://127.0.0.1:8973/assets/react-dom-Cix4fOWO.js",
+    "http://127.0.0.1:8973/assets/apiError-BrHiOXLb.js",
+    "http://127.0.0.1:8973/assets/react-DNa95sGW.js",
+    "http://127.0.0.1:8973/assets/chunk-OB3PAWPO-C3b71G74.js",
+    "http://127.0.0.1:8973/assets/staticImages-CHo2Ao-l.js",
+    "http://127.0.0.1:8973/assets/hono-BeKjVcNn.js",
+    "http://127.0.0.1:8973/assets/queryKeys-B_JWd4jc.js",
+    "http://127.0.0.1:8973/assets/bundle-mjs-D7QTbxyK.js",
+    "http://127.0.0.1:8973/assets/pro-regular-svg-icons-Dnmsbuee.js",
+    "http://127.0.0.1:8973/assets/floating-ui.react-DyAJpbry.js",
+    "http://127.0.0.1:8973/assets/tooltip-2EO0bvkf.js",
+    "http://127.0.0.1:8973/assets/pro-solid-svg-icons-diUH_kwe.js",
+    "http://127.0.0.1:8973/assets/sheetClose-CD0Hxa1l.js",
+    "http://127.0.0.1:8973/assets/popupStackStyles-CfDDLT58.js",
+    "http://127.0.0.1:8973/assets/popupStackContext-D6CMzLOa.js",
+    "http://127.0.0.1:8973/assets/useMediaQuery-D34ekj5u.js",
+    "http://127.0.0.1:8973/assets/mobilePopup-BX-tN0qP.js",
+    "http://127.0.0.1:8973/assets/popup-DWZ4hzWt.js",
+    "http://127.0.0.1:8973/assets/useSheetState-CRY-xOgc.js",
+    "http://127.0.0.1:8973/assets/locale-Dyp2g2yR.js",
+    "http://127.0.0.1:8973/assets/useHaptics-8lmL0Rnm.js",
+    "http://127.0.0.1:8973/assets/react-CTzMMUqR.js",
+    "http://127.0.0.1:8973/assets/pro-duotone-svg-icons-C0h0RAMQ.js",
+    "http://127.0.0.1:8973/assets/spinner-HBNvrZXQ.js",
+    "http://127.0.0.1:8973/assets/scrollLink-B9M73TD3.js",
+    "http://127.0.0.1:8973/assets/reveal-CMDv-sQ5.js",
+    "http://127.0.0.1:8973/assets/enums-DizpUwof.js",
+    "http://127.0.0.1:8973/assets/username-Bb9M9AMf.js",
+    "http://127.0.0.1:8973/assets/mutation-DuoFFr75.js",
+    "http://127.0.0.1:8973/assets/useMutation-B-h8GQ8k.js",
+    "http://127.0.0.1:8973/assets/dist-tB7i8E8p.js",
+    "http://127.0.0.1:8973/assets/dist-CyJspSs3.js",
+    "http://127.0.0.1:8973/assets/confirmDialog-7j4C4HPj.js",
+    "http://127.0.0.1:8973/assets/middleware-ZXcm-2wU.js",
+    "http://127.0.0.1:8973/assets/buttonSpinner-CEvvriVn.js",
+    "http://127.0.0.1:8973/assets/booleanSwitch-bi3GYidu.js",
+    "http://127.0.0.1:8973/assets/constants-DB6H6L8i.js",
+    "http://127.0.0.1:8973/assets/useSearch-C1cdCspj.js",
+    "http://127.0.0.1:8973/assets/wrapper-kxvg780Q.js",
+    "http://127.0.0.1:8973/assets/switcher-2Nn3mTgT.js",
+    "http://127.0.0.1:8973/assets/actionSheet-C0BPfDRs.js",
+    "http://127.0.0.1:8973/assets/getMangaHref-DDQB0xwU.js",
+    "http://127.0.0.1:8973/assets/checkbox-DwjvFfDb.js",
+    "http://127.0.0.1:8973/assets/popoverTransition-CaLNbOgd.js",
+    "http://127.0.0.1:8973/assets/sheetActionGroup-Da_WH450.js",
+    "http://127.0.0.1:8973/assets/relativeTime-pWS12b3S.js",
+    "http://127.0.0.1:8973/assets/select-3F_iIqP9.js",
+    "http://127.0.0.1:8973/assets/sortable-BfY6rewr.js",
+    "http://127.0.0.1:8973/assets/getReadHref-ZA7mIwQf.js",
+    "http://127.0.0.1:8973/assets/wrapperConfig-Bgcz0XmO.js",
+    "http://127.0.0.1:8973/assets/nav-aGo5QKoI.js",
+    "http://127.0.0.1:8973/assets/username-DGwp-AmT.css",
+    "http://127.0.0.1:8973/assets/nav-CDvoHP-j.css",
+    "http://127.0.0.1:8973/assets/index-Bvxf1Wq7.css",
+    "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+    "http://127.0.0.1:8973/assets/workbox-window.prod.es5-Bd17z0YL.js",
+    "http://127.0.0.1:8973/z/api/send",
+    "http://127.0.0.1:8973/api/auth/me",
+    "http://127.0.0.1:8973/fonts/geist-latin.woff2",
+    "http://127.0.0.1:8973/api/home2/announcement",
+    "http://127.0.0.1:8973/cdn-cgi/rum?",
+    "http://127.0.0.1:8973/favicon.ico",
+    "http://127.0.0.1:8973/api/home2/hotUpdates?offset=0&limit=12&types=Manga%2CManwha%2CManhua%2COEL%2COther&mediums=Comic%2CNovel&contentRatings=Safe%2CSuggestive%2CErotica",
+    "http://127.0.0.1:8973/api/home2/recentlyUpdated?offset=0&limit=12&types=Manga%2CManwha%2CManhua%2COEL%2COther&mediums=Comic%2CNovel&contentRatings=Safe%2CSuggestive%2CErotica",
+    "http://127.0.0.1:8973/api/home2/popular?timeframe=daily&offset=0&limit=12&types=Manga%2CManwha%2CManhua%2COEL%2COther&mediums=Comic%2CNovel&contentRatings=Safe%2CSuggestive%2CErotica",
+    "http://127.0.0.1:8973/cdn/static/posters/LE4fO4wcT1LPq50g-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/drifXgPGbIBI4EhB-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/idyyn3EAENI7ibHd-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/ruynatGcovIP830Q-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/E2K3KQILkJrqicTN-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/jjPRkgzrdj5FeABb-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/AJ4fxLnWMvjyNO4B-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/xUEhg01NSQieqAg4-large.webp",
+    "http://127.0.0.1:8973/cdn/static/posters/iHlyDKa37uEskbsO-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/ZIHjn10VxW98i6e3-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/shD7TL6ZjelELtDv-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/5PxN25u5AIhdpjS8-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/S9yRtj5B5TXxs642-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/Xk9nduU0TsOXmDoK-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/h7J2Rqw2wbberhuK-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/gyWuU7kLcEkHvkdP-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/ORUaec9n0QE29ZOk-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/541hUN8pFmNJpBGy-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/aGLcsmYEdqxzFPyb-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/YjubCUu7y6z9DA6g-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/kAoAOBprTv9ZKVFH-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/DegQO5NEX7O3x9L5-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/DnJ4U6xBLhIYnrAu-large.avif",
+    "http://127.0.0.1:8973/cdn/static/posters/vVz5IEkzQ06L6zOQ-large.avif",
+    "http://127.0.0.1:8973/assets/socialRoutes-B3icArtj.js",
+    "http://127.0.0.1:8973/api"
+  ],
+  "fonts": [
+    {
+      "family": "Geist",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Geist",
+      "status": "loaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Atkinson Hyperlegible",
+      "status": "unloaded",
+      "weight": "200 800"
+    },
+    {
+      "family": "Atkinson Hyperlegible",
+      "status": "unloaded",
+      "weight": "200 800"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Bevan",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Coiny",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Coiny",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Coiny",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Coiny",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Domine",
+      "status": "unloaded",
+      "weight": "400 700"
+    },
+    {
+      "family": "Domine",
+      "status": "unloaded",
+      "weight": "400 700"
+    },
+    {
+      "family": "Jersey 10",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Jersey 10",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Metamorphous",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Metamorphous",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Montserrat",
+      "status": "unloaded",
+      "weight": "100 900"
+    },
+    {
+      "family": "Orbitron",
+      "status": "unloaded",
+      "weight": "400 900"
+    },
+    {
+      "family": "Anton",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Anton",
+      "status": "unloaded",
+      "weight": "400"
+    },
+    {
+      "family": "Anton",
+      "status": "unloaded",
+      "weight": "400"
+    }
+  ],
+  "heading": {
+    "tag": "H2",
+    "text": "Hot Updates",
+    "class": "min-w-0 truncate text-xl md:text-2xl text-foreground2",
+    "rect": {
+      "x": 140,
+      "y": 107,
+      "width": 137.265625,
+      "height": 32
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "24px",
+    "lineHeight": "32px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(249, 248, 246)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(249, 248, 246) none 3px",
+    "scale": "none"
+  },
+  "card": {
+    "tag": "A",
+    "text": "Manhwa71.1KThe Eccentric Escort Warrior52m ago",
+    "class": "fine:hocus:[&_.poster]:outline-foreground coarse:active:scale-95 outline-none select-none fine:hocus:[&_.title]:text-foreground2",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 334.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) none 3px",
+    "scale": "none"
+  },
+  "title": {
+    "tag": "P",
+    "text": "The Eccentric Escort Warrior",
+    "class": "mt-6 line-clamp-2 text-sm title",
+    "rect": {
+      "x": 140,
+      "y": 430.40625,
+      "width": 180,
+      "height": 40
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "14px",
+    "lineHeight": "20px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) none 3px",
+    "scale": "none"
+  },
+  "poster": {
+    "tag": "IMG",
+    "text": "",
+    "class": "poster outline-2 outline-transparent size-full block object-cover rounded-[inherit]",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 270.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "12px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgba(0, 0, 0, 0) solid 2px",
+    "scale": "none"
+  },
+  "cardHover": {
+    "tag": "A",
+    "text": "Manhwa71.1KThe Eccentric Escort Warrior52m ago",
+    "class": "fine:hocus:[&_.poster]:outline-foreground coarse:active:scale-95 outline-none select-none fine:hocus:[&_.title]:text-foreground2",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 334.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) none 3px",
+    "scale": "none"
+  },
+  "posterHover": {
+    "tag": "IMG",
+    "text": "",
+    "class": "poster outline-2 outline-transparent size-full block object-cover rounded-[inherit]",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 270.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "12px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) solid 2px",
+    "scale": "none"
+  },
+  "titleHover": {
+    "tag": "P",
+    "text": "The Eccentric Escort Warrior",
+    "class": "mt-6 line-clamp-2 text-sm title",
+    "rect": {
+      "x": 140,
+      "y": 430.40625,
+      "width": 180,
+      "height": 40
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "14px",
+    "lineHeight": "20px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(249, 248, 246)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(249, 248, 246) none 3px",
+    "scale": "none"
+  },
+  "cardFocus": {
+    "tag": "A",
+    "text": "Manhwa71.1KThe Eccentric Escort Warrior52m ago",
+    "class": "fine:hocus:[&_.poster]:outline-foreground coarse:active:scale-95 outline-none select-none fine:hocus:[&_.title]:text-foreground2",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 334.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(153, 200, 255) none 1px",
+    "scale": "none"
+  },
+  "posterFocus": {
+    "tag": "IMG",
+    "text": "",
+    "class": "poster outline-2 outline-transparent size-full block object-cover rounded-[inherit]",
+    "rect": {
+      "x": 140,
+      "y": 154,
+      "width": 180,
+      "height": 270.40625
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(184, 188, 192)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "12px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(184, 188, 192) solid 2px",
+    "scale": "none"
+  },
+  "search": {
+    "visible": true,
+    "focused": true,
+    "style": {
+      "tag": "INPUT",
+      "text": "",
+      "class": "w-full pl-48 pr-48 bg-transparent h-full outline-none text-foreground2 placeholder:text-foreground appearance-none",
+      "rect": {
+        "x": 432,
+        "y": 42,
+        "width": 576,
+        "height": 52
+      },
+      "fontFamily": "Geist, sans-serif",
+      "fontSize": "16px",
+      "lineHeight": "24px",
+      "fontWeight": "400",
+      "letterSpacing": "normal",
+      "color": "rgb(249, 248, 246)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px",
+      "transitionProperty": "all",
+      "transitionDuration": "0s",
+      "transitionTimingFunction": "ease",
+      "outline": "rgb(153, 200, 255) none 1px",
+      "scale": "none"
+    },
+    "afterArrow": {
+      "active": "<input id=\"desktop-fixed-search-input\" class=\"w-full pl-48 pr-48 bg-transparent h-full outline-none text-foreground2 placeholder:text-foreground appearance-none\" placeholder=\"Start typing to search\" aria-label=\"Search for series\" aria-controls=\"search-results-container\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" type=\"search\" value=\"witch\" name=\"search\" style=\"\">",
+      "selected": [
+        "The Young Witch Wants To Have Sex?!The Young Witch Wants to Have Sex!?Manga · Completed · 2020 · NAKAMURA Enjitsu"
+      ]
+    },
+    "escapeClosedImmediate": false,
+    "afterEscape": {
+      "tag": "INPUT",
+      "text": "",
+      "class": "w-full pl-48 pr-48 bg-transparent h-full outline-none text-foreground2 placeholder:text-foreground appearance-none",
+      "rect": {
+        "x": 432,
+        "y": 42,
+        "width": 576,
+        "height": 52
+      },
+      "fontFamily": "Geist, sans-serif",
+      "fontSize": "16px",
+      "lineHeight": "24px",
+      "fontWeight": "400",
+      "letterSpacing": "normal",
+      "color": "rgb(249, 248, 246)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "borderRadius": "0px",
+      "transitionProperty": "all",
+      "transitionDuration": "0s",
+      "transitionTimingFunction": "ease",
+      "outline": "rgb(153, 200, 255) none 1px",
+      "scale": "none"
+    },
+    "closedForm": {
+      "opacity": "0",
+      "pointerEvents": "none"
+    },
+    "escapeClosed": true
+  },
+  "menu": [
+    {
+      "class": "translate-y-0 scale-100 opacity-100 w-380 origin-top transition-[transform_opacity] will-change-[transform_opacity] duration-150 ease-out",
+      "property": "all",
+      "duration": "0.15s",
+      "easing": "cubic-bezier(0, 0, 0.2, 1)"
+    }
+  ],
+  "preferences": "ATSUMARU\n\nHome\nUser lists\nCommunity\nGroups\nLeaderboard\nRules\n\nBROWSE\n\nAdvanced search\nPopular\nTrending\nRising\nHot updates\nRecently updated\nRecently added\nHot arrivals\nTop rated\nMost bookmarked\nMost talked about\nBinge-worthy\nHidden gems\nMost polarizing\nNovels\nRandom\n\nACCOUNT\n\nBookmarks\nNotifications\nSaved lists\nMy lists\nSafe\n18+\n⌘\nK\nSeries\nUsers\nSeries\nUsers\nLogin\nSign up\nCancel\nSeries\nUsers\nSeries\nUsers\nHave we met before?\n\nCreate an account to never lose your progress again\n\nTrack progress\n\nTrack your reading progress and continue reading from any device\n\nBookmark your favorite comics\n\nKeep track of your favorite comics and never miss a chapter\n\nComment, reply and upvote\n\nEngage with the community and share your thoughts on what you're reading\n\nNever miss a chapter\n\nGet notified when new chapters are added to your bookmarked series\n\nJoin the community\n\nTake part in the forums, follow other readers and see what everyone is reading\n\nCustomize your browsing experience\n\nSet and save filters to fine tune your browsing experience.\n\nCreate account\nLogin\n\nIt's completely free and always will be\n\nRising\nHot Arrivals\nMost Bookmarked\nDaily\nWeekly\nMonthly\nAll time\nDaily\nWeekly\nMonthly\nAll time\nSpotlight: Sci-Fi\nTop Lists\nMost Talked About\nDaily\nWeekly\nMonthly\nAll time\nDaily\nWeekly\nMonthly\nAll time\nRecently Added\nHot Lists\nNew Lists\nTop Rated\nHidden Gems\nBinge-Worthy\nManga\n9\n1.6M\n\nJoJo's Bizarre Adventure: Part 7–Steel Ball Run\n\nManhwa\n9\n582.4K\n\nCooking Go\n\nManhwa\n9\n8.6M\n\nThe Greatest Estate Developer\n\nManga\n8.9\n712.7K\n\nMONSTER\n\nManhwa\n8.9\n1.9M\n\nOn the Way to Meet Mom\n\nManga\n8.9\n1.2M\n\nVINLAND SAGA\n\nManga\n8.9\n447.7K\n\nFULLMETAL ALCHEMIST\n\nManga\n8.9\n26.4K\n\nFullmetal Alchemist (WEBTOON)\n\nNovel\n8.8\n54.2K\n\nHeaven Official’s Blessing: Tian Guan Ci Fu\n\nManga\n8.8\n517.8K\n\nSlam Dunk\n\nManga\n8.8\n571.8K\n\n20th Century Boys\n\nManga\n8.7\n1.3M\n\nGoodnight Punpun\n\nSee more\nSee all\nMost Polarizing\nManga\n6.3\n729.4K\n\nMy Childhood Friend Has Grown Too Much\n\nManhwa\n9\n582.4K\n\nCooking Go\n\nManhwa\n8.5\n201.2K\n\nFirst Love Makeover Log\n\nNovel\n8.6\n112.3K\n\nMushoku Tensei: Jobless Reincarnation\n\nManga\n6.5\n689.6K\n\nMy Neighbor Lady Wants to Do XXX\n\nManga\n7.9\n710.7K\n\nMushoku Tensei: Jobless Reincarnation\n\nManhua\n7.2\n442.3K\n\nInfinite Evolution From Zero\n\nManhua\n6.8\n587K\n\nGoblin's Ascent: From Loser to Winner\n\nOEL\n3.4M\n\nShadow Slave\n\nManga\n6.6\n633.3K\n\nCross of Six Men\n\nManhwa\n6.7\n217.9K\n\nRooftop Swordmaster\n\nManhwa\n7.9\n297K\n\nThe Remarried Empress\n\nSee more\nSee all\nCustomize home\nSafe\n18+\n\nATSUMARU\n\nHome\nUser lists\nCommunity\nGroups\nLeaderboard\nRules\nPremium\nRequest series\nInstall\nWhat's new\nPrivacy policy\n\nBROWSE\n\nAdvanced search\nPopular\nTrending\nRising\nHot updates\nRecently updated\nRecently added\nHot arrivals\nTop rated\nMost bookmarked\nMost talked about\nBinge-worthy\nHidden gems\nMost polarizing\nNovels\nRandom\n\nACCOUNT\n\nSign up\nLogin\nForgot password\n\nSOCIAL MEDIA\n\nDiscord\nReddit\nTikTok\nContent preferences\nTypes\nManga\n\nJapanese comics\n\nManhwa\n\nKorean comics\n\nManhua\n\nChinese comics\n\nOEL\n\nOriginal English-language\n\nOther\n\nDoujinshi and indie webcomics\n\nFormat\nComics\n\nManga, manhwa, manhua & OEL\n\nNovels\n\nLight & web novels\n\nContent rating\nSafe\n\nAll-ages content suitable for all audiences.\n\nSuggestive\n\nHas elements of suggestive content.\n\nErotica\n\nContent of an erotic nature.\n\nPornographic\n\nExplicit sexual content.\n\nExcluded genres & tags\n\nNothing excluded. Your home feed shows everything.\n\nBrowse genres & tags\nSections\n\nAll sections shown.\n\nArrange sections\nReset to defaults\nSave",
+  "mobileHeading": {
+    "tag": "H2",
+    "text": "Hot Updates",
+    "class": "min-w-0 truncate text-xl md:text-2xl text-foreground2",
+    "rect": {
+      "x": 16,
+      "y": 89,
+      "width": 114.390625,
+      "height": 28
+    },
+    "fontFamily": "Geist, sans-serif",
+    "fontSize": "20px",
+    "lineHeight": "28px",
+    "fontWeight": "400",
+    "letterSpacing": "normal",
+    "color": "rgb(249, 248, 246)",
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "borderRadius": "0px",
+    "transitionProperty": "all",
+    "transitionDuration": "0s",
+    "transitionTimingFunction": "ease",
+    "outline": "rgb(249, 248, 246) none 3px",
+    "scale": "none"
+  },
+  "mobile": {
+    "width": 390,
+    "scrollWidth": 390
+  }
+}
