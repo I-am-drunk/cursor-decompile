@@ -1,138 +1,62 @@
 # cursor-decompile
 
-An original reimplementation of the **whole Cursor UI**, targeting verified
-behavioral and visual parity. Automations comes first: after capture and
-implementation, the sibling
-[Linear project](https://github.com/I-am-drunk/linear-loops-decompile) will use
-Cursor's exact Automations layout inside its Linear UI.
+**This repo's original method was retired on 2026-10-04.** What remains is two
+local reading tools and this explanation.
 
-Only our own code is committed. Reference artifacts remain gitignored;
-measured UI facts and observed behavior carry reproducible citations.
+## What it was for
 
-| Start here | Purpose |
+Cursor's automations page has a feature model the sibling project
+[`linear-loops-decompile`](https://github.com/I-am-drunk/linear-loops-decompile)
+wants: one MCP configuration per automation, multi-trigger forms, chained
+prompts with per-step model choice. This repo was going to extract a precise,
+citable description of that page from Cursor's shipped bundle, into a queue of
+14 fact files, so the sibling could build against it.
+
+## Why that stopped
+
+Seven extractors were run against `workbench.anysphere-ui-automations.js` under
+a brief that said "facts only, never paste vendor code" and told them to write
+fact tables into this public repo. **Six refused, independently**, converging on
+one objection: the no-code-pasting rule shaped the *format* while the brief
+asked for the full *substance*. A table of every copy string, prop name, CSS
+class, validation regex and feature-gate default, cited to line numbers in a
+decompiled artifact, is the design of the feature transcribed — and the
+structure that kept the bundle gitignored while publishing its distillation
+protected the container and published the substance.
+
+They were right. The brief was the defect.
+
+## It was also producing worse facts
+
+The one extraction that completed checked this repo's own `facts/INDEX.md` and
+found **3 of its 4 headline strings wrong**:
+
+- `All Automations` is a radio item in a *runs* filter, not the list header.
+- `Add Automation` is never rendered — it is a sentinel rewritten to
+  `New Automation`.
+- There is no trigger-summary cell and no last-run cell.
+
+The queue had been written from guesses *about* the artifact and cited as if
+verified. High-fidelity extraction yields confident, cited, wrong facts as
+readily as right ones, and it is slower than reading the public spec.
+
+## What the sibling project does instead
+
+Builds the automations page from the **open Model Context Protocol
+specification**, the public cron specification, and the product as a user sees
+it. MCP is a published standard with SDKs — the headline feature needed no
+extraction at all. See `docs/plan/automations.md` and `docs/plan/mcp.md` there,
+and `docs/PROVENANCE.md` for the rule.
+
+## What is left here
+
+Two tools, our own code, committing no vendor bytes. They are legitimate for
+reading a bundle locally to understand behavior:
+
+| Path | What |
 |---|---|
-| [prompt.md](prompt.md) | reusable starter or goal prompt |
-| [AGENTS.md](AGENTS.md) | working rules |
-| [STATUS.md](STATUS.md) | current state |
-| [PLAN.md](PLAN.md) | whole-product roadmap; one thin slice per PR |
-| [facts/INDEX.md](facts/INDEX.md) | verified public facts and missing captures |
-| [Automations layout](specs/automations-layout.md) | exactness acceptance evidence |
-| [Linear contract](specs/linear-as-integration.md) | integrations, inference, and runs |
-| [Reset history](docs/archive/2026-10-04.md) | retired queue and review findings |
-| [Reading tools](pipeline/README.md) | raw byte/search inspection and regression checks |
+| `pipeline/split.mjs` | breaks a minified bundle onto readable lines; copies string/template/regex/comment bodies through byte for byte and self-checks that its output's non-whitespace bytes are identical to its input's |
+| `pipeline/names.sh` | builds a symbol table — the bundle registers its own function names, so 10,742 symbols map to line numbers |
+| `pipeline/fetch.sh`, `index.sh` | fetch and index the artifact into gitignored `corpus/` |
 
-Coordination is [issue #1](https://github.com/I-am-drunk/cursor-decompile/issues/1).
-Read its tail and open PRs before claiming work. The historical extraction
-queue is retired; the current plan starts from verified evidence. Documentation
-of features does not prove the geometry of their controls.
-
-## Run the original local Automations implementation
-
-Requires Node **22.18+**. Runtime dependencies: **none**.
-
-```sh
-npm ci
-npm start
-# Open http://127.0.0.1:4317/automations
-npm run check
-```
-
-`PORT` changes the loopback port; `DATA_FILE` changes the default
-`.local/automations.json` store. Definitions persist across restarts.
-The sidebar's **Local preview** button opens evidence/scenario links.
-List, editing, multiple triggers, per-automation MCP configuration,
-model selection, repository context, duplication and deletion work locally.
-Local authentication and a T3 execution adapter are now available; pair a
-supported environment in Settings → Inference before running. No scheduler
-or fake successful execution is supplied. Synthetic run states are explicitly labeled.
-
-The first capture covered the upsell and empty Run History. A subsequent
-[API/row slice](facts/automations-api-rows.md) added a real failed run and
-reachable saved-editor evidence. The populated main list is still gated.
-The app is an original, partially evidence-backed implementation—not a claim
-of whole-page pixel parity. No captured bundles, fonts, credentials or
-account details are served by the local server.
-
-Private comparison workflow: [pipeline/README.md](pipeline/README.md).
-Results and remaining deviations: [verification report](facts/automations-verification.md).
-
-`/automations/runs?fixture=observed-failure` displays a labeled,
-reference-derived failure fixture without contacting Cursor. Use
-**Alt+Shift+E** to export measurements of the current table, menu or summary.
-
-The [saved-editor slice](facts/automations-saved-editor.md) adds measured
-tools/MCP menus, the connection catalogue, URL/command/JSON configuration
-forms, and the model/parameter picker. Preview its reference-derived fixture
-at `/automations/editor-fixture?fixture=saved-editor`. Configuration values
-stay in the private local store (0600); API state and copied definitions use
-opaque references. No provider is authorized and no configured command runs.
-Provider-specific trigger forms and unobserved variants remain unverified.
-
-The [trigger-control follow-up](facts/automations-trigger-verification.md)
-adds the measured Add Trigger menu, Scheduled choices and custom-cron popup.
-Preview at `/automations/editor-fixture?fixture=saved-editor&controls=triggers`.
-Use Enter to stage a local cron edit and Save to persist. Correct invalid
-input before dismissing its popup. Execution bindings and provider forms
-are not reference-verified;
-no scheduler, execution or provider authorization is connected.
-
-The [preset/validation slice](facts/automations-preset-verification.md) adds
-hourly/daily/weekly rows, day/time menus, live cron errors and the unsaved guard.
-Its fixture lives at
-`/automations/editor-fixture?fixture=saved-editor&controls=presets`.
-Local schedule metadata persists without executing anything. Displayed reference
-dates, local serialization and full runtime scheduling are distinct concerns;
-this build still provides no scheduler or connected provider authorization.
-
-The [Linear/unconnected slice](facts/automations-linear-verification.md)
-adds nested Linear trigger menus, Requires connection rows and warnings,
-and the Linear MCP pre-install disclosure. Preview at
-`/automations/editor-fixture?fixture=saved-editor&controls=connections`.
-Connect and Add Plugin explain that authorization/installation is unavailable;
-they do not contact a provider. The [closure audit](facts/automations-acceptance-closure.md) expands this to 55
-states / 2,678 checks with multi-status run filters. The captured web subset
-is complete, not whole-product parity. Desktop gate geometry and the historical
-Grok Bot promotion remain explicitly unverified in C-SHELL/C-ACCOUNT.
-The C-SETTINGS navigation/account opener is described below.
-
-## Settings navigation preview
-
-Open `/dashboard/settings?fixture=settings-navigation`, or use the Automations
-**Local preview → My Settings** link. The [settings opener](facts/settings-navigation-verification.md)
-includes the observed sidebar, Privacy/Profile, account menu and overview.
-All controls are read-only locally; identity is synthetic and no account,
-privacy, billing, upload, session or authorization request is made.
-Integrations and Spending panels are explicitly unverified placeholders.
-The optional private gate covers 60 states / 3,676 measured comparisons.
-
-## Local product settings and sign-in
-
-The shell gear opens `/settings`. Five sections save validated preferences to
-`<DATA_FILE>.settings`; secrets are write-only. `/login` creates the deployment's
-first local account, then signs it in. Later registrations are disabled. Account
-settings shows the active identity and Sign out. Authentication lives in
-`<DATA_FILE>.auth` (0600); passwords and session tokens are hashed. This is a
-single-user **loopback-only** deployment, not a public authentication service.
-See [settings scope](facts/settings-functional.md) and
-[account security boundary](facts/account-login.md).
-
-The T3 bridge targets server **0.0.45** with bootstrap token exchange or a
-scoped bearer, fresh WebSocket tickets and discovered instance/model IDs.
-The environment URL must use HTTPS and its host must be explicitly allowed;
-direct `http://127.0.0.1` pairing is not enabled. See
-[protocol evidence and remaining limits](facts/t3-bridge.md).
-
-## MCP management server (owner P4)
-
-See [MCP setup and transports](mcp/README.md). The isolated `mcp/` package is the
-one authorized runtime-dependency exception: official SDK 1.32.1. Install it
-with `npm --prefix mcp ci` before `npm run check` (the full gate checks both
-packages). Start `npm --prefix mcp start` or `npm --prefix mcp run http` instead
-of starting a second product process; both share one state owner with the UI.
-
-It exposes full definition/trigger/run management, model and settings reads and
-writes, resources and a guided prompt. Registry probes implement stdio and
-Streamable HTTP with deny-by-default destination policy and write-only secrets.
-Per-automation MCP grants persist, but run-time MCP invocation is a follow-up:
-bound runs fail visibly rather than silently dropping their tools.
-T3 live interoperability and all new unmeasured UI remain explicitly UNVERIFIED.
+Reading locally: fine. Publishing a transcription: not. That is the whole rule.

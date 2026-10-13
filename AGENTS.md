@@ -1,31 +1,35 @@
-# AGENTS.md — rules of this repo (enforced, not advisory)
+# AGENTS.md
 
-Read `docs/RESTART-2026-10-12.md` first. It governs.
+**The fact-extraction queue in this repo is closed.** Read README.md for why.
+Do not open PRs adding `facts/*.md` files, and do not resume the 14-row queue
+with a reworded brief — six independent refusals is a finding, not an obstacle.
 
-## The two laws
+## What is in scope here
 
-1. **Copy-first, chisel-only.** Every pixel and every behavior starts from the captured original
-   (Cursor `corpus/` for shell/settings; Devin `devin-decompile/app/src` for automations). You may
-   delete and adapt. You may NOT invent layout, visuals, or interaction. An invented surface is a
-   failed PR.
-2. **Verify before PR.** No PR opens without: (a) tests green, (b) a Computer-Use verification
-   artifact — screenshots + interaction pass of YOUR change served live, compared against the
-   captured original, linked in the PR body.
+- Maintaining the two reading tools (`pipeline/split.mjs`, `pipeline/names.sh`)
+  so a session can read a minified bundle locally.
+- Nothing else. Product work lives in the sibling repo.
 
-## Process
+## The rule
 
-- Planning phase: produce plans/maps only. No implementation PRs until the owner approves the plans.
-- One idea per PR. Branch from latest main. Conventional commits.
-- CodeRabbit reviews first (`@coderabbitai autofix` to apply its fixes). Address or rebut every
-  thread before ready-for-review.
-- Never mark your own PR ready — the orchestrator flips it after checking evidence links,
-  verification artifact, and tests.
-- If you touch two features, split the PR.
-- Flaky test = P0, fix now, never retry-into-green.
+This repo is public. Never commit vendor material or a transcription of one —
+including a fact table reproducing a surface's internals at byte fidelity:
+every string, prop name, class, regex and flag default cited to a decompiled
+artifact. "Facts, not code" does not change what that is.
 
-## Sources of truth
+Reading a shipped bundle locally to understand behavior is fine and is what
+these tools are for. Publishing the distillation is not.
 
-- Shell/settings UI: `corpus/` (Cursor original).
-- Automations UI: `devin-decompile` repo `app/src/features/*` + its DECOMPILED_SPEC (Devin layout).
-- Inference/connection: Linear only (docs/MASTER-PLAN.md §V1–V10). T3 Connect is parked.
-- Evidence labels: observed > extracted > invented(none).
+Full statement of the rule, and the history that produced it:
+`docs/PROVENANCE.md` in
+[`linear-loops-decompile`](https://github.com/I-am-drunk/linear-loops-decompile).
+
+## If you think a case is different
+
+Raise it with the owner. Interoperability work, wire-format compatibility and
+security analysis are legitimate and differently situated. "We need it to match
+exactly" is not, by itself, a reason.
+
+## Tooling
+
+`gh`, already authenticated. No MCP, no PAT.
