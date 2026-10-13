@@ -9,7 +9,7 @@
 > `reference/raycast/proof.html` (Astra, branch ref-raycast-animation); raycast.com live;
 > `docs/ATSU-UI-PRINCIPLES.md` (ref-atsu); baseline spec above.
 >
-> Pass log: P1 skeleton · P2 facts · P3 decisions · P4 light palette derived, React shape, Astra facts folded in · P5 (simplify).
+> Pass log: P1 skeleton · P2 facts · P3 decisions · P4 light palette derived, React shape, Astra facts folded in · P5 simplified: two stages not three, one fallback paragraph, no dark-fallback escape hatch, delivery matches the React route.
 >
 > Status of inputs at P4 (2026-10-13 09:40): `docs/RAYCAST-ANIMATION.md` + interaction doc landed on
 > `ref-raycast-animation`; `reference/raycast/proof.html` and `extracted/` **not yet pushed**. §2 corrected
@@ -162,13 +162,13 @@ What the picture actually is, mathematically:
    MeshTransmissionMaterial renders the scene to a 1024² target and then samples it 6× per
    rod fragment per frame.
 
-Rebuild plan (three stages; Astra ships stage 1 first, parity-checked at each stage):
+Rebuild plan (two stages; Astra ships S1 first, parity-checked at each stage). Pre-warming is
+not a stage: S1 compiles both programs inside the scene's mount effect, nothing earlier.
 
 | Stage | What | Size | JS/frame | Pixel-parity claim |
 |---|---|---|---|---|
-| S1 | Raw WebGL2, no framework: the extracted shaders verbatim, hand-rolled cube + instanced rods + transmission render target. One `<script type=module>` inlined in the login HTML. | ≤ 18 KB gz | ≤ 1.5 ms (M1) | **exact** (same GLSL, same uniforms, same `damp3`) |
+| S1 | Raw WebGL2, no framework: the extracted shaders verbatim, hand-rolled cube + instanced rods + transmission render target. One ES module `src/login/scene.ts`, imported by `RaycastScene` (§10) and listed in the route's `modulepreload`. | ≤ 18 KB gz | ≤ 1.5 ms (M1) | **exact** (same GLSL, same uniforms, same `damp3`) |
 | S2 | Specialise dead branches of the transmission shader (no backside, no env map, no roughness map, flat/linear colour) | ≤ 12 KB gz | ≤ 1.0 ms | exact within 1/255 (branch removal, no maths change) |
-| S3 | Pre-warm: compile shaders in a `requestIdleCallback` before the canvas is attached; first frame drawn before `DOMContentLoaded` finishes | same | — | n/a (timing only) |
 
 Hard rule from `docs/interactions/raycast-animation.md`: any approximation (e.g. a 2D
 pre-rendered field, fewer rods, fewer samples) is **labelled and rejected as exact**. S1
@@ -229,9 +229,9 @@ Everything the user sees in the first second, in order (DESIGN, budgets in §8):
 
 | t (ms from HTML byte 0) | What | How |
 |---|---|---|
-| 0 | HTML + inlined CSS + inlined scene module arrive in one response (≤ 24 KB gz total) | login route serves a single self-contained document |
-| ≤ 16 | First paint: page colour, card, labels, inputs. Card is in the HTML, not rendered by JS. | no JS on the critical path for the form |
-| ≤ 40 | Scene module parses; WebGL2 context + shaders compile (S3 pre-warm) | module runs before `DOMContentLoaded` |
+| 0 | HTML + CSS + page JS; `scene.ts` in `modulepreload` (≤ 24 KB gz total before first frame) | React route; server-rendered form markup |
+| ≤ 16 | First paint: page colour, card, labels, inputs. Card markup is server-rendered; typing works before hydration. | no JS on the critical path for the form |
+| ≤ 40 | Scene module parses; WebGL2 context + both programs compile | inside `RaycastScene`'s mount effect (§10) |
 | ≤ 100 | First scene frame: clear colour + rods + cube at `scale ≈ 0.02` | `requestAnimationFrame` #1 |
 | 100 → ~3000 | Cube grows: `damp3(scale → 1, smoothTime 1)` = source. Visually settled (≥ 0.99) at ≈ 3.0 s | same maths as source, seeded from the first frame's clock |
 | 0 → ∞ | Colour field scrolls at speed 0.1 (period of the fastest wave ≈ 63 s). Rods distort to 15 / .025 if viewport > 7.3 world units | source |
@@ -241,12 +241,11 @@ Pointer: kept (answers OQ3). Rotation ±0.3 rad on the cube, damp 0.5, from `mou
 `window` only. The scene is `pointer-events: none`, so the form owns every click; the
 pointer only *influences* rotation. Touch devices: no `mousemove`, no rotation (source).
 
-`prefers-reduced-motion: reduce` (answers V5 precisely): the scene module exits before
-creating a context. The page shows the **settled pose** as a static PNG: cube at scale 1,
-rotation 0, field at t = 10000 (uTime 0), rods at distortion 0. Astra renders this PNG
-from S1 at 1512×982 DPR 2 light + dark, ≤ 60 KB AVIF each, served as `<img aria-hidden>`
-behind the scrim. This is also the fallback when `WebGL2` is unavailable or context creation
-throws. No CSS animation anywhere on the page, so nothing else needs the media query.
+`prefers-reduced-motion: reduce`, no WebGL2, or context creation throws: one still image per
+theme, `/login/still-{dark,light}.avif`, `<img aria-hidden>` in the scene's place (§10 shows
+both branches). The still is the settled pose: scale 1, rotation 0, uTime 0, distortion 0,
+rendered by Astra from S1 at 1512×982 DPR 2, ≤ 60 KB each. No CSS animation exists on the
+page, so nothing else needs the media query.
 
 `document.hidden` → cancel rAF; resume with the clock paused (source demand-mode behaviour).
 Form submit success → cancel rAF (page is being replaced).
@@ -257,7 +256,7 @@ Measured on the login route, cold cache, Chrome 130, M1 Air, loopback server.
 
 | Metric | Target | Source of truth |
 |---|---|---|
-| HTML response (form + CSS + scene module inlined) | ≤ 24 KB gz; ≤ 1 request before first frame | `curl -sw %{size_download}` with `Accept-Encoding: gzip` |
+| Bytes before first scene frame (HTML + CSS + page JS + `scene.ts`) | ≤ 24 KB gz; ≤ 3 requests, all `modulepreload`ed | `curl -sw %{size_download}` with `Accept-Encoding: gzip` |
 | Scene module alone | S1 ≤ 18 KB gz, S2 ≤ 12 KB gz | `esbuild --minify \| gzip -9 \| wc -c` |
 | Reduced-motion/fallback PNG (AVIF) | ≤ 60 KB each, 2 files, lazy (only loaded when used) | file size |
 | First Contentful Paint | ≤ 50 ms after HTML | Performance panel |
@@ -269,8 +268,7 @@ Measured on the login route, cold cache, Chrome 130, M1 Air, loopback server.
 | Layout shift | CLS 0 (card is in HTML, fixed size) | Lighthouse |
 | Form interactive | at first paint (no JS needed to type) | manual |
 
-How the build meets it: no framework, no bundler runtime, one ES module inlined by the
-server; shaders as template literals; geometry generated in ≈ 40 lines (box + 16 cylinders
+How the build meets it: no 3D framework, one dependency-free ES module (`scene.ts`), preloaded; shaders as template literals; geometry generated in ≈ 40 lines (box + 16 cylinders
 via `drawArraysInstanced`); one render target for transmission (1024²) sized once; uniforms
 updated in place. Anything over budget blocks the PR, not the spec.
 
@@ -289,7 +287,7 @@ visible UI).
 | P4 | Pointer | move pointer to 4 corners, hold 1 s each; compare rotation via silhouette | ≤ 2 px |
 | P5 | Rods | count 16, spacing 1 unit, tilt 42° measured from screenshot | exact |
 | P6 | Scrim | overlay diff of our scrim vs raycast `:after` on a flat grey scene | identical |
-| P7 | Light theme | §6 table; owner eye check + card border ≥ 1.3:1 on 5 frames | pass or fall back to dark scene |
+| P7 | Light theme | render light tone B (§6) at t = 5 s, 60 s; owner eye check; card border ≥ 1.3:1 on 5 frames; OKLab L of each emitted stop within .02 of the §6 derivation | pass, or return the derivation to Fable with the failing frame (no dark fallback) |
 | P8 | Reduced motion | emulate; assert no WebGL context, `<img>` present, 0 rAF | exact |
 | P9 | Budget | every row of §8 | all green |
 | P10 | Form | click every control; tab order Email → Password → button; all 7 states in §4 with screenshots; autofill works | all |
