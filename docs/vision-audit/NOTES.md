@@ -653,3 +653,14 @@ fragment, hash grain seeded per pixel), lane log 06:14 perf trace.
 - **V3 scrim "≥ 4.5:1 on every frame"** is right in spirit but unmeasurable as written against
   a moving refraction field. FIX → state where it is measured (card background vs text, card
   is opaque) so the scene never enters the contrast calculation at all. Simpler and provable.
+
+## 30 · 06:50 · Lane health — q45 third death; raycast reconnecting; login skeleton not pushed
+
+- fable-q45 session bbdb6f3c died 06:44: `Connection lost before a response was produced.`
+  31 tool calls, zero writes, 52 min. Relaunched at escalation 9. Three deaths on this goal.
+- astra-raycast (codex): `Reconnecting... 2/5` at 06:47; still alive (2 h 53). The 58-line
+  RAYCAST-ANIMATION.md draft remains uncommitted (entry 28 FIX stands).
+- design-login 617f53f (P1 skeleton) exists locally only; `origin/design-login` is still at
+  main. Runner pushes. Until then the login lane's one deliverable is on one disk.
+- Projects (40 calls) and the login relaunch (19 calls): zero writes at 06:47. The login lane
+  that wrote the skeleton was the *previous* session; the current one has not touched the file.
