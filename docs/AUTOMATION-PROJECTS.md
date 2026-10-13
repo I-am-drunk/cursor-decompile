@@ -191,7 +191,7 @@ Nesting: **never**. Dropping a folder on a folder is not possible because folder
 
 | State | Board renders | Evidence |
 |---|---|---|
-| loading | frame with 8 skeleton cards: 16px circle · 120px×12px bar · 180px×12px bar · 91×20 bar | Devin's four-row skeleton metric re-flowed (EXTRACTED `ListSkeleton`) |
+| loading | frame with 8 skeleton cards, each = Devin's skeleton row re-flowed: `h-[14px] w-48` bar · `h-[14px] w-32` bar (gap-1) · line 3 `h-5 w-[91px]` left, `h-4 w-16` right | EXTRACTED `ListSkeleton` (`ListPagination.tsx` L54–L66); no glyph placeholder because Devin has none |
 | no automations, can manage | Devin §6.5 three creation cards + suggested templates, unchanged; no frame | EXTRACTED |
 | no automations, cannot manage | `No automations yet` centred, same as Devin | EXTRACTED |
 | filters match nothing | `No automations match these filters` + `Clear all` inside the frame | EXTRACTED |
@@ -216,8 +216,11 @@ Nesting: **never**. Dropping a folder on a folder is not possible because folder
 | `…` menu → `Move to project ›` | automation card (menu is `canManage` only; hidden on hover like Devin's) | submenu: list of projects + `New project…` + `Remove from project` (when filed) |
 | F2 | folder card | rename inline |
 
-`Move to project` is the only addition to Devin's row menu (Duplicate, Enable/Disable,
-Delete). It is also the touch path and the screen-reader path.
+`Move to project ›` is inserted after `View sessions` in Devin's row menu (Enable/Disable ·
+View sessions · Duplicate · ─ · Delete; EXTRACTED `AutomationListItem.tsx` L132–L145). Devin's
+main page mounts rows with `canManage=false, hideActions=true` so the menu is **hidden**
+there; we mount with `canManage=true` because the owner is always the manager of a
+one-workspace product. The menu is also the touch path and the screen-reader path.
 
 ### 8.2 Touch (coarse pointer)
 
