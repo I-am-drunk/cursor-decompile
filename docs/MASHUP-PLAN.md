@@ -213,3 +213,24 @@ chat gate → login page → error-logs (once original captured).
 
 RESTART §4: Playwright critical journeys (connect Linear, create, edit, view run, chat gate),
 CU screenshot pass per PR against the donor at matching viewport/theme/DPR, 80% on changed lines.
+
+## 8. Open questions for the owner (ranked)
+
+1. Login background: A (gradient mesh, recommended), B (aurora), or C (constellation)?
+2. Customize tab order: desktop 3.10.48 (Plugins · MCPs · Skills · Rules · Hooks · Subagents,
+   chosen) vs current web (Plugins · Skills · MCPs · Hooks · Rules)?
+3. Global run history page is a DESIGN composition (§3.6); accept, or drop to per-automation
+   Events only?
+4. Preflight code step: accept "stored but disabled" for v1 (SERVER-FROM-DEVIN §5)?
+5. Skill chips on chat (§3.8) — accept or defer?
+
+## 9. `[3.10.48]` changelog for this document
+
+| When (local) | Landed on RE branches | Change here |
+|---|---|---|
+| 2026-10-12 23:22 | `DESKTOP-3.10.48-CONNECTORS.md` + `evidence/desktop-3.10.48/*` | §0 token table built from `css-theme.md`/`css-typography.md`; M4 Customize tab set |
+| 23:31 | `DESKTOP-3.10.48-CUSTOMIZATION-SIDEBAR.md`, `-SETTINGS.md` | §3.7 secondary nav geometry; settings root `max-w 900px`, `pl-[230px]` noted as Devin's own frame — **not** adopted, Cursor frame wins |
+| 23:38 | `DESKTOP-3.10.48-CLOUD-CONNECTORS.md` (web capture) | §2 route table unchanged; web tab order recorded as open question 2 |
+| 23:38 | `DESKTOP-3.10.48-AUTOMATIONS.md` | states list/editor/detail deltas vs 3.10.31 are **not yet established**; §3.2–3.5 stay on 3.8.20 spec + 3.10.31 changelog until that pass lands |
+| 23:47–23:58 | re-server `CONNECTOR-BACKEND`, `AUTH-SESSION`, `LIVE-MARKETPLACE-ACCESS` | SERVER-FROM-DEVIN §6 gateway verbs and OAuth refresh; marketplace = public registry, not Devin's token-gated catalog |
+| open | remote Automations list/editor/detail capture; Connections provider forms | re-read on landing; §3 rows marked `[3.10.48]` when revised |
