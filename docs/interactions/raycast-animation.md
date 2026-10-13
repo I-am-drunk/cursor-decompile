@@ -17,8 +17,8 @@ Source: reference/raycast/extracted/{config.json,offsets.json,cube-component.js,
 - The decorative surface has no controls, focus targets, click behavior, copy, empty state,
   forms, navigation or error messages. If WebGL fails, retain source background and report
   the error to the diagnostic collector (no invented fallback illustration).
-- Theme: no alternate palette has been extracted. OS light/dark must be tested; do not invent
-  colors. Reduced-motion behavior has not been established; do not claim source equivalence.
+- Theme: use the owner-directed derived two-tone mapping below. Reduced-motion behavior
+  is a documented product adaptation, not an observed source behavior.
 - Diagnostic URL parameters may fix time/viewport for comparisons; these are test apparatus,
   not product interactions. No visible diagnostic controls in the reproduced background.
 - Source CSS edge overlays must be copied verbatim. Pixel equivalence requires matching
@@ -62,3 +62,8 @@ only the matrix/quaternion methods it uses, retaining source arithmetic order. C
 fade ends are #07080a, distinct from the scene clear #07090a (live theme-check.json).
 
 Frame-order refinement (W/S/Q): the transmission callback renders the previous cube state before the cube callback updates scale, rotation and color time. Retain that previous state for the offscreen pass. Snapshot diagnostics set previous=current to compare static states. On the terminal frame, setFrameloop(never) resets the source clock before the cube callback: direct cube time becomes zero; glass time retains the terminal value.
+
+Diagnostic refinement: source-color comparison may compile the captured shader without
+the product theme branch. This is a diagnostic-only option, selected at initialization;
+production dark/light swaps must still share one program and preserve state. Validate
+both clean-browser and lifecycle/context-recovery-first sequences before claiming equality.
