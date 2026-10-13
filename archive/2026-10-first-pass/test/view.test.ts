@@ -11,6 +11,8 @@ test('views escape user content and expose actual empty/loading-free structure',
   assert.match(list([a],'mine','nomatch',1),/No Results Found/);
   assert.match(runs([],'team','','',false),/No Runs Yet/);
   assert.match(runs([],'team','','',false),/data-evidence="runs-card"/);
+  assert.match(gate(),/Upgrade to unlock Automations/);
+  assert.doesNotMatch(shell(gate()),/Local preview|Profile/);
   assert.match(notFound(),/Page not found/);
   assert.match(shell(notFound()),/aria-label="Automations"/);
   const unsafe={...a,triggers:[{id:'"><img src=x>',kind:'Schedule' as const,event:'Cron',value:'0 9 * * *'}]};
