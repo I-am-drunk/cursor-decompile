@@ -2,7 +2,7 @@ import { ScheduleController } from './schedule-controller.ts';
 import { installSidebar } from '../shell/sidebar.ts';
 import { draft, emptyState, events, triggerKinds, validate } from './model.ts';
 import type { Automation, Run, State, Tool, Trigger, TriggerKind } from './model.ts';
-import { btn, dialog, esc, field, gate, chatGate, notFound, icon, link, list, runs, runSummary, shell } from './view.ts';
+import { btn, dialog, esc, field, notFound, icon, list, runs, runSummary, shell } from './view.ts';
 import { referenceAutomation, referenceRun, referenceTime } from './row-data.ts';
 import { EditorController } from './editor-controller.ts';
 import { TriggerController } from './trigger-controller.ts';
@@ -59,10 +59,8 @@ function render() {
   const selected=editUi.models.find(m=>m.id===form.model);
   const selectedName=selected?`${selected.name} ${modelSuffix(selected,form.modelParameters??(form.model==='composer-2.5'?{fast:'false'}:selected.defaults))}`.trim():names[form.model]??(form.model||'Select model');
   let content: string;
-  if (location.pathname === '/chat') content = chatGate();
-  else if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
+  if (params().get('state') === 'loading') content = '<div class="page" role="status">Loading…</div>';
   else if (params().get('state') === 'error') content = `<div class="page" role="alert">Could not load automations. ${btn('Retry','retry','outline')}</div>`;
-  else if (params().get('state') === 'upgrade') content = gate();
   else if (missingRoute) content=notFound();
   else if (isRuns) content = runs(runRows(), params().get('scope') ?? 'team', runQuery, params().get('status') ?? '', searchOpen,names,referenceFixture()?referenceTime:Date.now());
   else if (id&&id!=='new') content = savedEditor(form,selectedName,errors,titleEditing,editorFixture(),triggerUi.preview());
@@ -70,7 +68,7 @@ function render() {
   else content = list(state.automations, scope, query, page,names);
   const markup = shell(content, isRuns ? 'Run History' : id ? form.name || 'New Automation' : '',id&&!isRuns&&!missingRoute?editorToolbar(form,dirty):'');
   if (app.querySelector('main')) { const template=document.createElement('template');template.innerHTML=markup;app.querySelector('main')!.replaceWith(template.content.querySelector('main')!); } else app.innerHTML=markup;
-  app.querySelectorAll<HTMLAnchorElement>('.side-nav a').forEach(a=>{const active=a.pathname===(location.pathname==='/chat'?'/chat':'/automations');a.classList.toggle('selected',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  app.querySelectorAll<HTMLAnchorElement>('.side-nav a').forEach(a=>{const active=a.pathname==='/automations';a.classList.toggle('selected',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   if (referenceFixture() && id==='evidence-automation') {
     app.querySelectorAll<HTMLInputElement>('.ed-header input,.ed-body textarea,.ed-header button,.ed-body button,.ed-toolbar button').forEach(e=>{e.disabled=true;});
   }
@@ -169,25 +167,6 @@ function renderModal() {
     title = 'Filter by'; html = `<div class="menu"><h3>Status</h3>${['running','failed','succeeded','skipped'].map(s=>
       btn(s[0]!.toUpperCase()+s.slice(1),`status:${s}`,params().get('status')===s?'selected':'')).join('')}
       <hr>${btn('Clear all filters','status:')}</div><p>Automation filtering is available from its editor's Run History link. Trigger/tool filters remain UNVERIFIED.</p>`;
-  } else if (modal === 'unsaved') {
-    title = 'Unsaved Changes'; html = '<p>Save or discard changes before continuing.</p>';
-    footer = btn('Keep Editing','dismiss','outline')+btn('Discard','discard','outline')+btn('Save','save','primary');
-  } else if (modal) {
-    title = modal === 'upgrade' ? 'Local preview — no checkout' : 'Original local implementation';
-    html = `<p>No remote account, billing, MCP or agent execution is connected. Definitions are saved on this machine.</p>
-      <p>Observed: upgrade gate, Run History and a real plan-restricted failed-run summary.
-      Automation-list rows remain extracted, not screenshot-certified.</p><div class="menu">
-      ${link('Settings','/settings','button')}
-      ${link('Local automation list','/automations','button')}${link('Captured upgrade state','/automations?state=upgrade','button')}
-      ${link('Observed empty Run History','/automations/runs','button')}${link('Synthetic run states','/automations/runs?fixture=runs','button')}
-      ${link('Reference-derived failed run','/automations/runs?fixture=observed-failure','button')}
-      ${link('Reference-derived saved editor','/automations/editor-fixture?fixture=saved-editor','button')}
-      ${link('Captured trigger controls','/automations/editor-fixture?fixture=saved-editor&controls=triggers','button')}
-      ${link('Preset and validation captures','/automations/editor-fixture?fixture=saved-editor&controls=presets','button')}
-      ${link('Unconnected Linear and MCP','/automations/editor-fixture?fixture=saved-editor&controls=connections','button')}
-      ${link('Run filter acceptance','/automations/runs?fixture=observed-failure&controls=filters','button')}
-      ${link('Loading state (design)','/automations?state=loading','button')}${link('Error state (design)','/automations?state=error','button')}
-      ${btn('Export layout measurements','export')}</div>`;
   } else { closeModal(); return; }
   overlays.innerHTML = dialog(title,html,footer);
   activateDialog();

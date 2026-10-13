@@ -1,0 +1,14 @@
+/* Carved from artifacts/shell/reference-{expanded,collapsed}.png (DPR 2).
+   Only Automations remains. Collapse is explicit; no hover/drag/focus expansion. */
+.shell-sidebar{width:280px;border:0;z-index:3;display:flex}
+.sidebar-surface{position:absolute;inset:0;width:280px;display:flex;flex-direction:column;background:#f5f5f5;border-right:1px solid var(--line);overflow:hidden}
+.shell-sidebar .brand{height:44px;padding:0 12px;justify-content:flex-end}
+.shell-sidebar .side-nav{padding:0 6px}
+.shell-sidebar .destination{display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border-radius:8px;white-space:nowrap}
+.shell-sidebar .rail-icon{display:flex;flex:0 0 14px;width:14px;height:14px}
+.shell-sidebar .rail-icon svg{display:block;width:14px;height:14px}
+body.collapsed .shell-sidebar,body.collapsed .sidebar-surface{width:44px}
+body.collapsed .shell-sidebar .brand{padding:0;justify-content:center}
+body.collapsed .shell-sidebar .side-nav{padding:3px 8px}
+body.collapsed .shell-sidebar .destination{width:26px;height:26px;padding:0;justify-content:center}
+body.collapsed .shell-sidebar .side-label{display:none}

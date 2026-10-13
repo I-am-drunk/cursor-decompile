@@ -68,17 +68,6 @@ P3 inference [#22](https://github.com/I-am-drunk/cursor-decompile/pull/22) merge
 P4 MCP [#23](https://github.com/I-am-drunk/cursor-decompile/pull/23) completes
 this ordered product series, not whole-reference parity.
 
-## UI SETTINGS CARVE — owner correction in progress
-
-Four retained sections now use captured rows/headings instead of the invented
-index, tables and registry forms. Standalone search and Profile were deleted;
-the disconnected chat gate links to Linear connection.
-[Source mapping, file audit, validation and blockers](docs/SETTINGS-CARVE.md).
-71 root + 6 MCP tests and Chromium checks pass. Not ready to ship: original
-search/connected-chat captures and a real Linear account/chat backend are
-missing; the strict repository-wide branding scan also remains nonzero.
-Search/Connect remain disabled. No connected-chat or whole-page parity claim.
-
 ## Agent B — automations carve and polish
 
 Automations/Run History shell, compact SVGs, hover/drag cleanup, removed
@@ -97,13 +86,3 @@ hour/minute choices, labeled timezone search and raw cron editor, retaining
 Cursor validation behavior. [Complete change/source audit](docs/verification/automations-carve.md).
 Historical passing tests do not establish new raster parity; limitations remain
 explicit. Peer COMMENT review is required before merge.
-
-## Animation / interaction audit
-
-[Motion inventory and screenshots](docs/verification/motion-audit.md) retain
-180ms sidebar width easing and remove invented opacity/shadow/reveal motion.
-44px rail icons and toggle remain clickable; 280px labels and narrow-screen
-explicit toggle verified. Devin scheduling pass fixes invalid custom dismissal
-through timezone selection and uses a trash action. 15 local screenshots saved;
-75 root + 6 MCP tests and Chromium interaction gate pass. Reference hover timing
-and whole-page raster parity remain UNVERIFIED. Peer COMMENT review requested.

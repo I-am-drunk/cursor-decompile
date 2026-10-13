@@ -13,18 +13,12 @@ test('HTTP server serves original UI and protects mutation and private files',as
   await new Promise<void>(r=>server.listen(0,'127.0.0.1',r));
   t.after(async()=>{await new Promise<void>(r=>server.close(()=>r()));await rm(dir,{recursive:true,force:true});});
   const origin=`http://127.0.0.1:${(server.address() as AddressInfo).port}`;
-  for(const path of ['/codebase','/codebases','/search','/agents','/editor']) {
+  for(const path of ['/codebase','/codebases','/chat','/search','/agents','/editor']) {
     const page=await fetch(origin+path,{redirect:'manual'});
     assert.equal(page.status,404);assert.match(await page.text(),/Page not found/);
   }
-  const gate=await fetch(origin+'/chat',{redirect:'manual'});
-  assert.equal(gate.status,303);assert.equal(gate.headers.get('location'),'/login');
   const send=await signIn(origin);
-  const chat=await send('/chat');assert.equal(chat.status,200);assert.match(await chat.text(),/\/app.ts/);
-  for(const path of ['/settings','/settings/linear','/settings/mcp','/settings/accounts','/settings/general']){
-    const settings=await send(path);assert.equal(settings.status,200);assert.match(await settings.text(),/live-app.ts/);
-  }
-  for(const path of ['/codebase','/codebases','/search']) {
+  for(const path of ['/codebase','/codebases','/chat','/search']) {
     const page=await send(path);assert.equal(page.status,404);assert.match(await page.text(),/Back to Automations/);
   }
   for(const path of ['/dashboard','/dashboard/settings','/dashboard/integrations','/dashboard/spending']){

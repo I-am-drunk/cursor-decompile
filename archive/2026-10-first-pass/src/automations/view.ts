@@ -5,8 +5,6 @@ export const esc = (value: unknown): string => String(value ?? '').replace(/[&<>
   c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 export const icon = (name: string): string => {
   const paths: Record<string, string> = {
-    send: '<path d="M2 2.5h12L8 14V7.5L2 2.5Z"/>',
-    automation: '<rect x="1.5" y="4.5" width="13" height="10" rx="2"/><path d="M8 1v3.5M5.5 8v3m5-3v3"/>',
     gear: '<path d="M6 1h4l1 3 3 1v4l-3 1-1 3H6l-1-3-3-1V5l3-1Z"/><circle cx="8" cy="7" r="2"/>',
     person: '<circle cx="8" cy="5" r="3"/><path d="M2 15v-2a6 6 0 0 1 12 0v2"/>',
     search: '<circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 4 4"/>',
@@ -36,28 +34,14 @@ export function shell(content: string, crumb = '', toolbar = ''): string {
   const destination=(name: string, glyph: string, path: string) =>
     `<a href="${path}" ${path.startsWith('/automations')?'data-nav':''} aria-label="${name}" title="${name}" class="destination ${name===(crumb==='Run History'?'Run History':'Automations')?'selected':''}"><span class="rail-icon">${icon(glyph)}</span><span class="side-label">${name}</span></a>`;
   return `<aside data-evidence="sidebar" class="shell-sidebar" aria-label="Main navigation"><div class="sidebar-surface">
-    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Collapse sidebar" aria-expanded="true"')}${btn(icon('search'), 'sidebar-search', 'icon side-label', 'aria-label="Search" disabled')}</div>
-    <nav class="side-nav">${destination('New Chat','send','/chat')}${destination('Automations','automation','/automations')}</nav>
-    <div class="no-agents side-label">No Agents Yet</div><div class="account">
-      ${destination('Settings','gear','/settings')}
-  </div></div></aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
+    <div class="brand">${btn(icon('sidebar'), 'collapse', 'icon', 'aria-label="Collapse sidebar" aria-expanded="true"')}</div>
+    <nav class="side-nav">${destination('Automations','bot','/automations')}</nav>
+  </div></aside><main>${crumb ? `<div class="breadcrumb ${toolbar?'ed-bar':''}" data-evidence="breadcrumb">${link('Automations','/automations')}<span>›</span>${esc(crumb)}${toolbar}</div>` : ''}
     <div class="scroll-pane">${content}</div></main>`;
 }
 
-// Owner-required disconnected state; never infer a connection from saved intent.
-export function chatGate(): string {
-  return '<div class="chat-gate"><h1><a href="/settings/linear">Connect to <span>Linear</span></a></h1></div>';
-}
 export function notFound(): string {
   return `<div class="page"><h1>Page not found</h1><p>This page is no longer available.</p>${link('Back to Automations','/automations','button outline')}</div>`;
-}
-export function gate(): string {
-  return `<div class="page gate"><header><h1 data-evidence="gate-title">Automations</h1></header>
-    <section class="upsell" data-evidence="gate-card"><div class="upsell-inner">
-      <div><h3 data-evidence="gate-heading">Upgrade to unlock Automations</h3>
-      <p data-evidence="gate-description">Upgrade for Automations, unlimited completions, MAX Mode, and more</p></div>
-      ${btn('Upgrade to Pro', 'upgrade', 'primary', 'data-evidence="gate-button"')}
-    </div></section></div>`;
 }
 export function tabs(scope: string, action = 'scope'): string {
   return `<div class="tabs" role="tablist" aria-label="${action === 'scope' ? 'Automation filters' : 'Run ownership'}">
