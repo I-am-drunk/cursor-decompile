@@ -844,3 +844,25 @@ method and pass threshold; artifact location; PR split (spec → S1 scene ≤ 50
   depends on raycast's `?heroDebug` param; confirm it exists in the captured HTML or drop
   the claim and use pointer-parking only.
 - Nine commits on `design-login`, origin still at main. Runner pushes before anything else.
+
+## 40 · 08:05 · `design-decisions` f24a3bc — DECISION-preflight.md pass 1: cut from v1
+
+**Checked:** §1 plain-words definition (programmable condition + fan-out mapper, not env
+setup), §2 why Devin built it, §5 options table, §6 recommendation with four weighted reasons
+and a reinstate condition, §7 import rule.
+
+**Verdict: on-vision. Decisive, evidenced, and the answer is the simple one.**
+
+- The owner said he did not understand the feature; §1 explains it in one paragraph and a
+  three-row table. "Not environment setup" corrects the goal text's own guess. That is the
+  decision doc doing its job before it decides.
+- Option B ("store but disabled") is named for what it is: an always-disabled control, an
+  invented interaction that GOAL-SYSTEM §1 bans. Agrees with entry 07. Good that the lane
+  reached it independently.
+- Reinstate condition is concrete (first event poller lands AND one real automation needs
+  code), and the build order for that day is listed. Nothing is left vague.
+- **One FIX for the server plan, not this doc:** SERVER-FROM-DEVIN §5 and §2 still carry the
+  code-step routes as "accepted, stored, disabled". With this decision they go to the 404
+  column entirely (entry 07 FIX becomes mandatory). The import rule (drop `code_step`, one
+  run-log line) is the only trace.
+- Skill-chips doc is being edited in the main checkout right now (file watcher 08:03).
