@@ -793,3 +793,13 @@ decision, the contrast rule.
   plan (how Astra CU-tests against raycast.com: viewports, DPR, both themes, reduced motion,
   the parity method from RAYCAST-ANIMATION.md). Then passes P3–P5 should *cut*, not add.
 - Six local commits, origin still at main. Runner pushes.
+
+## 37 · 07:45 · fable-q45 hung (same signature); login lane is the only one producing
+
+- Session fa4a4908 (fable-q45, relaunched 06:44): transcript frozen since 07:31:34, process
+  alive (56 min) with two gateway sockets open. Third hang-then-die cycle expected. 45 tool
+  calls, zero writes since the 07:00 skeletons (those came from the prior session).
+- fable-projects relaunch b919dd74 (07:22): 18 tool calls, zero writes at 07:38.
+- Contrast: fable-login, relaunched with the "progress-banking" preamble, has committed six
+  passes in 70 minutes. Same model, same gateway, different prompt. The preamble works;
+  the other two lanes are still running the old prompt.
