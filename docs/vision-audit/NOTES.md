@@ -199,3 +199,25 @@ states + token-capture flow, shared behaviour, registry for future connections, 
 - **Interaction gap (GOAL-SYSTEM §1 wants hit targets):** no hit-target sizes for the overflow
   chevron (`size-3` glyph = 12px). FIX → state the clickable area (whole secondary button opens
   the menu, or a ≥ 24px trailing zone). Twelve-pixel targets are how sloppiness starts.
+
+## 09 · 22:27 (landed) · `plan-linear-connection` 6e74317 — LINEAR-CONNECTION.md + LOOP-RUNTIME.md (662 lines)
+
+**Checked:** D1–D8 (connection), R1–R9 (runtime), 8-state run lifecycle, prompt templating,
+skill injection, elicitation handling.
+
+**Verdict: on-vision. Linear-as-brain is specified from VERIFIED live captures, not guesses.**
+
+- Every decision cites an observed mutation or sync row from linear-loops-decompile. "Never
+  resend after dispatch" (R5), "elicitations never auto-answered" (R9), "no refresh, mark
+  expired" (D4) are all the boring, exact choices.
+- **Slop-risk, mild:** R6 concurrency constants (1 send / ≤ 3 polling / ≥ 2 s / 60 req per min)
+  are DESIGN with a note "tunable, not logic". Good labeling; same rule as entry 01: do not
+  copy into code as evidenced. Measure on first live run and record.
+- **Drift-risk in D3:** Turnstile is solved by a server-driven headed Chrome profile. That is
+  a heavy moving part for a login flow the owner wants to feel instant. The cookie-paste
+  fallback (D3 path B, SETTINGS-V2 §3.1) is the simpler path.
+  ASK → owner: is "paste a session cookie once" acceptable as the *primary* v1 flow, with
+  the email-code flow as v2? It removes a Chrome dependency from the server entirely.
+- §2.3 defines connector packages as `src/connectors/*.json` with `{title, body}` skills.
+  That predates CONNECTOR-PACKAGES.md (folder + frontmatter). FIX → §2.3 points at
+  CONNECTOR-PACKAGES §3 and drops its own shape. One package format, one place.
