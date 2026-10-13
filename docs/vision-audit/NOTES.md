@@ -512,3 +512,25 @@ account-managed plugins, the "Practical options" verdict table, ACP lifecycle RP
   disconnectServer`) is the server contract our Customize → MCPs tab needs. CONNECTORS-PAGE-SPEC
   §5 should cite it by name rather than inventing verbs.
 - No slop: every claim has a byte offset; "no live requests were made" is stated where true.
+
+## 22 · 05:55 · `plan-devin-mashup` 0f73ebf/f1b8501 — docs/MASHUP-PLAN.md (236 lines)
+
+**Checked:** §0 one-rule, §1 decisions, §2 routes, §3 page-by-page composition, §4 seams,
+§5 deleted list, §6 build order, §8 owner questions, §9 changelog.
+
+**Verdict: on-vision as the composition map. §8 is now four-fifths answered; the doc does not know.**
+
+- On-vision: "Cursor shell, Devin pages, Cursor tokens always" is the mashup rule stated
+  once and applied per row. §5 "Deleted, not hidden" is the right instinct: Slack, ACU spend,
+  security profiles, Consumption/Issues tabs, Pylon, `Improve with Devin` all go. Build order
+  = one PR per arrow. Sidebar is never touched by Devin pages.
+- **Stale by the owner's decisions last night:** Q1 login (answered: raycast), Q2 tab order
+  (answered: desktop), Q4 preflight and Q5 skill chips (delegated to fable-q45, in flight).
+  Q3 global run history (a DESIGN composition) is the only one still truly open.
+  FIX → §8 shrinks to Q3 plus a pointer to the two DECISION docs when they land; §3.9 points
+  at LOGIN-PAGE-V2; §9 changelog gets a 2026-10-13 row for the four decisions.
+- **Drift carried from entry 06:** §9 row 23:47 says "marketplace = public registry, not
+  Devin's token-gated catalog." Flip with C4.
+- **Missing surface:** the automation-projects board has no route in §2 and no row in §3.
+  The brief calls it the global run view's context. FIX → add `/automations` board mode (or
+  `/projects`) as a §2 row marked DESIGN-pending-spec, so the build order knows it exists.
