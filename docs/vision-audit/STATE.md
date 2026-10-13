@@ -1,0 +1,69 @@
+# Vision — where it stands tonight (2026-10-13, updated 08:15)
+
+Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
+
+## One line
+Planning is strong and on-vision; **zero product code exists yet**. Three spec contradictions
+remain, two pushed branches are truncated stubs, settings-v2 finished five passes and is ready for Astra, and the three
+other Fable design lanes (login, projects, decisions) have died repeatedly with no output.
+
+## Status by the five things the owner cares about
+
+| # | Pillar | Tonight | Risk |
+|---|---|---|---|
+| 1 | UI quality, copy-first | Doc-before-code holding. LOGIN-PAGE-V2 §0–§6 landed (extracted raycast facts, 3-layer stack, implementation-complete form states, staged instant rebuild with KB/ms budget, scrim copied from raycast). Two lanes independently extracted identical raycast numbers. | §7 verification plan missing; six login commits unpushed; projects board still has no spec (NOTES 33–36). |
+| 2 | Connector packages w/ skills | Thesis nailed in CONNECTOR-PACKAGES; packages = Devin plugins (CONNECTORS-PAGE-SPEC §7). Devin cloud now has a Create-Plugin dialog + manifest editor captured (NOTES 14) = our authoring UX, copy it. | Settings nav naming still split across two specs (NOTES 01, 06). |
+| 3 | Linear as brain, Devin-shaped server | SERVER-FROM-DEVIN is the only server plan; T3-derived ARCHITECTURE is superseded and should be closed (NOTES 13). Linear chat loop VERIFIED live. | Scheduler format decided in prose (RRULE+tz) but three docs still differ (NOTES 15). Runs-vs-native-Loops question open (NOTES 10). |
+| 4 | Simple settings | SETTINGS-V2 pass 5 = one list, two rows, three states, one button per row (Connect or Disconnect). Exactly the brief; lane parked clean. | Nav still 5 entries in CONNECTORS-PAGE-SPEC; collapse to ≤3 (NOTES 06, 08). |
+| 5 | Speed | Raycast lane measured it: live raycast.com spends ~325 ms parsing + evaluating script; the proof spends ~8 ms (NOTES 26). Color math is four lines of trig; glass pass is the only cost. | Numbers are in the lane log, not yet in the doc; gz size and budget line still missing (NOTES 17, 26). |
+
+## Contradictions to resolve first (Runner, in this order)
+1. **Login background.** LOGIN-PAGE-SPEC offers 3 invented options; owner chose raycast. Strike §2/§4, point at `docs/interactions/raycast-animation.md`, carry the perf budget over. (fable-login is rewriting this now as LOGIN-PAGE-V2.)
+2. **Marketplace source.** CONNECTORS-PAGE-SPEC C4 + SERVER-FROM-DEVIN §6 say "public registry, Devin catalog not proxied." Brief says Devin marketplace via connected Devin account. Flip both. Name which catalog "Available" lists (NOTES 14).
+3. **Settings nav.** Brief: two cards (Linear, Devin). CONNECTOR-PACKAGES says 4 entries w/ "Packages"; CONNECTORS-PAGE-SPEC says 5 with a redundant `Connections`. Collapse to ≤ 3.
+4. **MASHUP-PLAN §8.** Four of five owner questions are answered (raycast, desktop tab order, preflight and chips delegated). Shrink §8 to the global-run-history question; add the projects board as a route (NOTES 22).
+5. **Scheduler format.** RRULE + per-schedule IANA tz, Devin's storage shape; cron only via a proven adapter. State it once in SERVER-FROM-DEVIN §1; park Cursor's raw-cron input as v2 (NOTES 15).
+
+## Housekeeping that blocks a clean morning
+- **Fable design lanes: 1 skeleton in 3 h.** design-login committed a 30-line P1 skeleton at 06:35 (unpushed). fable-projects and fable-q45 have died 3× each on gateway errors (`300s wall-clock budget`, `Connection lost`) after 30–66 reads and zero writes; current relaunches show the same pattern. Fix: resume instead of cold relaunch, transcript-mtime watchdog, and a committed skeleton in the first 10 minutes of every goal (NOTES 20, 24, 28, 30). **Night's biggest risk.**
+- **Truncated pushes:** `origin/plan-devin-port` (65 lines) and `origin/plan-ui-extraction` (141 lines) are stubs; the real docs (1,268 / 267 lines) are only in local worktree commits 2630d27 / aeb5b19. Force-push with lease (NOTES 12).
+- **Stray files:** untracked copies of both maps sit in the `design-decisions` working tree. Delete.
+- **atsu tree is 161 MB in git.** Lane recovered and wrote README + three docs (good); still needs the one-poster-size rewrite before any merge (NOTES 07, 19).
+- **Close plan-server-architecture** as superseded; harvest the scaffold tree into SERVER-FROM-DEVIN (NOTES 13).
+
+## Gaps the brief names that no lane has landed yet
+- **Automation projects board** (iPhone-home-screen folders, default unfiled). fable-projects
+  started 03:50; `design-projects` still at main. No schema either: add `automation_folders` +
+  `automations.folder_id` to SERVER-FROM-DEVIN §3 before any schema PR (NOTES 07).
+- **Light/dark two-tone raycast.** Closed by evidence: raycast.com returns identical values under
+  both OS color schemes (theme-check.json). Light mode cannot be copied. ASK owner: dark-only v1
+  (exact) or one derived light palette labeled DESIGN. Default dark-only (NOTES 25).
+- **Our runs vs Linear native Loops.** Owner must pick. Default stays: our records (NOTES 10).
+- **v1 keep/hide/cut over Devin's automations surface.** DEVIN-PORT-MAP inventories everything
+  (ACU limits, security profiles, Issues triage, consumption charts). Nobody has drawn the v1
+  line yet (NOTES 12).
+- **Preflight code steps + skill chips.** fable-q45 started 03:53; DECISION docs pending.
+
+## Lane scoreboard (tips as of 05:00)
+| Lane | Tip | Verdict |
+|---|---|---|
+| vision-connector-packages | b8f5638 | on-vision, 2 drift points (nav name, marketplace) |
+| ref-raycast-animation | 97eb399 + 58-line uncommitted draft | on-vision, evidence-grade math/geometry; **commit the draft**; budget line missing (NOTES 25, 26, 28) |
+| ref-atsu | f1372bc | principles/tokens/interactions docs on-vision, README added; **161 MB in git**, shrink before merge (NOTES 19) |
+| plan-devin-mashup | c30282c | 4 of 5 specs on-vision; LOGIN superseded |
+| design-settings-v2 | a697aa4 | **on-vision**, 5 passes, 3 states, one button; ready for Astra (NOTES 18) |
+| plan-ui-extraction | aeb5b19 local / 24bbd22 origin | on-vision; **origin truncated** |
+| plan-devin-port | 2630d27 local / 991d4ae origin | on-vision evidence; scope unbounded; **origin truncated** |
+| plan-server-architecture | 97f6018 | superseded by SERVER-FROM-DEVIN; close |
+| plan-linear-connection | 6e74317 | on-vision; Turnstile-Chrome vs cookie-paste ASK open |
+| design-login | a313b6b (10 commits, **unpushed**) | **LOGIN-PAGE-V2 complete through P3**: §0–§9 (facts, stack, form states, staged instant rebuild, scrim, timeline, budget table, CU plan P1–P11). On-vision; ready for Astra S1 (NOTES 29–39, 42) |
+| design-decisions | f24a3bc (unpushed) | **Preflight: cut from v1** (pass 1, decisive). Skill chips pass 1 in progress: "no removable chips" (NOTES 31, 40) |
+| design-projects | d602f44 (unpushed) | **AUTOMATION-PROJECTS skeleton landed 07:45**: §0 idea, iOS-vs-desktop resolutions, 4 owner questions; §2–§11 TODO (NOTES 41) |
+| devin-decompile re-server / re-desktop / docs-public-spec | 741da31 / 0cc66a8 / b20e607 | VERIFIED evidence; cloud plugin editor = authoring copy source |
+| linear-loops re-chat-automations | 008326b | rigorous map; raises Loops-vs-ours question |
+
+## What "good" looks like by morning
+Contradictions 1–4 resolved in docs; truncated branches re-pushed; LOGIN-PAGE-V2 and
+AUTOMATION-PROJECTS exist and pass audit; raycast contract has a byte/ms budget; atsu commit
+rewritten under 50 MB with an INDEX; v1 keep/hide/cut line drawn over Devin's surface.
+Still no code. That is fine.
