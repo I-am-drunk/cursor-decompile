@@ -101,3 +101,36 @@ ramps use an `easeInExpo` curve on the damp (`2^(10e−10)`).
 
 No logo, no footer, no "Forgot password" (none exists: `facts/account-login.md`), no theme
 toggle (follows OS / app setting). Every element earns its pixels (GOAL-SYSTEM §5.2).
+
+## 4. Form states and copy (implementation-complete)
+
+Mode is decided once, from `GET /api/auth/status` → `{configured}`. Until it answers, render
+sign-in mode with the button disabled (no spinner: the answer is loopback, ≤ 20 ms).
+
+| Mode | Heading | Sub | Button | Password autocomplete |
+|---|---|---|---|---|
+| sign-in (`configured: true`) | `Workspace` | `Sign in` | `Sign in` | `current-password` |
+| first-run (`configured: false`) | `Workspace` | `Create local account` | `Create account` | `new-password` |
+
+Field copy: labels `Email`, `Password`. No placeholders (Cursor settings inputs have none).
+`login_hint` query param prefills Email; focus then lands on Password.
+
+| State | Trigger | Visual | Timing |
+|---|---|---|---|
+| idle | load | inputs `--border-primary` 1px, text `--text-primary`; button primary enabled | first paint |
+| focus | `:focus-visible` on input/button | 2px ring `--border-accent-primary`, offset 3 (baseline) | 0 ms, no transition |
+| invalid (client) | submit with empty/short field | browser native validity blocked; instead our error line shows copy below; the first invalid input gets focus; its border `--text-red` | 0 ms |
+| loading | submit accepted | button `disabled`, label unchanged (no "Signing in…"), inputs `readonly`; error line cleared | until response |
+| error (server) | 4xx | error line text = server `error` string verbatim; button re-enabled; Password cleared and focused | 0 ms |
+| success | 2xx | button stays disabled; `location.replace(redirect ?? "/")` | ≤ 1 frame |
+| unreachable | fetch rejects | error line `Cannot reach local server.`; button enabled | 0 ms |
+
+Error line: `role=alert aria-live=polite`, 12/16 `--text-red`, margin-top 8, min-height 16 so
+the card never changes height. Exact server copy (EXTRACTED `src/auth/store.ts`):
+
+- 400 → `Use a valid email and a password of 12–1024 characters.`
+- 401 → `Invalid email or password.`
+- 409 → `Local account already exists. Sign in.` (page also flips to sign-in mode)
+- 429 → `Too many attempts. Try again in a minute.` (DESIGN: server has no copy; GAP until added)
+
+No transitions on the form at all. The only motion on the page is the scene (§5).
