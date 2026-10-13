@@ -467,13 +467,19 @@ process table, lane worktrees (`/tmp/wt-login`, `/tmp/wt-proj`, main checkout on
 - These are the brief's two highest-value unstarted items (login around raycast; the
   automation-projects board) plus the two owner-delegated decisions. Two hours of wall clock
   with zero output is the one thing that makes the morning read "nothing happened."
-  Correction after reading goalrun.py: stderr is already merged into the log. So the `claude -p`
-  process ran 30–40 min, printed nothing, and exited 1. In `-p` mode output arrives only at the
-  end, so a kill or a swallowed API error leaves an empty log.
-  FIX → Runner: run the lanes with `--output-format stream-json --verbose` so progress lands in
-  the log as it happens (the watchdog script only tracks five named interactive sessions, so it
-  is not the killer); read the lane's transcript jsonl for the last assistant message; run one
-  of the three in the foreground once; and split the goal (e.g. fable-projects → "board
-  layout + card" first, drag lifecycle second). Do not keep relaunching the same prompt with
-  escalation 9; that is the runner equivalent of a mega-PR.
+  **Root cause (from the lane transcripts in `~/.claude/projects/-Users-irene-cursor-decompile/`):**
+  all three sessions ran 35–66 tool calls (reads, searches, fetches), made **zero Write/Edit
+  calls**, then ended on a synthetic API error: `chain exceeded 300s wall-clock budget after
+  6–8 chunks (upstream degraded) — retry the request` (login 05:17, q45 04:49) and
+  `risk-refused` (projects 04:49). The gateway killed the turn; `claude -p` exits 1 and prints
+  nothing because output arrives only at the end.
+  FIX → Runner, two parts. (a) Resilience: run lanes with `--output-format stream-json` so
+  partial work is visible; on `upstream degraded` relaunch immediately with `--resume` of the
+  same session id instead of a cold start with escalation counters. (b) Behaviour: these goals
+  say "think slowly, iterate 5 passes" and the lanes obeyed by reading for 40 minutes before
+  writing a line. Add one sentence to each goal: *write a 30-line skeleton of the doc and
+  commit it within the first 10 minutes, then iterate.* fable-settings did exactly that
+  (pass 1 at 02:49) and survived. A committed skeleton is also what the next relaunch resumes
+  from. The `risk-refused` on fable-projects needs a look at what the lane fetched last; if it
+  was an iOS reverse-engineering source, point it at Apple's public HIG instead.
 - Until this is fixed the STATE "gaps" list is not shrinking, whatever the other lanes do.
