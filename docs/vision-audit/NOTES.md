@@ -568,3 +568,23 @@ account-managed plugins, the "Practical options" verdict table, ACP lifecycle RP
   verification. Do not claim pixel identity across states yet. Refraction discrepancies are
   recorded below." That is the right posture after entry 17. Still no budget line; still
   three.js-sized builds. Verdict unchanged: on-vision on fidelity, size budget missing.
+
+## 25 · 06:12 · `ref-raycast-animation` draft, 38 lines — technique, geometry, colors, theme check
+
+**Checked:** §Technique (three.js r186 + R3F, cube color field → half-float target → 16 glass
+cylinders; camera FOV 35°, z 16.54; cube 7³ at z −9; group rotation .73 rad), §Colors
+(#f4feff / #ff7a98 / #b80232, unused #ff162a; clear #07090a vs CSS #07080a), theme check.
+
+**Verdict: on-vision and now evidence-grade. The light-mode ASK is closed by evidence.**
+
+- Every number cites a claim ID with byte offsets. The 1-unit mismatch between canvas clear
+  and CSS grey is recorded rather than smoothed over. This is what "exact" looks like.
+- **Two-tone decided by evidence:** both emulated OS color schemes return identical values,
+  classes and body background (`evidence/theme-check.json`). Raycast has no light palette.
+  The brief's "two-toned, adapting to dark/light mode" therefore cannot be copied; it is a
+  DESIGN item for fable-login. The draft says exactly that ("would require a separate design
+  decision"). ASK → owner: ship login dark-only in v1 (exact copy), or accept one derived light
+  palette labeled DESIGN? Default until answered: dark-only. Do not invent.
+- Still missing: the budget line (entry 17). The draft now has enough geometry to state the
+  hand-written end state: one cube program, one glass program, 16 instanced cylinders, one
+  half-float target. Write the KB/ms targets next to that sentence.
