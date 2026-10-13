@@ -1,6 +1,6 @@
 # AUTOMATION PROJECTS — the board (iPhone-home-screen model for automations)
 
-Status: **pass 4 — board default, timer-free drag-out, one create call.** Branch `design-projects`. Fable, 2026-10-13. Owner's
+Status: **pass 5 — fixed 78px card, folder subtitle, contradiction sweep.** Branch `design-projects`. Fable, 2026-10-13. Owner's
 flagship. Law: GOAL-SYSTEM §1 — nothing here is implemented until every state, transition, timing
 and copy string below is filled. Evidence labels: VERIFIED > OBSERVED > EXTRACTED > DOCUMENTED >
 DESIGN (ours). GAP = missing evidence, never permission to invent.
@@ -63,7 +63,7 @@ re-flow the row's three columns into two lines; we add nothing.
 
 | # | Part | Spec | Evidence |
 |---|---|---|---|
-| 1 | Shell | `rounded-md px-3 py-2`, `hover:bg-tint-secondary`, whole card is the `Link` to `/automations/$id`; min-height 64px | EXTRACTED row classes; height DESIGN (two 18px lines + 20px sparkline line + 8px·2 padding) |
+| 1 | Shell | `rounded-md px-3 py-2`, `hover:bg-tint-secondary`, whole card is the `Link` to `/automations/$id`; height **78px** fixed (8 + 18 + 2 + 18 + 4 + 20 + 8) so every cell is identical | EXTRACTED row classes; height is the sum of Devin's own line metrics |
 | 2 | Line 1 | `flex gap-2.5`: 16px source glyph in an 18px box (`py-px`) · name 13px/18px medium, one-line truncate, tooltip only when clamped · `Disabled` / `Personal` badges `shrink-0` | EXTRACTED L89–L96 |
 | 3 | Line 2 | 13px/18px `text-text-secondary` truncate: `creator · <channel>` (channel in `text-text-accent-primary`) or creator alone | EXTRACTED L97–L99 |
 | 4 | Line 3 | `flex items-center justify-between` `mt-1`: left = 91×20 sparkline (null / 91×20 skeleton / flat centerline / normalised 1.5px stroke, gradients from Devin §6.4) · right = 12px/16px secondary relative date, `—` for never, absolute tooltip | EXTRACTED L104–L113 |
@@ -77,13 +77,12 @@ Draggable surface = the whole card. Clicking without moving ≥4px follows the l
 |---|---|---|---|
 | 1 | Shell | same as 3.1 #1 but `bg-bg-secondary` at rest (a folder is a container; iOS tints the folder tile) | DESIGN, iOS DOCUMENTED |
 | 2 | Line 1 | 16px folder glyph (lucide `Folder`) · project name 13px/18px medium truncate · count badge `<n>` using Devin `Badge` | DESIGN reusing Devin `Badge` |
-| 3 | Line 2 | 13px secondary: the first three member names joined by ` · `, truncated, or `Empty` | DESIGN (replaces iOS 3×3 mini-icon preview, which needs icons we don't have) |
+| 3 | Line 2 | 13px secondary: member names joined by ` · `, truncated (a folder always has ≥2 members, §5.3) | DESIGN (replaces iOS 3×3 mini-icon preview; we have 16px glyphs, not icons) |
 | 4 | Line 3 | left = **summed** sparkline of members (bucket-wise sum, same renderer) · right = most recent `last_invocation_at` across members | DESIGN reusing renderer |
 | 5 | Hover | `hover:bg-tint-secondary` like rows; cursor default; click opens folder (§5.4) | EXTRACTED hover |
 
-A folder card is never a link. Enter/click opens it. It is a drop target (§4.3) and is itself
-draggable only for **reordering projects among projects** — deferred to v2 (§14 Q5); in v1 the
-folder card does not pick up.
+A folder card is never a link. Enter/click opens it. It is a drop target (§4.3). It does not
+pick up (reordering is v2, §14 Q5).
 
 ## 4. Drag lifecycle
 
@@ -326,3 +325,5 @@ toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 
 - pass 4 (2026-10-13): board is the default view; drag-out of an open folder has no 300ms
   timer (pointer on the dim closes it); collision create is one request; stale `over-nothing`
   reference removed; Backspace-to-close dropped.
+- pass 5 (2026-10-13): card height fixed at 78px from Devin's own line metrics; folder
+  subtitle rule simplified (folders always have ≥2 members); read-through for stale references.
