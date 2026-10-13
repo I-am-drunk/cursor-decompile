@@ -164,3 +164,40 @@ Rebuild plan (three stages; Astra ships stage 1 first, parity-checked at each st
 Hard rule from `docs/interactions/raycast-animation.md`: any approximation (e.g. a 2D
 pre-rendered field, fewer rods, fewer samples) is **labelled and rejected as exact**. S1
 is the floor; nothing ships that is not at least S1.
+
+## 6. Scrim, contrast, two-tone (dark/light)
+
+The card is opaque `--bg-elevated`, so text contrast inside it is fixed by tokens and never
+depends on the scene. The scrim exists for two reasons only: (1) copy raycast's own edge
+treatment, which is what makes the scene read as "lit from behind" rather than a screensaver,
+and (2) hold the page edges at the page colour so the card has a calm field around it.
+
+Scrim = raycast `heroBackground:after`, copied verbatim, with its two literal colours
+replaced by one token (DESIGN: tokenisation is the only change):
+
+```css
+.scrim { position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgb(var(--bg-page) / .125) 0%, rgb(var(--bg-page) / .125) 90%, rgb(var(--bg-page)) 100%) bottom right / 100% 100% no-repeat,
+    linear-gradient(to left,  rgb(var(--bg-page) / 0) 0%, rgb(var(--bg-page)) 100%) top left  / 5% 100% no-repeat,
+    linear-gradient(to right, rgb(var(--bg-page) / 0) 0%, rgb(var(--bg-page)) 100%) top right / 5% 100% no-repeat; }
+```
+
+(`#07080a20` = alpha 0x20/255 = .125; `#07080a` = raycast `--grey-900` = our dark `--bg-page`,
+which must be set to `7 8 10` on this page. GAP: confirm our dark `--bg-page` value.)
+
+| Theme | Scene clear colour | Cube colours | Scrim token | Status |
+|---|---|---|---|---|
+| dark | `rgb(7,9,10)` (source) | source c1–c3 | `--bg-page` dark = `#07080a` | EXTRACTED |
+| light | `--bg-page` light | **source c1–c3 unchanged** | `--bg-page` light | DESIGN |
+
+Light decision (answers OQ1): there is no extracted light palette and we do not invent one.
+The only thing that changes is the clear colour and the scrim token. The colour field is
+`pow(color,3)` of pinks/reds and stays legible on a light page because the rods refract it
+over the page colour, not over black. Astra CU-tests both; if light fails the owner's eye,
+the fallback is **dark scene in both themes** (the card still follows the theme), not a new
+palette.
+
+Contrast rule: card text ≥ 4.5:1 is guaranteed by tokens; outside the card there is no text.
+So the only measurable is that the card border remains visible: `--border-secondary` on
+`--bg-elevated` against any scene frame ≥ 1.3:1 sampled on 5 frames (Astra, §9).
