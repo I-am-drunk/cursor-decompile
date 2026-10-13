@@ -63,3 +63,41 @@ Hero CSS overlay (copied verbatim, `heroBackground:after`): bottom fade `#07080a
 What this means for us: the "load animation" is **two things** — (a) the cube growing from
 scale 0 with a critically-damped spring (visible for ≈ 3 s), and (b) the colour field
 scrolling at speed 0.1 behind 16 refracting glass rods. (a) is the moment people remember.
+
+Glass rod placement (EXTRACTED `tF`): rod *n* at x = (n+1)·1 − 8 → 16 rods at x ∈ {−7 … 8},
+spacing 1 world unit (= 2 × radius), the group tilted 0.73 rad (≈ 42°) about z. Distortion
+ramps use an `easeInExpo` curve on the damp (`2^(10e−10)`).
+
+## 3. Page layout (DESIGN, geometry copied)
+
+```
+┌─────────────────────────────────────────────────────┐  viewport
+│ ░░░░░░ scene: fixed, inset 0, z 0, pointer-events none │
+│ ░░░░░░ scrim: fixed, inset 0, z 1 (see §6)             │
+│                                                       │
+│              ┌──────────────────────┐                 │
+│              │  Workspace     20/28 │  card z 2       │
+│              │  Sign in       13/18 │  360 wide       │
+│              │                      │  32 padding     │
+│              │  Email        label  │  12 radius      │
+│              │  [            ] 28h  │                 │
+│              │  Password     label  │                 │
+│              │  [            ] 28h  │                 │
+│              │  [   Sign in   ] 28h │                 │
+│              │  error line 12/16    │                 │
+│              └──────────────────────┘                 │
+└─────────────────────────────────────────────────────┘
+```
+
+| Element | Value | Source |
+|---|---|---|
+| Page | `min-height: 100dvh; display: grid; place-items: center; background: var(--bg-page)` | baseline L1 |
+| Card | `width: min(360px, 100vw − 96px)`; padding 32; radius 12; `--bg-elevated`; 1px `--border-secondary`; `--shadow-L2` | baseline §3 |
+| Card vertical offset | none: dead-centre. raycast's hero text is centred too (padding-driven). | raycast hero CSS |
+| Scene | `<canvas>` fixed inset 0, `aria-hidden`, `pointer-events: none`, z-index 0 | baseline L6 |
+| Scrim | one `<div>` fixed inset 0, z 1, `pointer-events: none` (§6) | DESIGN |
+| Card z | 2; nothing else on the page | — |
+| Stack order | scene → scrim → card. The card never blends with the scene. | — |
+
+No logo, no footer, no "Forgot password" (none exists: `facts/account-login.md`), no theme
+toggle (follows OS / app setting). Every element earns its pixels (GOAL-SYSTEM §5.2).
