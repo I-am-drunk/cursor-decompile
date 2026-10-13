@@ -1,0 +1,1 @@
+import{t as e}from"./react-DNa95sGW.js";var t=e(e=>({open:!1,userId:null,initialValues:null,setOpen:(t,n)=>e({open:t,initialValues:n,userId:n?.userId??null}),close:()=>e({open:!1})}));export{t};

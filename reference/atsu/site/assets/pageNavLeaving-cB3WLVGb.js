@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-B-hcVAMW.js";import{E as t,Vi as n}from"./pro-regular-svg-icons-Dnmsbuee.js";var r=e();function i(){return(0,r.jsx)(n,{icon:t,className:`ml-auto text-foreground/40`})}export{i as t};

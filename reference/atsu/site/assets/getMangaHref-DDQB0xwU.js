@@ -1,0 +1,1 @@
+function e(e){return e===`Novel`?`novel`:`manga`}function t({mangaId:t,medium:n,commentId:r,path:i}){let a=i?`/${i}`:``;return`${`/${e(n)}/${t}${a}`}${r?`?commentId=${r}`:``}`}export{e as n,t};

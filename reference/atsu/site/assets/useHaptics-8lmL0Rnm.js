@@ -1,0 +1,1 @@
+import{a as e,n as t}from"./jsx-runtime-B-hcVAMW.js";import{n,t as r}from"./react-CTzMMUqR.js";var i=e(t(),1);function a(){let e=n(`mobile.ui.haptics`),{trigger:t}=r();return{triggerHaptic:(0,i.useCallback)((n=`light`)=>{e&&t(n)},[e,t])}}export{a as t};

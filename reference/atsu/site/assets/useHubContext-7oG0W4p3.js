@@ -1,0 +1,1 @@
+import{t as e}from"./useQuery-hMuCHTHT.js";import{n as t}from"./apiError-BrHiOXLb.js";import{t as n}from"./hono-BeKjVcNn.js";var r=[`hub`,`context`];function i(){return e({queryKey:r,queryFn:async()=>{let e=await n.hub.context.$get();if(!e.ok)throw await t(e);return e.json()},staleTime:6e4,retry:!1})}export{i as t};

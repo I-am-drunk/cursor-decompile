@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-B-hcVAMW.js";import{t}from"./bundle-mjs-D7QTbxyK.js";var n=e();function r({children:e,value:r,content:i,onChange:a,className:o,...s}){return(0,n.jsxs)(`div`,{className:t(`relative base:inline-block`,o),...s,children:[i,(0,n.jsx)(`select`,{className:`inset-0 absolute opacity-0 cursor-pointer z-2`,value:r,onChange:a,children:e})]})}export{r as t};

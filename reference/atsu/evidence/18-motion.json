@@ -1,0 +1,1249 @@
+{
+  "at": "2026-10-13T08:52:11.060Z",
+  "passes": [
+    {
+      "reducedMotion": "no-preference",
+      "frames": [
+        {
+          "ms": -9.79999997615812,
+          "opacity": "0",
+          "scale": "0.9",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 6.900000023841869,
+          "opacity": "0",
+          "scale": "0.9",
+          "transform": "matrix(1, 0, 0, 1, -8.5782, 16.4965)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 23.500000023841835,
+          "opacity": "0.328952",
+          "scale": "0.932895",
+          "transform": "matrix(1, 0, 0, 1, -13.9295, 26.7874)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 40.10000002384186,
+          "opacity": "0.535061",
+          "scale": "0.953506",
+          "transform": "matrix(1, 0, 0, 1, -17.7971, 34.2251)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 56.90000002384187,
+          "opacity": "0.68553",
+          "scale": "0.968553",
+          "transform": "matrix(1, 0, 0, 1, -20.6907, 39.7898)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 73.50000002384184,
+          "opacity": "0.795421",
+          "scale": "0.979542",
+          "transform": "matrix(1, 0, 0, 1, -22.7885, 43.8241)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 90.20000002384188,
+          "opacity": "0.876622",
+          "scale": "0.987662",
+          "transform": "matrix(1, 0, 0, 1, -24.2875, 46.7066)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 106.80000002384185,
+          "opacity": "0.933946",
+          "scale": "0.993395",
+          "transform": "matrix(1, 0, 0, 1, -25.2712, 48.5985)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 123.50000002384184,
+          "opacity": "0.97203",
+          "scale": "0.997203",
+          "transform": "matrix(1, 0, 0, 1, -25.8258, 49.6649)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 140.20000002384188,
+          "opacity": "0.993327",
+          "scale": "0.999333",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": [
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 156.8000000238419,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": [
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 173.50000002384184,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 190.20000002384188,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 206.8000000238419,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 223.50000002384184,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 240.20000002384188,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 256.9000000238418,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 273.50000002384184,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 290.10000002384186,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 306.8000000238419,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 323.50000002384184,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 340.10000002384186,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 356.8000000238419,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 373.50000002384184,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 390.10000002384186,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 406.8000000238419,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 423.50000002384184,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 440.2000000238419,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 456.8000000238419,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        }
+      ]
+    },
+    {
+      "reducedMotion": "reduce",
+      "frames": [
+        {
+          "ms": 2.1299999642372143,
+          "opacity": "0",
+          "scale": "0.9",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 2.1299999642372143,
+          "opacity": "0",
+          "scale": "0.9",
+          "transform": "matrix(1, 0, 0, 1, -8.55044, 16.4432)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 18.7999999642372,
+          "opacity": "0.328923",
+          "scale": "0.932892",
+          "transform": "matrix(1, 0, 0, 1, -13.9289, 26.7864)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 35.49999996423722,
+          "opacity": "0.536082",
+          "scale": "0.953608",
+          "transform": "matrix(1, 0, 0, 1, -17.8166, 34.2627)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 52.19999996423721,
+          "opacity": "0.685515",
+          "scale": "0.968551",
+          "transform": "matrix(1, 0, 0, 1, -20.6904, 39.7892)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 68.7999999642372,
+          "opacity": "0.79541",
+          "scale": "0.979541",
+          "transform": "matrix(1, 0, 0, 1, -22.7883, 43.8237)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 85.49999996423719,
+          "opacity": "0.876614",
+          "scale": "0.987661",
+          "transform": "matrix(1, 0, 0, 1, -24.2873, 46.7064)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 102.09999996423721,
+          "opacity": "0.93394",
+          "scale": "0.993394",
+          "transform": "matrix(1, 0, 0, 1, -25.2711, 48.5983)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 118.7999999642372,
+          "opacity": "0.972026",
+          "scale": "0.997203",
+          "transform": "matrix(1, 0, 0, 1, -25.8257, 49.6649)",
+          "animations": [
+            {
+              "property": "transform",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 135.4999999642372,
+          "opacity": "0.993325",
+          "scale": "0.999333",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": [
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 152.0999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": [
+            {
+              "property": "opacity",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            },
+            {
+              "property": "scale",
+              "timing": {
+                "delay": 0,
+                "direction": "normal",
+                "duration": 150,
+                "easing": "cubic-bezier(0, 0, 0.2, 1)",
+                "endDelay": 0,
+                "fill": "backwards",
+                "iterationStart": 0,
+                "iterations": 1
+              }
+            }
+          ]
+        },
+        {
+          "ms": 168.7999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 185.39999996423722,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 202.0999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 218.7999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 235.39999996423722,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 252.0999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 268.7999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 285.4999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 302.19999996423724,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 318.7999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 335.4999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 352.0999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 368.79999996423726,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 385.4999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 402.0999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 418.79999996423726,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 435.4999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        },
+        {
+          "ms": 452.0999999642372,
+          "opacity": "1",
+          "scale": "1",
+          "transform": "matrix(1, 0, 0, 1, -26, 50)",
+          "animations": []
+        }
+      ]
+    }
+  ]
+}
