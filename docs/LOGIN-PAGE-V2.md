@@ -9,7 +9,11 @@
 > `reference/raycast/proof.html` (Astra, branch ref-raycast-animation); raycast.com live;
 > `docs/ATSU-UI-PRINCIPLES.md` (ref-atsu); baseline spec above.
 >
-> Pass log: P1 skeleton · P2 · P3 · P4 · P5 (each pass simpler than the last).
+> Pass log: P1 skeleton · P2 facts · P3 decisions · P4 light palette derived, React shape, Astra facts folded in · P5 (simplify).
+>
+> Status of inputs at P4 (2026-10-13 09:40): `docs/RAYCAST-ANIMATION.md` + interaction doc landed on
+> `ref-raycast-animation`; `reference/raycast/proof.html` and `extracted/` **not yet pushed**. §2 corrected
+> from Astra's doc where it contradicted my live read (r186 not r123; clear `#07090a`, CSS `#07080a`).
 
 ## 0. Decisions
 
@@ -18,14 +22,14 @@
 | V1 | Background = raycast.com cube/glass scene, framework-free WebGL2, first frame ≤ 100 ms | DESIGN | VISION-BRIEF; §5, §8 |
 | V2 | Form geometry = baseline §3 verbatim (card 360, inputs 28/6, label 13); no transitions | EXTRACTED | LOGIN-PAGE-SPEC L1/L2 |
 | V3 | Scrim = raycast `heroBackground:after` verbatim, tokenised to `--bg-page` | EXTRACTED | §6 |
-| V4 | Two-tone = clear colour + scrim follow `--bg-page`; cube colours never change | DESIGN | §6; no light palette exists in source |
+| V4 | Two-tone = tone A (page: clear colour + scrim) and tone B (field: c1–c3). Both swap with the theme. Light tone B is **derived** from the source colour math (§6), not invented: source has no light palette (Astra theme-check.json). | DESIGN (derived) | §6; owner directive 2026-10-13 |
 | V5 | Pointer rotation kept (source); scene is `pointer-events: none` | EXTRACTED | §7 |
 | V6 | Reduced motion / no WebGL2 = static settled-pose AVIF behind the scrim | DESIGN | §7 |
 | V7 | Form never depends on the scene; flag can remove it | DESIGN | baseline L6 |
 
 ## 1. Resolved questions
 
-- Light palette: not invented. Only the page colour changes (V4). Fallback = dark scene in both themes.
+- Light palette: in scope (owner directive). Derived by mirroring each stop's OKLab lightness about the page lightness, hue and chroma held (§6). The shader stays verbatim; only the three uniforms change.
 - Does the source settle? No. It stops at 200 s and holds the last frame; the cube is settled by ≈ 3 s.
 - Pointer: kept. Rotation only; the form owns all clicks.
 - Size: source ships ≈ 280 KB gz of JS for this scene; ours ≤ 18 KB gz (S1), ≤ 12 KB (S2).
@@ -33,19 +37,20 @@
 ## 2. The source animation — EXTRACTED facts (raycast.com, 2026-10-13 live)
 
 Pulled live from `www.raycast.com` HTML + chunk `2c5k8hkujs8m5.js` (115 KB raw / 32 KB gz,
-plus three.js r123 chunk 943 KB / 247 KB gz). The scene is a React-Three-Fiber canvas
+plus three.js r186 chunk 943 KB / 247 KB gz; Astra: version is r186, my first read said r123). The scene is a React-Three-Fiber canvas
 behind the hero, lazily mounted after hydration. Config literal (RSC payload, verbatim):
 
 | Group | Values |
 |---|---|
-| scene | bg `rgb(7,9,10)`; cube at z −9, y 0; glass group z 0, rotation 0.73 rad; camera z 16.54, fov 35, near .01, far 100; dpr 2 |
+| scene | clear `rgb(7,9,10)` = `#07090a` (CSS page/fade colour is `#07080a`, one green step different; both kept verbatim); cube at z −9, y 0; glass group z 0, rotation 0.73 rad; camera z 16.54, fov 35, near .01, far 100; dpr 2 |
 | cubeShader | speed 0.1, size 0.99; color1 `244,254,255`, color2 `255,122,152`, color3 `184,2,50`, color4 `255,22,42` (color4 unused by shader) |
 | cube mesh | `boxGeometry 7×7×7`, starts `scale 0`, `damp3(scale → 1,1,1, smoothTime 1)` per frame |
 | cubeInteraction | enabled; rotation x = pointer.x × 0.3, y = −pointer.y × 0.3, angular damp smoothTime 0.5; translationInfluence 0.2 unused |
 | glass | 16 cylinders r 0.5 h 15 subdiv 8 (`Instances`), MeshTransmissionMaterial: thickness 1, roughness .35, anisotropicBlur 2.88, ior 1.5, chromaticAberration 3, transmission 1, resolution 1024, samples 6 (5 when viewport < 7.3 world units) |
 | distortion | if viewport width > 7.3: `damp(distortion → 15, λ30)`, `damp(temporalDistortion → .025, λ10)`; else both 0 |
 | loop | `frameloop: demand` off-screen, `always` on-screen; **stops forever at elapsed > 200 s** (`setFrameloop("never")`) |
-| canvas | `linear: true`, `flat: true` (no tone mapping), `preserveDrawingBuffer` |
+| canvas | `linear: true`, `flat: true` (no tone mapping), `preserveDrawingBuffer`; `uResolution` is **CSS pixels** even at DPR 2 and inside the 1024² target (Astra: preserve this mismatch) |
+| quality | PerformanceMonitor may lower DPR to 1.5–2 and target to 256–1024² at runtime (live observed 448²/DPR 1.6). We pin 1024²/DPR 2: parity is claimed against that state only |
 | postProcessing | disabled (dither shader shipped but off) |
 
 Cube fragment shader (exact, 3 waves summed, R = 3 gamma):
@@ -67,7 +72,10 @@ scrolling at speed 0.1 behind 16 refracting glass rods. (a) is the moment people
 
 Glass rod placement (EXTRACTED `tF`): rod *n* at x = (n+1)·1 − 8 → 16 rods at x ∈ {−7 … 8},
 spacing 1 world unit (= 2 × radius), the group tilted 0.73 rad (≈ 42°) about z. Distortion
-ramps use an `easeInExpo` curve on the damp (`2^(10e−10)`).
+damps use `E(x)=2^(10x−10)` as the damp's decay function with `maxSpeed .0002`; scale and pointer use the
+default `E(x)=1/(1+x+.48x²+.235x³)`. Snap when |current−target| ≤ .001. Frame deltas change the result,
+so parity captures must share frame timing (§9). Frame order: transmission pass draws the **previous**
+frame's cube state, then the cube updates (Astra W/S/Q); keep that order.
 
 ## 3. Page layout (DESIGN, geometry copied)
 
