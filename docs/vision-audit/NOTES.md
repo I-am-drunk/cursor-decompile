@@ -483,3 +483,32 @@ process table, lane worktrees (`/tmp/wt-login`, `/tmp/wt-proj`, main checkout on
   from. The `risk-refused` on fable-projects needs a look at what the lane fetched last; if it
   was an iOS reverse-engineering source, point it at Apple's public HIG instead.
 - Until this is fixed the STATE "gaps" list is not shrinking, whatever the other lanes do.
+
+## 21 · 05:50 · devin-decompile `re-server-3.10.48` 70b9509/15c3052/741da31 — MARKETPLACE.md + CONNECTOR-BACKEND.md
+
+**Checked:** registry request proof (Go disassembly: no Devin credential on the upstream
+`registry.modelcontextprotocol.io` fetch), the separate `CascadePluginsService` RPC table,
+account-managed plugins, the "Practical options" verdict table, ACP lifecycle RPCs.
+
+**Verdict: on-vision evidence; one recommendation in it drifts from the owner's decision.**
+
+- "Marketplace" is three things in Devin, and the evidence now separates them cleanly:
+  (1) upstream MCP registry, public, no auth; (2) Windsurf/Devin plugin catalog via
+  `GetAvailableCascadePlugins`, 52 plugins, needs the session token (VERIFIED live 741da31);
+  (3) account-managed plugin manifests via `GetAccountManagedPlugins`, same token.
+  The owner's "Connect Devin account = marketplace access" means (2) and (3). SETTINGS-V2 V5
+  already defines connected as (3) answering 200. Good.
+- **Drift in the doc's own verdict table:** "Independent implementation: Recommended" (build
+  around the public registry). That was the lane's judgment before the live-access proof, and
+  it is the opposite of what the owner decided. Research may recommend; the product spec must
+  not inherit this line by accident. CONNECTORS-PAGE-SPEC C4 currently *does* match this
+  recommendation, which is exactly entry 06's drift.
+  FIX → CONNECTORS-PAGE-SPEC C4: Available = (2) when a Devin account is connected, with
+  (1) as the no-account fallback. Same card. Install writes (`InstallCascadePlugin`) read-only
+  until the owner says otherwise. The re-server lane should add one line under "Practical
+  options": "Owner decision 2026-10-13: proxy with the owner's own session; independent
+  implementation is the fallback."
+- The ACP MCP lifecycle table (`installServer/removeServer/connectServer/toggleServer/
+  disconnectServer`) is the server contract our Customize → MCPs tab needs. CONNECTORS-PAGE-SPEC
+  §5 should cite it by name rather than inventing verbs.
+- No slop: every claim has a byte offset; "no live requests were made" is stated where true.
