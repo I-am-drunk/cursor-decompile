@@ -1,4 +1,4 @@
-# Vision — where it stands tonight (2026-10-13, updated 06:45)
+# Vision — where it stands tonight (2026-10-13, updated 07:00)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
@@ -25,7 +25,7 @@ other Fable design lanes (login, projects, decisions) have died repeatedly with 
 5. **Scheduler format.** RRULE + per-schedule IANA tz, Devin's storage shape; cron only via a proven adapter. State it once in SERVER-FROM-DEVIN §1; park Cursor's raw-cron input as v2 (NOTES 15).
 
 ## Housekeeping that blocks a clean morning
-- **Three Fable design lanes have produced zero bytes in 2.5 h.** fable-q45 died 2× and fable-login 3× on a gateway error (`300s wall-clock budget … upstream degraded`); fable-projects is hung on an unanswered gateway request since 05:38 and the runner cannot see it. Every session read 30–66 files and wrote nothing. Fix: transcript-mtime watchdog + resume, and make each goal commit a skeleton doc in the first 10 minutes (NOTES 20, 23, 24). **Night's biggest risk.**
+- **Fable design lanes: 1 skeleton in 3 h.** design-login committed a 30-line P1 skeleton at 06:35 (unpushed). fable-projects and fable-q45 have died 3× each on gateway errors (`300s wall-clock budget`, `Connection lost`) after 30–66 reads and zero writes; current relaunches show the same pattern. Fix: resume instead of cold relaunch, transcript-mtime watchdog, and a committed skeleton in the first 10 minutes of every goal (NOTES 20, 24, 28, 30). **Night's biggest risk.**
 - **Truncated pushes:** `origin/plan-devin-port` (65 lines) and `origin/plan-ui-extraction` (141 lines) are stubs; the real docs (1,268 / 267 lines) are only in local worktree commits 2630d27 / aeb5b19. Force-push with lease (NOTES 12).
 - **Stray files:** untracked copies of both maps sit in the `design-decisions` working tree. Delete.
 - **atsu tree is 161 MB in git.** Lane recovered and wrote README + three docs (good); still needs the one-poster-size rewrite before any merge (NOTES 07, 19).
