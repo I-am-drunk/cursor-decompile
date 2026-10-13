@@ -15,19 +15,20 @@
 
 | # | Decision | Status | Basis |
 |---|---|---|---|
-| V1 | Background = raycast.com cube/glass WebGL scene, framework-free, first frame ≤ 100 ms | DESIGN | VISION-BRIEF "today" |
-| V2 | Form geometry = baseline §3 verbatim (card 360, inputs 28/6, label 13) | EXTRACTED | LOGIN-PAGE-SPEC L1/L2 |
-| V3 | Scrim between scene and card guarantees ≥ 4.5:1 on every frame | DESIGN | WCAG AA |
-| V4 | Two-tone: dark = source palette; light = TBD (no extracted palette) | GAP | raycast-animation.md "Theme" |
-| V5 | Reduced motion = static settled frame (t = ∞ pose), no WebGL loop | DESIGN | baseline L5 |
-| V6 | Form never depends on the scene; scene failure = flat page color | DESIGN | baseline L6 |
+| V1 | Background = raycast.com cube/glass scene, framework-free WebGL2, first frame ≤ 100 ms | DESIGN | VISION-BRIEF; §5, §8 |
+| V2 | Form geometry = baseline §3 verbatim (card 360, inputs 28/6, label 13); no transitions | EXTRACTED | LOGIN-PAGE-SPEC L1/L2 |
+| V3 | Scrim = raycast `heroBackground:after` verbatim, tokenised to `--bg-page` | EXTRACTED | §6 |
+| V4 | Two-tone = clear colour + scrim follow `--bg-page`; cube colours never change | DESIGN | §6; no light palette exists in source |
+| V5 | Pointer rotation kept (source); scene is `pointer-events: none` | EXTRACTED | §7 |
+| V6 | Reduced motion / no WebGL2 = static settled-pose AVIF behind the scrim | DESIGN | §7 |
+| V7 | Form never depends on the scene; flag can remove it | DESIGN | baseline L6 |
 
-## 1. Open questions (answer before P3)
+## 1. Resolved questions
 
-- OQ1 Light-theme palette: derive from source by inverting background only, or author?
-- OQ2 Does the source animation ever settle, or is it a 200 s loop then freeze?
-- OQ3 Pointer parallax on the login page: keep (source) or drop (form focus)?
-- OQ4 Instant-load target: what is the gzipped size of the extracted shaders?
+- Light palette: not invented. Only the page colour changes (V4). Fallback = dark scene in both themes.
+- Does the source settle? No. It stops at 200 s and holds the last frame; the cube is settled by ≈ 3 s.
+- Pointer: kept. Rotation only; the form owns all clicks.
+- Size: source ships ≈ 280 KB gz of JS for this scene; ours ≤ 18 KB gz (S1), ≤ 12 KB (S2).
 
 ## 2. The source animation — EXTRACTED facts (raycast.com, 2026-10-13 live)
 
