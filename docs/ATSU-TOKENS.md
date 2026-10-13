@@ -75,3 +75,19 @@ All 17 theme overrides (EXTRACTED; premium light themes not live-selected):
 DERIVED sRGB contrast on the classic canvas: #f9f8f6 15.72:1; #b8bcc0 8.73:1; #999da0 6.10:1; #8e7ce6 4.91:1; foreground at 50% approximates #6a6d70, 3.20:1. This is a compositing calculation, not a browser pixel measurement; do not copy faint 12px operational metadata blindly.
 
 Typography detail: the global themed rule sets font-optical-sizing:auto, -webkit-font-smoothing:antialiased, and font-style:normal (CSS byte256458). Font smoothing is browser/platform-dependent; it is not a transferable guarantee of identical rasterization.
+
+## Typography pass: browser measurements
+
+VERIFIED in Chrome at 1440×1000; `reference/atsu/evidence/16-live.json` and matching `17-replay.json`. CSS definitions alone do not establish the rendered role.
+
+| Role | Measured typography | Geometry / implication |
+|---|---|---|
+| Section heading | Geist 24/32px, 400, normal tracking | x140/y107; E19; size and near-white establish hierarchy |
+| Card name | Geist 14/20px, 400, normal tracking | 180px wide; two-line first title = 40px; starts 6px below poster |
+| Card outline | 2px transparent → #b8bcc0 | Hover/focus do not alter the 180×270.40625px poster |
+| Expanded search input | Geist 16/24px, 400 | 576×52px inside the 600px panel; distinct from the 18px resting search |
+| Narrow section heading | Geist 20/28px, 400 | x16/y89 at 390px viewport; no document overflow |
+
+The card name starts at y430.40625 while its poster ends at y424.40625: measured 6px gap verifies E18. Poster 180×270.40625 agrees with the 215:323 ratio to layout rounding. Font loading is awaited before measuring; `fonts` records loaded versus unused declared faces. A declared family is not evidence of a visible role.
+
+Regular-weight 24px headings, regular 14px item labels and smaller/lower-luminance metadata let alignment do most of the organizing. Two-line clamping is a maximum budget, not a fixed minimum title height: some cards have one-line names. Do not infer a fixed metadata baseline from a common poster baseline.

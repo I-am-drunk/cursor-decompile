@@ -109,3 +109,28 @@ These are DESIGN review criteria, not implementation permission. Cursor remains 
 - The bundle contains expressive premium/profile effects and many animation utilities. Their existence is not evidence that ordinary app chrome animates that way.
 - The 100ms button transition targets transform, while active styling sets the individual scale property. Do not claim a 100ms press animation without checking the cascade.
 - Light themes are marked premium in source. Their tokens are extracted; authenticated theme selection and all premium states were not live-verified.
+
+## Deeper pass: what the browser adds
+
+The [live/local verification](../reference/atsu/evidence/VERIFICATION.md) sharpens three principles:
+
+1. **Alignment carries hierarchy.** At 1440px the heading and first card begin at x140; every poster is 180px wide. The heading is 24/32px at weight400, title14/20px at weight400, with exactly6px between image and name. Alignment organizes before weight does. Evidence: `16-live.json` heading/title/poster; E18–E19.
+2. **Feedback has a motion budget.** Poster hover and keyboard focus change a 2px outline immediately without resizing. Navigation instead interpolates .9→1 scale and 0→1 opacity in150ms. Evidence: live/replay posterHover/posterFocus; `18-motion.json`; nav byte240948.
+3. **Responsive density changes the reading task.** At390px, 20/28px headings, 16px margins, horizontal item strips and bottom navigation expose a few choices and invite lateral exploration. Evidence: `16-live-mobile.png`, mobileHeading; E20/E45–E46. This pass did not simulate a coarse pointer.
+
+Computed behavior also exposes limits: navigation still animates with reduced motion enabled; search closes through opacity/pointer-events rather than unmounting; light themes remain source-only. Transfer the organizing principles with explicit accessibility acceptance criteria, not every implementation detail.
+
+## Fable's application worksheet
+
+Record these alongside the captured Cursor/Devin component before implementation:
+
+| Decision | Evidence to preserve | Review criterion |
+|---|---|---|
+| Information order | Name, status, metadata and action positions | Same roles remain at the same locations |
+| Group boundaries | Source spacing within objects, between objects and between sections | Relationships remain distinguishable |
+| Type roles | Family, size/line-height, weight, luminance, clamping | Avoid another weight/size when alignment already separates roles |
+| Response | Trigger, initial feedback, network state, final state | Input acknowledgement is independent of remote completion |
+| Disclosure | Anchor, bounds, focus, dismissal, scroll owner | Opening preserves context; closing leaves usable focus |
+| Motion | Property, timing/physics, origin, reduced-motion behavior | Every movement explains a change; verify computed behavior |
+
+These are DESIGN review criteria, not replacement pixels. Apply them to the shell's navigation, the list's repeated items, the editor's field groups and settings' account rows using the existing captured sources. Approval of an implementation remains separate from this reference analysis.

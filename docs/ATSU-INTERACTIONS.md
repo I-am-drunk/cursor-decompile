@@ -50,3 +50,13 @@ Home carousel stores horizontal scroll in sessionStorage, restores it with snap 
 ## Cascade caveat
 
 The compiled transition-[transform_opacity] rule contains transition-property:transform opacity (CSS byte187715), and matching will-change also uses a space (byte191109). These are not valid comma-separated property lists. The explicit150ms duration/ease-out remain declarations; actual property selection depends on fallback/cascade. Source intent is not a computed-style measurement. Tooltip/account helper styles are separate.
+
+## Browser motion pass: actual cascade and focus
+
+VERIFIED: `evidence/18-motion.json` samples navigation opening in Chrome. The computed transition is **all 150ms cubic-bezier(0,0,.2,1)**. Individual scale interpolates .9→1 with opacity 0→1, reaching the final state around 150ms. Thus the malformed property list discussed above falls back to `all` in this browser; the animation is not absent. The same interpolation persists under `prefers-reduced-motion: reduce`. This result applies to navigation, not every spring or reveal primitive.
+
+VERIFIED: `16-live.json`/`17-replay.json` show the poster outline becoming foreground on hover and on focus after moving the pointer away. Both compute a zero-second transition; geometry is unchanged. The title also brightens immediately. This is a useful distinction: frequent item feedback is immediate, while opening a spatial layer gets a short transition.
+
+Search Escape leaves the form mounted at its original rectangle but sets opacity 0 and pointer-events none (source nav byte76894 and following form declaration; measured `search.closedForm`). Bounding-box visibility alone is not a dismissal test. The input can retain focus after Escape; focus restoration was not established. Do not turn “closes visually” into a claim of a complete accessible dialog lifecycle.
+
+These browser measurements supplement the source ledger. No frame timing is claimed for reader drawers, sort transitions, switcher springs, or premium effects. The default CSS timing is not a global motion token that overrides per-component physics.
