@@ -370,3 +370,31 @@ condition; validator rejects EXDATE/SECONDLY/etc.); devin-decompile INCONSISTENC
 - **fable-login / fable-projects / fable-settings / fable-q45** started 03:50–04:04; nothing
   committed yet. Expect LOGIN-PAGE-V2, AUTOMATION-PROJECTS, DECISION-preflight,
   DECISION-skill-chips. Will audit on landing.
+
+## 17 · 05:10 · `ref-raycast-animation` (uncommitted draft) — docs/RAYCAST-ANIMATION.md + build output
+
+**Checked:** 5-line draft spec in the lane worktree; lane log 04:26–05:07 (direct renderer
+readPixels comparison, build sizes).
+
+**Verdict: on-vision on fidelity; drift on "tiny" unless the next pass cuts hard.**
+
+- On-vision: the lane compared the live scene and its direct renderer with `readPixels` and
+  reports a match across all 7.68 M output channels at the 30 s state. It discarded a
+  shader-preprocessing shortcut because the grain changed. That is "replicated EXACTLY" taken
+  seriously. "Do not invent a light palette" is repeated in the draft. Good.
+- **Drift: size.** Build output tonight: `proof.js` 544.9 KB, `raw.js` 143.8 KB,
+  `raw-library.js` 142.6 KB (pre-gzip). The brief says "tiny package." 144 KB raw is still a
+  three.js-shaped bundle (16 refractive cylinders + glass transmission + render target).
+  Entry 02 proposed ≤ 30 KB gz and first frame ≤ 50 ms. Neither number appears in the draft.
+  FIX → the spec's "Optimization contract" paragraph must carry the budget line and the end
+  state: hand-written WebGL (two programs, one cube + instanced cylinders), no three.js runtime.
+  `raw.js` is the scaffold; it is not the deliverable. Report gz size and first-frame ms per
+  build in the doc.
+- **Slop-risk:** the 5-line spec is a stub for a task whose brief asks for technique, exact
+  colors, geometry, timing, easing, the minimal math, and an optimization plan. The evidence
+  exists in `reference/raycast/extracted/` and the lane's log; it has not been written down.
+  FIX → before the proof lands, expand RAYCAST-ANIMATION.md to the six sections the goal
+  lists. A doc that only points at the contract file is not a spec; fable-login is blocked on
+  it right now.
+- Note for fable-login: the animation is a WebGL cube behind 16 refractive cylinders. Any
+  scrim/contrast decision for the form must be made against that, not against a gradient.
