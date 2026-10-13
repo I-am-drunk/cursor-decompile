@@ -252,3 +252,27 @@ How the build meets it: no framework, no bundler runtime, one ES module inlined 
 server; shaders as template literals; geometry generated in ≈ 40 lines (box + 16 cylinders
 via `drawArraysInstanced`); one render target for transmission (1024²) sized once; uniforms
 updated in place. Anything over budget blocks the PR, not the spec.
+
+## 9. Verification plan (Astra, computer-use, before any PR)
+
+Pixel-parity against raycast.com requires matched state (interaction doc): same viewport,
+DPR, elapsed time, pointer history, frame deltas. The test apparatus is URL params on both
+sides — raycast's own `?heroDebug` plus our `?t=<s>&pointer=0&dpr=2` (ours only; never
+visible UI).
+
+| # | Check | Method | Pass |
+|---|---|---|---|
+| P1 | Field shader parity | render our cube face alone vs source `tP` shader at t ∈ {10000, 10005, 10050}, 1024², same uniforms | max channel diff ≤ 1/255 |
+| P2 | Full-frame parity, settled | raycast at 1512×982 DPR 2, scroll 0, pointer parked at (0,0), capture at elapsed 5 s, 10 s, 60 s; ours at same t | SSIM ≥ 0.98 over the hero rect; per-pixel ≤ 2/255 for ≥ 95 % of pixels |
+| P3 | Cube growth curve | 60 captures over 0–3 s both sides; measure cube silhouette width | ≤ 2 px at every sample |
+| P4 | Pointer | move pointer to 4 corners, hold 1 s each; compare rotation via silhouette | ≤ 2 px |
+| P5 | Rods | count 16, spacing 1 unit, tilt 42° measured from screenshot | exact |
+| P6 | Scrim | overlay diff of our scrim vs raycast `:after` on a flat grey scene | identical |
+| P7 | Light theme | §6 table; owner eye check + card border ≥ 1.3:1 on 5 frames | pass or fall back to dark scene |
+| P8 | Reduced motion | emulate; assert no WebGL context, `<img>` present, 0 rAF | exact |
+| P9 | Budget | every row of §8 | all green |
+| P10 | Form | click every control; tab order Email → Password → button; all 7 states in §4 with screenshots; autofill works | all |
+| P11 | Scene removed | feature flag off: login journey passes unchanged | pass |
+
+Artifacts land in `docs/verification/login-v2/` (captures + `report.json`). Spec PR → S1
+PR (scene only, ≤ 500 lines) → form PR → verification PR, per GOAL-SYSTEM §2.
