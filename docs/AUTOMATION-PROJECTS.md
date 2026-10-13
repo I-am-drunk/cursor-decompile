@@ -1,6 +1,6 @@
 # AUTOMATION PROJECTS — the board (iPhone-home-screen model for automations)
 
-Status: **pass 6 — shadows, scrim, ring, folder tint pinned to Devin tokens.** Branch `design-projects`. Fable, 2026-10-13. Owner's
+Status: **pass 7 — grid gap = Devin row gap; menu reveal wording; sweep.** Branch `design-projects`. Fable, 2026-10-13. Owner's
 flagship. Law: GOAL-SYSTEM §1 — nothing here is implemented until every state, transition, timing
 and copy string below is filled. Evidence labels: VERIFIED > OBSERVED > EXTRACTED > DOCUMENTED >
 DESIGN (ours). GAP = missing evidence, never permission to invent.
@@ -42,7 +42,7 @@ above the frame is Devin's, byte for byte (EXTRACTED `AutomationsListPage.tsx` L
 | Header | `mx-1` · h2 `Automations` 18px medium · p 13px secondary `Bring Devin into your recurring and event-driven workflows` → ours: `Automations that run on your Linear workspace` | EXTRACTED / copy DESIGN |
 | Toolbar row | `mx-1 flex items-center justify-between gap-2`: left = segmented tabs `All <n>` · `Created by you <n>`; right = search (⌘F), metadata filter, **view toggle (new, §9)**, `Create automation` split button | EXTRACTED + 1 addition |
 | Grid frame | same `mx-1 rounded-lg border border-border-secondary bg-bg-elevated`, no header row (columns make no sense on a grid), inner `p-1` | EXTRACTED shell, DESIGN removal of header |
-| Grid | CSS grid, `gap-1` (4px — the row gap `gap-0.5` doubled because cards have two visible edges), columns `repeat(auto-fill, minmax(260px, 1fr))` → 3 cols at 800px, 4 at 1200px | DESIGN (relational to Devin's 4px row rhythm) |
+| Grid | CSS grid, `gap-0.5` (2px, exactly the row gap; cards are borderless tiles with a hover wash, like rows), columns `repeat(auto-fill, minmax(260px, 1fr))` → 3 cols at 800px, 4 at 1200px | gap EXTRACTED (`ListFrame` `gap-0.5 p-1`); column count DESIGN |
 | Card | one grid cell, §3 | — |
 | Ordering | Devin §6.3 default comparator (enabled first, newest `last_invocation_at`, newest `created_at`); projects are **not** sorted into the automations — they sit first, in `position` order, then unfiled automations | EXTRACTED comparator, DESIGN placement |
 
@@ -213,7 +213,7 @@ Nesting: **never**. Dropping a folder on a folder is not possible because folder
 | Enter / Space | folder card | open folder (§5.4) |
 | Escape | open folder | close |
 | ⌘F | page | Devin's search (unchanged) |
-| `…` menu → `Move to project ›` | automation card (menu is `canManage` only; hidden on hover like Devin's) | submenu: list of projects + `New project…` + `Remove from project` (when filed) |
+| `…` menu → `Move to project ›` | automation card (menu is `canManage` only; revealed on hover/focus-within, replacing the date, like Devin's) | submenu: list of projects + `New project…` + `Remove from project` (when filed) |
 | F2 | folder card | rename inline |
 
 `Move to project ›` is inserted after `View sessions` in Devin's row menu (Enable/Disable ·
@@ -334,3 +334,6 @@ visual token we touch (`shadow-L3/L4`, `bg-bg-scrim`, `bg-bg-wash`, `ring-border
 - pass 6 (2026-10-13): ghost shadow → `shadow-L3`, sheet → `shadow-L4`, dim → `bg-bg-scrim`,
   folder tint → `bg-bg-wash`, target/focus ring → `ring-border-primary`, scrim in/out → Devin's
   150/300ms. DESIGN labels on those rows replaced by EXTRACTED with `index.css` line refs.
+
+- pass 7 (2026-10-13): grid gap is Devin's own `gap-0.5`, not an invented 4px; row-menu
+  reveal described as Devin does it (hover/focus-within replaces the date).
