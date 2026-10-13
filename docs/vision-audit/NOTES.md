@@ -803,3 +803,23 @@ decision, the contrast rule.
 - Contrast: fable-login, relaunched with the "progress-banking" preamble, has committed six
   passes in 70 minutes. Same model, same gateway, different prompt. The preamble works;
   the other two lanes are still running the old prompt.
+
+## 38 · 07:55 · `design-login` 01f85d4 — LOGIN-PAGE-V2.md §7: load timeline, pointer, reduced motion
+
+**Checked:** the millisecond timeline (0 / ≤16 / ≤40 / ≤100 / 100→3000 / 200 000), pointer
+rule, reduced-motion fallback (static settled-pose AVIF), `document.hidden` and submit
+behaviour.
+
+**Verdict: on-vision. "Instant" is now a table with seven rows, each with a mechanism.**
+
+- Card is in the HTML, not rendered by JS; first paint ≤ 16 ms with no JS on the form's
+  critical path. First scene frame ≤ 100 ms. This is the owner's "pages must load instantly"
+  stated as a contract Astra can fail.
+- OQ2 and OQ3 are answered from source (loop stops at 200 s; pointer kept, scene is
+  `pointer-events: none` so the form owns every click). V5 is made precise: reduced motion
+  = static settled pose, rendered from S1 itself, so the fallback is still the exact picture.
+  The same image doubles as the no-WebGL2 fallback. One asset, two jobs. Simple.
+- **One nit:** the ≤ 24 KB gz "one response" in row 0 and §5's S1 ≤ 18 KB gz should be
+  reconciled in §8 (18 scene + CSS + HTML ≈ 24 is plausible; say so in one line).
+- With §7, every item in the goal's checklist exists except the CU verification plan. P3–P5
+  should cut and tighten, not add. Seven commits, origin still at main. Runner pushes.
