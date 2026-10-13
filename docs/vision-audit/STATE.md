@@ -1,4 +1,4 @@
-# Vision — where it stands tonight (2026-10-13, updated 07:00)
+# Vision — where it stands tonight (2026-10-13, updated 07:10)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
@@ -57,7 +57,8 @@ other Fable design lanes (login, projects, decisions) have died repeatedly with 
 | plan-server-architecture | 97f6018 | superseded by SERVER-FROM-DEVIN; close |
 | plan-linear-connection | 6e74317 | on-vision; Turnstile-Chrome vs cookie-paste ASK open |
 | design-login | 617f53f | **LOGIN-PAGE-V2 P1 skeleton landed 06:35**, on-vision; budget/light-mode fixes (NOTES 29) |
-| design-projects / design-decisions | at main / b8f5638 | Fable lanes dying repeatedly, nothing landed (NOTES 20–28) |
+| design-decisions | a030d45 | **DECISION skeletons landed 07:00** (preflight, skill chips); on-vision, defaults cut / no chips (NOTES 31) |
+| design-projects | at main | Lane dying repeatedly; **no board spec yet** (NOTES 20–30) |
 | devin-decompile re-server / re-desktop / docs-public-spec | 741da31 / 0cc66a8 / b20e607 | VERIFIED evidence; cloud plugin editor = authoring copy source |
 | linear-loops re-chat-automations | 008326b | rigorous map; raises Loops-vs-ours question |
 
