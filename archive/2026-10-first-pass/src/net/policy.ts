@@ -16,9 +16,10 @@ export async function destination(url:URL,hosts:string[],credential=false):Promi
   }) as RequestOptions['lookup']};
 }
 export async function postJson(url:URL,hosts:string[],payload:unknown,token=''):Promise<Record<string,unknown>>{
- const options=await destination(url,hosts,true),body=JSON.stringify(payload);
+ const options=await destination(url,hosts,true),form=payload instanceof URLSearchParams;
+ const body=form?payload.toString():JSON.stringify(payload);
  return new Promise((resolve,reject)=>{
-  const req=(url.protocol==='https:'?https:http)({...options,method:'POST',headers:{'Content-Type':'application/json','Content-Length':Buffer.byteLength(body),...(token?{Authorization:`Bearer ${token}`}:{})}},res=>{
+  const req=(url.protocol==='https:'?https:http)({...options,method:'POST',headers:{'Content-Type':form?'application/x-www-form-urlencoded':'application/json','Content-Length':Buffer.byteLength(body),...(token?{Authorization:`Bearer ${token}`}:{})}},res=>{
    let size=0;const chunks:Buffer[]=[];
    res.on('data',(chunk:Buffer)=>{size+=chunk.length;if(size>1048576)res.destroy(Error('Response too large'));else chunks.push(chunk);});
    res.on('error',reject);res.on('end',()=>{

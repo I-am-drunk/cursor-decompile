@@ -116,6 +116,12 @@ single-user **loopback-only** deployment, not a public authentication service.
 See [settings scope](facts/settings-functional.md) and
 [account security boundary](facts/account-login.md).
 
+The T3 bridge targets server **0.0.45** with bootstrap token exchange or a
+scoped bearer, fresh WebSocket tickets and discovered instance/model IDs.
+The environment URL must use HTTPS and its host must be explicitly allowed;
+direct `http://127.0.0.1` pairing is not enabled. See
+[protocol evidence and remaining limits](facts/t3-bridge.md).
+
 ## MCP management server (owner P4)
 
 See [MCP setup and transports](mcp/README.md). The isolated `mcp/` package is the

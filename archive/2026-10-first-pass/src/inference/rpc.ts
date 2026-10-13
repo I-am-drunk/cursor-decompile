@@ -1,6 +1,6 @@
 import type { Wire } from '../net/websocket.ts';
 interface Pending {resolve:(v:unknown)=>void;reject:(e:Error)=>void;chunk?:(v:unknown)=>void;timer?:ReturnType<typeof setTimeout>}
-// Effect 4.0.0-beta.59 RpcSerialization.layerJson; NOT JSON-RPC 2.0.
+// Effect RpcSerialization.layerJson as used by T3 0.0.45; NOT JSON-RPC 2.0.
 export class T3Rpc {
  wire:Wire;next=0;pending=new Map<string,Pending>();closed=false;
  constructor(wire:Wire){this.wire=wire;wire.on('message',text=>this.receive(text));wire.on('close',()=>this.fail(Error('Environment disconnected.')));}

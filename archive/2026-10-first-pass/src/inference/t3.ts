@@ -23,17 +23,25 @@ export class T3Bridge implements InferenceProvider {
    const base=new URL(s.inference.url),hosts=s.mcp.allowedHosts;
    let stored:{origin:string;token:string;expiresAt:string}|null=null;
    const text=await this.settings.secret('t3Session');if(text)stored=JSON.parse(text);
-   if(!stored||stored.origin!==base.origin||Date.parse(stored.expiresAt)<=Date.now()){
+   if(!stored||stored.origin!==base.origin||!Number.isFinite(Date.parse(stored.expiresAt))||Date.parse(stored.expiresAt)<=Date.now()){
     const credential=await this.settings.secret('inference');if(!credential)throw Error('Pairing credential required.');
-    const result=s.inference.credentialKind==='bearer'?{sessionToken:credential,expiresAt:new Date(Date.now()+3600000).toISOString()}:
-     await this.transport.post(new URL('/api/auth/bootstrap/bearer',base),hosts,{credential});
-    if(typeof result.sessionToken!=='string'||typeof result.expiresAt!=='string')throw Error('Incompatible bootstrap response.');
-    stored={origin:base.origin,token:result.sessionToken,expiresAt:result.expiresAt};
+    const result=s.inference.credentialKind==='bearer'?{access_token:credential,token_type:'Bearer',expires_in:3600}:
+     await this.transport.post(new URL('/oauth/token',base),hosts,new URLSearchParams({
+      grant_type:'urn:ietf:params:oauth:grant-type:token-exchange',
+      subject_token:credential,subject_token_type:'urn:t3:params:oauth:token-type:environment-bootstrap',
+      requested_token_type:'urn:ietf:params:oauth:token-type:access_token',
+     }));
+    if(typeof result.access_token!=='string'||!result.access_token||result.token_type!=='Bearer'||
+     typeof result.expires_in!=='number'||!Number.isFinite(result.expires_in)||result.expires_in<=0)throw Error('Incompatible bootstrap response.');
+    const expiry=Date.now()+result.expires_in*1000;
+    if(!Number.isFinite(expiry)||expiry>8640000000000000)throw Error('Incompatible bootstrap expiry.');
+    stored={origin:base.origin,token:result.access_token,expiresAt:new Date(expiry).toISOString()};
     await this.settings.setSecret('t3Session',JSON.stringify(stored));
    }
-   const access=await this.transport.post(new URL('/api/auth/ws-token',base),hosts,{},stored.token);
-   if(typeof access.token!=='string')throw Error('Incompatible WebSocket token response.');
-   const url=new URL('/ws',base);url.protocol=url.protocol==='https:'?'wss:':'ws:';url.searchParams.set('wsToken',access.token);
+   const access=await this.transport.post(new URL('/api/auth/websocket-ticket',base),hosts,{},stored.token);
+   if(typeof access.ticket!=='string'||!access.ticket)throw Error('Incompatible WebSocket ticket response.');
+   const url=new URL('/ws',base);url.protocol=url.protocol==='https:'?'wss:':'ws:';
+   url.searchParams.set('orchestrationProtocol','2');url.searchParams.set('wsTicket',access.ticket);
    const rpc=new T3Rpc(await this.transport.connect(url,hosts));this.rpc=rpc;
    rpc.wire.on('close',()=>{if(this.rpc===rpc&&this.state.status==='connected')this.state={...this.state,status:'disconnected',message:'Environment disconnected. Reconnect to refresh models.'};});
    const config=parseConfig(await rpc.call('server.getConfig'));this.catalog=config.models;
