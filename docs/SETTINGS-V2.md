@@ -1,4 +1,4 @@
-# SETTINGS V2 — one linear list of connections (2026-10-13, pass 4)
+# SETTINGS V2 — one linear list of connections (2026-10-13, pass 5)
 
 > Branch `design-settings-v2`. Interaction doc (GOAL-SYSTEM §1); no implementation. Supersedes
 > `SETTINGS-SIMPLIFICATION.md` where they differ. Owner directive (VISION-BRIEF §4): settings is
@@ -74,13 +74,11 @@ Three states. The button has two labels. Everything else is the status line.
 | busy | unchanged | `Connecting…` | spinner, disabled |
 | connected | `<Provider> Account` | `<identity> · Verified <relative time>` | `Disconnect` secondary |
 
-- Pass 2 had a fourth state, *needs attention*. It was *disconnected* with a different status
-  line and the same button, so it is now a status line, not a state.
 - Strings `Not connected`, `Connecting…`, `Connect`, `Disconnect` are Devin's (PROVEN en).
   `Session expired` / `Could not verify` are LINEAR-CONNECTION §7.3.
 - `Connect` after expiry reruns the provider flow with identity prefilled; the secret is
   replaced in place, same account id (LINEAR-CONNECTION §7.1). No `Reconnect`, no `Retry`:
-  transient errors are retried by the health tick (§4), the user sees Connect or Disconnect.
+  transient errors are retried by the health tick (LINEAR-CONNECTION §4); the user sees Connect or Disconnect.
 - Loading (first paint): label + skeleton status `h-3.5 w-40` (PROVEN ConnectionsSection
   :785) + disabled `Connect`. No empty state: zero accounts = disconnected rows.
 
@@ -119,8 +117,6 @@ the slot mounts with the paste step. One step, one input, like Linear's email st
 | Paste | `Paste your Devin session token` · masked input autofocus · `Continue` · `Cancel` · note `text-text-secondary`: `Open the Devin desktop app and sign in, then connect again to skip this.` | `connectDevin(token)` |
 | Verify | row *busy* | `GetAccountManagedPlugins` 200 → connected; identity = `userId` before the `\|` |
 
-- Pass 2 showed a `Looking for the Devin desktop app…` step and hid paste behind a link. The
-  lookup is under 3s, so it is the ordinary busy spinner; paste is shown directly, one click less.
 - Inline errors, same place as Linear: `Token not accepted` · `Could not reach Devin`.
 - Health tick reuses `GetAccountManagedPlugins`; 401 → `Session expired`. Same interval as
   Linear (LINEAR-CONNECTION §4) so both rows behave as one system.
@@ -188,3 +184,4 @@ need none never appear on this page.
 | 2 | Five states → four. Overflow menu, `Reconnect`, `Retry` deleted: one button, two labels. Devin paste step hidden behind a link. `· Marketplace access` suffix removed. Button height PROVEN. |
 | 3 | Four states → three: *needs attention* folded into *disconnected* as a status line. Devin `Looking for…` step deleted; cache lookup is the ordinary busy spinner, paste shown directly. |
 | 4 | Pass-history prose removed from §1/§2 (lives here). V3 reworded around the status line. Spacing rhythm named (ATSU §2). Org `Select` made `md` so every flow button is one size. |
+| 5 | Remaining pass-history bullets moved out of §3/§5 into this table; `§4` cross-ref corrected to LINEAR-CONNECTION §4. |
