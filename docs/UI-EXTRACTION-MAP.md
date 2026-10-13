@@ -139,3 +139,129 @@ does not authorize a separate scheduling engine.
 | `editor/AutomationEditorPage.tsx` | `editor/AutomationEditorPage.tsx:59`; route id/template; form/baseline/touched/showErrors/saving/saveError/advancedOpen/webhookCreds/regenerating/mcpHosts/networkConfirm; navigation blocker | EditorSkeleton, frame, section ordering, save gating, dirty guard and confirmation, create/edit/template initialization | Real API adapter; remove unused Slack/security/webhook queries with their controls; no fake save/run success | SPEC §8,14,15; page :59–418 |
 | `editor/form.ts` | `editor/form.ts:11`; FormState; emptyForm, formFromTemplate/Automation, consumePrefill, validate, canonical/isDirty, normalize/serialize helpers | Cloning, dirty comparison, metadata handling, retained trigger/action validation, create-vs-update semantics | Project onto Linear schema; remove Devin billing, Slack, security defaults and wire fields together; preserve unknown retained data deliberately | SPEC §4,8.1,14–15; :61,91,110,150,286,468,503,540,565 |
 | `editor/TriggerEditor.tsx` | Same suffix; AddTriggerMenu :219; TriggerCardProps :945; TriggerCard :970; schedule/condition helpers detailed below | Card geometry, condition groups, menu/submenu anatomy, schedules/timezone/RRULE editor, connection warning treatment | Retain Linear source and supported schedule controls; delete unsupported GitHub/Slack/Pylon/code-scan/webhook branches and plan upsells; add only evidenced missing Cursor Linear events | SPEC §9; Cursor Linear/trigger facts anchor additions |
+| `editor/AgentCard.tsx` | `editor/AgentCard.tsx:712`; action/index/count/change/remove, readonly/error, type/lock flags, mode/identity, MCP Set/recommendations, Linear switch, session options, Slack/security inputs; per-type draft ref and autoUnselected | Instructions card/textarea, supported session-type conversion and destination select, MCP selector geometry/search | One Linear inference path; delete Devin mode/billing, Slack monitor/triage/remediation, unsupported impersonation/security; no seeded sessions | SPEC §10–11; helpers :47,82,117,137,204,366,618,679 |
+| `editor/NotificationsSection.tsx` | Same suffix :125; actions/onActionsChange/readonly/triggerEventTypes/onChannelToJoinChange; derives notify/start; SlackChannelPicker query state; EmailNotificationRow/SlackNotificationRow | Existing section/rows and action update logic only if delivery supported | Remove Slack destination; remove email section if no approved sender. Do not invent Linear notification card | SPEC §12; :38,79,99,125 |
+| `editor/AdvancedSection.tsx` | Same suffix; AdvancedAccordion(open,onOpenChange,children), MetadataRows, LimitsRow, QueueingRow, ChildSessionsRow, ScratchpadRow, SecurityProfile/NetworkPolicy rows | Accordion and retained metadata/limit control anatomy | Retain metadata; expose invocation/concurrency only if actual Loop limits exist. Delete ACU, Devin security profiles/network machine policy, child sessions/scratchpad if unsupported | SPEC §13; :27,89,149,249,379,511,603,626,697,732,743 |
+| `editor/useGenerateWithLinear.ts` | `editor/useGenerateWithDevin.tsx:39`; optional onSuccess; inflight ref, isGenerating/error; generate/improve callbacks | Single-flight and visible pending/error transitions | Replace fake 600ms postSession, client Devin IDs, prompts and route with real Linear conversation bootstrap; otherwise delete entry points | SPEC §16; source :28 explicitly local transport |
+| `detail/AutomationDetailPage.tsx` | Same suffix :473; route id; query, toast/deleteOpen/deleting, preset/custom, tab/tabChosen; EventsSection, RunDialog, RunNowButton, read-only cards | Detail frame/action bar, name/status/tags, retained trigger/instructions, run/disable/delete/duplicate UX, event table | Linear IDs/results; delete Improve until real; remove consumption, Slack legacy migration, responder/security/Pylon branches | SPEC §17–18; detailed contracts below |
+| `detail/analytics.tsx` | Same source suffix; rangeFor/aggregate; ChartCard(children,className); ActivitySummary/ConsumptionSummary(automationId,since,until); DateRangeControl(preset/custom callbacks); RangeCalendar(value,onValueChange,months,disableFuture,className) | Activity aggregation/chart, calendar/ranges, error/retry | Delete ACU consumption/conversion; real run events only | SPEC §18.1–18.2,18.6; :24,67,114,130,232,346,373 |
+| `detail/constants.ts` | Same suffix :1–22 | Status palette/order; 30s poll, 50 events/page, activity 5000/invocations 100 limits where API matches | Delete USD_PER_ACU=2.25; polling is not execution scheduling | SPEC §18; constants |
+| `detail/IssuesSection.tsx` | Same suffix; Highlight(text,query), NewIssuesChart(issues/loading/error/retry/since/until), IssuesList(automationId,issues/loading/error,initialExpandedIssueId), IssuesSection(automationId,since,until,showChart); selectedId/search/sheet phase | Search highlighting, drawer and invocation cards if supported | Devin triage issues are not automatically Linear issues. Omit reachable tab until semantic adapter approved | SPEC §18.5; :52,84,173,228,288 |
+| `templates/TemplatesPage.tsx` | Same suffix :16; query/searchOpen/category; templates/mine queries; usedIds/installed/connections | Availability/ranking, token search, counts/grouping, 2-column/lg:3 grid, six skeletons, retry/empty | Real user/catalog; exclude unsupported requirements; delete seed CURRENT_USER_ID/MCP_CATALOG | SPEC §7.1–7.3 |
+| `templates/TemplateCard.tsx` | Same suffix :56; template prop; TemplateCardSkeleton; category/icon helpers | Card geometry, requirement indicators, template-prefill link | Exclude unsupported templates rather than rewrite promises; preserve Linear/installed MCP icons | SPEC §7.3; :11–50,84,94 |
+| `error-logs/ErrorLogsPage.tsx` | Same suffix :22; route id; memoized 90-day range; failed-events query limit 50; loading/error/empty/rows | Owner-selected clean component may be copied mechanically with provenance warning | Session IDs→Linear; original-layout acceptance blocked pending missing org-scoped module | Source :10–17 says RECONSTRUCTED; only route redirect, three catalog keys and shared events shape were captured |
+
+### Editor component contracts to retain while chiseling
+
+`TriggerEditor.tsx`:
+
+- AddTriggerMenu props: triggers/onAdd, label/chipClass, currentEventType, disabledEventTypes, showMonitor/onSelectMonitor, disabled. Singleton/current-row exemption remains for retained types.
+- TriggerCard: trigger/onChange/onRemove, readonly/showError/canRemove, credentials/URL/regeneration, connection map, disabled types/locked type, start-session/reply flags, monitor/triage flags, disabled channel IDs. Delete removed-feature props and handlers together, not merely their visible controls.
+- TimeSelect(hour,minute,onChange,showHour,disabled) :275 uses 24 hours and five-minute choices. TimezoneSelect(value,onChange,disabled) :292 has open/query state. RRuleEditor(value,onApply,children) :330 has open, visual/RRULE mode, frequency, interval, weekdays, month day, hour/minute, raw text and error; apply is distinct from dismissal. SchedulePhrase(trigger,onChange,readonly,frequencyControl) :410 composes the original inline controls.
+- ConditionEditor :632 takes trigger/change/readOnly, prefix/suffix, hidden fields, extra menu/pick handler/trailing node. Preserve OR-of-AND grouping and source schemas; ValueEditor :595 takes field/condition/value callback. ReplyRow :857 derives availability from action/trigger compatibility.
+- WebhookBody :761, secret visibility/confirm-regenerate, Slack monitor/channel selectors :456/509, CodeScanLimit :795 and Pylon banners :1064/1086 are explicitly mapped deletions when not backed by v1.
+
+`AgentCard.tsx`:
+
+- AgentTypeSelect(value/options/onValueChange, Slack/code-scan flags, disabled/lockedTooltip) and buildAgentTypeOptions :47 preserve draft restoration and one-new-session restriction where retained. SessionSelect :618 takes value/change, placeholder/className/disabled, pinnedOption/sessions; input/open state; DestinationSessionSelect :679 takes action/change/readonly/variant/sessions. Replace parser/Devin ID handling, not the picker layout.
+- McpSelector :366 takes selected/recommended Sets, change callback, runAsUser, linearEnabled/change, readOnly, auto-unselect callback, Slack controls, profile/automation/governing IDs/name and host/blocked callbacks. State: query; catalog loading/error; visibilitychange refresh. Keep generic connector availability and selection; remove unsupported governing-profile/Slack branches. Empty/disconnected/error are distinct.
+- useRunAsIdentityChange :204 tracks removed names; McpAutoUnselectedNotice :137 renders them. Do not leave identity/security notices after deleting their capability. SessionSummary/default sample sessions must become actual Linear sessions.
+- Instructions retain minHeight 120, maxHeight max(250px,30vh), textarea autosizing to at least 118px. Keep card radius 10px/p-3.5, rather than importing Cursor's editor layout.
+
+`AdvancedSection.tsx`:
+
+- MetadataRows :511: rows/change, readOnly/showErrors, suggestions/tagItems/error/label/description. SuggestInput :471 owns open state. Preserve duplicate/blank validation and reserved-tag handling.
+- LimitsRow :626: form/patch/readOnly/showAcu/enabled/change/defaultInvocationLimit; localOn. QueueingRow :697: form/patch/readOnly; on state. Keep switch-off null serialization only for supported runtime settings.
+- SecurityProfileSelect/Row :89/149 receive selection/form/patch, readonly/automation/saving/load-failure context; async profiles/resolved-security state. NetworkPolicyEditor :249 has entries/change/default/extra/readOnly/blocked, focusNewest/copy state; NetworkPolicyRow :379 has confirmOff. Delete these with `git-manager.devin.ai` default hosts if unsupported.
+- ChildSessionsRow :732 and ScratchpadRow :743 use form/patch/readOnly; scratchpad also forceEnabled/onBrowse. Their tooltips are execution claims and cannot be carried over to Linear without runtime evidence.
+
+Detail contracts (`AutomationDetailPage.tsx`):
+
+- EventsSection :92 props automationId/automationEnabled/since/until/triggers; page/statuses/search state; page query plus lifetime-events probe. Preserve never-run/no-match/loading/stale-error/disabled distinctions, filters and message highlighting. displayMessage/partsFor preserve resource links.
+- MetadataChips :212: tags, expanded/limit. RunDialog :248: open/change/onTrigger/showPrompt/description; prompt and idle→triggering→success. RunNowButton :279: automation/canRun/spendingFrozen/pylonOff/label/description/onError; open state. Replace vendor gates with real runtime eligibility; success requires accepted run response.
+- ReadOnlyCondition :317: condition/eventType/channelLabel. ReadOnlyTriggerCard :330: trigger/webhookUrl/channelLabel/onCopied. CopyValueButton :385: value/label/onCopied. LocalToast :394: message/onDone. InstructionPanel :442: action. OriginLine :454: automation/divider flags. Remove unsupported branches, preserve remaining typography.
+- LegacyMonitorBanner :413 owns busy/migration state: delete with Slack legacy support; do not repurpose it.
+- IssuesSection's IssueSheet :173 has starting/open/closing/closed phase. LinkedInvocations :148 queries automation/issue. Do not turn its sheet into an invented issue editor.
+- analytics DateRangeControl :373 has menuOpen/pickerOpen; RangeCalendar :346 has month state; activity derives buckets from events. Retain date boundary/incomplete range behavior.
+
+## 5. Shared dependency closure and adapters
+
+| Our target (`app/src/`) | Source file(s) | Copy verbatim | Chisel and why | Acceptance evidence |
+|---|---|---|---|---|
+| `ui/devin/*` | D/ui/{button,icon-button,input,input-group,select,checkbox,switch,menu,dialog,tooltip,popover,badge,segmented,skeleton,alert,card,settings}.tsx | Imported variants, portals, keyboard/focus, LabeledControlRow/SettingsCard/SectionHeader | Unused variants only; no global restyling | SPEC §19; source imports |
+| `styles/devin.css`, `assets/devin/*` | D/index.css and referenced assets | Tokens/fonts/utilities/keyframes/scrollbars | Scope against Cursor reset/token collisions; preserve computed result | SPEC §19; same-viewport comparison |
+| `features/automations/model/*` | D/model/types.ts, sources.tsx, tags.ts, rrule.ts | Retained schemas/operators, recurrence parsing/summary, metadata/source icons | Linear schema adapter; prune unsupported kinds after callers; no blind casts | SPEC §4,9,14,15 |
+| `features/automations/lib/*`, `data/timezones.ts` | D/lib/time.ts, cn.ts; data/timezones.ts | Dates, timezone ordering, class merge | Import paths only | SPEC §9.4,18 |
+| `features/automations/i18n/*`, `icons/*` | D/i18n/en.automations.json, t.ts; icons/brand.tsx, devin.tsx | Retained copy and glyph paths | Remove Devin/unsupported promises; approved naming only | COPY_CATALOG and SPEC |
+| `features/automations/api.ts`, `capabilities.ts` | D/data/store.ts, capabilities.ts interfaces | Query/error/retry/stale/optimistic rollback contract | Real slice API/Linear account/session/events; delete seeded success | MASTER-PLAN V1–V10; SPEC §5 |
+| `shell/AutomationHeaderOutlet.tsx` | D/shell/header-portals.tsx, PageHeaderBar.tsx, breadcrumb.tsx, crumbs.tsx | HeaderActions outlet and required page breadcrumb composition | Mount in Cursor shell; do not copy Devin sidebar/whole AppShell; bridge useTheme | SPEC §17.2; no second app shell |
+| `router.tsx` | D/router.tsx automations routes | List/create/templates/:id/edit/:id/error-logs params/search | Supported routes only; real Linear session destinations | SPEC §2; critical journeys |
+
+Trace transitive imports/CSS asset URLs before extracting. `data/seed.ts`, fake postSession, sample session arrays, spending-frozen UI and placeholder routes are not runtime foundations. Dependency closure must include actual glyph fonts, not just icon component names.
+
+## 6. Cursor-only feature deltas inside Devin layout
+
+| Our target | Exact source | Copy | Chisel | Acceptance evidence |
+|---|---|---|---|---|
+| `features/automations/model/linear-events.ts` | C-LINEAR; `reference/automations/linear-2026-10-12/{linear-menu,linear-issue-menu,linear-created,linear-status,linear-cycle}.json` | Linear→Issue→Created/Status changed and Cycle source choices, disabled connection treatment, captured field semantics | Project into Devin AddTriggerMenu/ConditionEditor; no Cursor editor frame transplant | Linear capture fact hashes and AX; note linear-issue.json is an intermediate menu, not configuration |
+| `features/automations/editor/TriggerEditor.tsx` | D schedule controls plus Cursor triggers/preset original captures | Devin inline schedule/timezone/recurrence layout; any retained Cursor-only schedule capability from source | RRULE is not cron. Add explicit runtime conversion only for proven equivalent subset; do not replace Devin layout with Cursor popup | `facts/automations-trigger-capture.md`, `automations-preset-capture.md`; SPEC §9.4 |
+| `features/settings/McpConnectionDialog.tsx` | C-MCP; original editor mcp-url/command/json | Cursor custom MCP add/edit forms absent from Devin automation selector | Keep Devin selector in editor; manage connections in Cursor settings | `facts/automations-saved-editor.md` |
+
+**Actual gap in clean Devin source:** D/model/sources.tsx declares Linear label/icon, but
+EVENT_SCHEMAS and SCHEMA_SOURCE_ORDER contain no Linear event group. Merely keeping the
+Linear icon does not implement a Linear trigger. Extract source event IDs/payloads from
+C-LINEAR and validate against the approved Loop adapter; observed labels alone do not
+establish webhook delivery or authenticated field options. Unconnected captures do not
+prove authorized forms. Cursor's model picker is deleted: it is not an inference catalog
+for our Linear-only product.
+
+## 7. Acceptance handoff (future implementation)
+
+Each implementation PR is one feature, branches from then-latest main, and includes green
+checks plus **Computer-Use screenshots and interaction log against the served change**,
+compared with original at matching viewport/theme/DPR. Link source hash, before/after,
+retained/deleted regions and gaps. CodeRabbit first; address/rebut all threads; orchestrator
+alone marks ready. No PR is opened for this planning document.
+
+Sidebar matrix:
+
+1. Cold expanded/persisted compact reload, storage failure fallback, routes without sidebar teardown.
+2. Button/Mod+Alt+B both ways including focused input; 0ms pin transition; 280/44 reserved width; fixed panel/border/clip; no label reflow.
+3. Header/nav hover <100ms then leave (no peek), ≥100ms (peek); blank rail does not initiate; move within panel; leave/re-enter before deadline cancels close.
+4. Visible menu/dialog holds peek through 180ms rechecks; dismissal permits closure; 150ms close then Activity disarm; 200ms open with exact easing.
+5. Keep sidebar open persists expanded; collapse while hovered clears peek/timers; unmount with pending timer cannot leak delayed updates.
+6. Compact glyph/order/hit targets, focus-visible swap, tooltips, no replacement Search/Profile/settings icons; inert list/footer not tabbable; no invented focus/drag reveal.
+7. Active/hover/focus retained links; search click/Mod+K/Escape/focus return; account menu dismissal; no new search route.
+8. Reduced-motion; 767/768 and 1511/1512 boundaries; conversation-only temporary collapse/restoration; mobile route-close/focus/inert behavior.
+
+Raw shell timing/styles also live at `/Users/irene/cursor-product-shell/corpus/shell-2026-10-12/{measurements,styles,motion,timing-result,toggle-timing}.txt`. Some console strings truncate. Recovered code resolves hover logic; live hover/mobile/search validation remains required.
+
+Other critical journeys: connect Linear with actual connection state; create from blank/template;
+edit with dirty navigation/discard/save-error/reload; list search/tags/sort/page and stale-error;
+view run/filter/date/manual-run pending/failure; disconnected chat gate; MCP tabs/keyboard/
+validation/create/reload; settings route/menu/focus. Test source state transitions, not markup
+snapshots alone. No retry-into-green. Runtime tests and CU are implementation gates, not
+claims made by this documentation change.
+
+## 8. Explicit blockers and extraction order
+
+1. Restore missing captured desktop corpus with version/hash manifest before mapping its
+   `automations.split.js`/`app/` sections. Web source mappings above are usable independently.
+2. Close Cursor asset dependency graph (fonts, icon font, overlays, CSS variables) using
+   captured inventories. Copy baseline shell intact and prove contract before deleting nav.
+3. Recover dashboard account behavior/Integrations page module and connected Linear forms.
+   Current nav/DOM/unconnected evidence cannot certify these mutations or layouts.
+4. Resolve error-logs provenance: the owner selected the clean Devin tree, but its error page
+   admits reconstruction. Capture original org-scoped page before claiming pixel parity;
+   do not conceal this by relabeling it EXTRACTED.
+5. Approve remaining product projections: General field inventory, runtime-supported
+   schedule/action/limit/notification types, Linear generation and triage issue semantics.
+   Unsupported controls are deleted, not filled with simulation.
+6. After plan approval: shell contract slice; settings primitives/each retained surface;
+   automation shared primitives/list; editor; detail; templates; error-logs once evidenced.
+   These are separate implementation reviews. Port missing Cursor features into Devin
+   controls, never replace Devin's editor with Cursor's layout.
+
+No invented pixel or interaction is authorized by a GAP. The complete desktop/mobile
+raster acceptance claim remains pending original asset closure and live comparison even
+where the controller contract is fully extracted.

@@ -227,7 +227,8 @@ rely on V4 memory and re-send only newly mentioned skills.
 
 **Chat turn** (user types in our chat page): identical path — our chat is a Linear conversation
 we proxy (RESTART §2.4), so the same `preamble` builder runs. The only difference is that the
-chat UI shows a skill chip per active skill so the user sees what the agent was told.
+chat UI renders each typed `/<skill>` as an inline mention token and names the attached packages
+in the conversation header (DECISION-skill-chips.md §7). No chip row.
 
 **Native Linear chat** (user is inside Linear): the mirrored AgentSkills carry the body; the
 tools are whatever the connected MCP server exposes for that account. No allowlist, no `always`.
@@ -431,7 +432,7 @@ Devin's MCP selector (`DEVIN_AUTOMATIONS_DECOMPILED_SPEC.md` §11.2: 42px header
 | Package card | n/a | Captured dashboard section stack: Connection (form per `auth`), Tools (list with per-tool enable, `defaultDisabled` off), Skills (list: title, mode badge, size, mirrored ✓/✗), Danger (Disable / Uninstall; Linear has no Uninstall) | C-SETTINGS DashboardSection/Cell |
 | Linear connection page | Connect flow | Unchanged; gains one line "Powers the Linear package" linking to its card | LINEAR-CONNECTION D7 |
 | Automation editor → Tools | Devin MCP selector of servers | Same selector, rows are **packages**; expanding a row (captured `mcp-linear-expanded`) lists its skills with checkboxes and a "pin skill" state; `Setup` badge routes to the package card when connection is `missing` | Devin §11.2; facts `mcp-linear-expanded` |
-| Chat page | Linear gate | Gains skill chips above the composer for the active attachment | DESIGN, needs owner acceptance |
+| Chat page | Linear gate | Inline `/skill` mention token in the composer + header package line; chip row rejected | DECISION-skill-chips.md §6–7 |
 
 Deleted, not hidden: the standalone per-server "bindings" panel from the archived first pass;
 registry URL/command/JSON forms survive only inside the New package dialog's URL tab.
