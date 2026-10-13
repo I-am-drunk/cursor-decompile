@@ -240,7 +240,7 @@ the pointer (it is position, not animation).
 |---|---|---|
 | Toggle | icon-only segmented control `Board ⊞ · List ☰` in the toolbar right group, left of `Create automation`; Devin `SegmentedTabs variant="rounded"` | the toolbar already holds a segmented control; same component |
 | Default | **Board**, always (pass 4: owner calls this the flagship; a default that hides it is a hedge) | VISION-BRIEF "Automation projects"; list remains one click away |
-| Persistence | `localStorage automations.view = board|list`; URL `?view=list` overrides for a link | matches Devin's `replace` URL policy |
+| Persistence | `localStorage automations.view = board \| list`; URL `?view=list` overrides for a link | matches Devin's `replace` URL policy |
 | List additions | a `Project` facet in the existing metadata filter popover (key `project`, values = project names, same OR/AND rules §6.2); row subtitle gets ` · in <project>` after the channel when filed | zero new columns; the filter popover already exists |
 | Row menu | `Move to project ›` (§8.1) in both views | one menu, two views |
 | Folder open | list view never opens folders; `?project=<id>` in list view = filter by that project | folders are a board idea |
