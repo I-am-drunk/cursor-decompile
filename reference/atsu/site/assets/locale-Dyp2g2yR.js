@@ -1,0 +1,1 @@
+var e=new Intl.Locale(navigator.language).maximize().region,t=e?`en-${e}`:`en`,n=new Intl.DateTimeFormat(t,{timeStyle:`short`}).resolvedOptions().hourCycle,r=n===`h23`||n===`h24`;export{r as n,t};

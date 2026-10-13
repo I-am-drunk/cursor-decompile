@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-B-hcVAMW.js";import{t}from"./bundle-mjs-D7QTbxyK.js";var n=e();function r({children:e,className:r}){return(0,n.jsx)(`div`,{className:t(`w-full min-w-0 max-w-(--wrapper) px-(--padding) mx-auto`,r),children:e})}export{r as t};
