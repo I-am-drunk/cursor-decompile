@@ -722,3 +722,30 @@ the closing "what this means for us" paragraph.
 - **One caution:** pointer parallax on a login form is a decision (OQ3), not a copy. The
   captured page is a hero, ours is a form. Default: keep it; it costs nothing and is exact.
 - Still unpushed (origin at main). Runner.
+
+## 34 · 07:30 · `design-login` 768a62c + b6796be — LOGIN-PAGE-V2.md §3 layout + §4 form states (71 lines)
+
+**Checked:** §3 stack diagram and element table (scene z0 → scrim z1 → card z2), §4 mode
+table (sign-in / first-run from `/api/auth/status`), seven-row state table, error copy, the
+"no transitions on the form" rule.
+
+**Verdict: on-vision. §4 is implementation-complete in the GOAL-SYSTEM §1 sense.**
+
+- Stack order is the simplest possible: three layers, card opaque, scene never enters the
+  contrast calculation. That resolves entry 29's V3 concern by construction.
+- "No logo, no footer, no Forgot password (none exists), no theme toggle" is simplicity test 2
+  applied line by line, each with a source. Card geometry is the baseline's copied Cursor
+  values (360 / 32 / 12 / 28h / 20-28 / 13-18).
+- State table has trigger, visual, timing for every row; error line has `min-height 16` so
+  the card never reflows. Server copy is EXTRACTED from `src/auth/store.ts`; the one invented
+  string (429) is labeled DESIGN + GAP. That is the labeling discipline the brief demands.
+- **Two nits for P3:**
+  (1) §4 "button disabled until `/api/auth/status` answers, no spinner" is right, but state
+  the fallback if it never answers (unreachable row covers fetch reject, not a hang). One
+  line: "after 2 s treat as sign-in mode, enabled."
+  (2) The §3 card shadow `--shadow-L2` is a Cursor token for elevated panels; confirm it is
+  what Cursor's own login card uses, or drop the shadow. One token, one source.
+- §5 (scene integration), §6 (scrim), §7 (instant-load budget) are the sections that make
+  this the owner's page rather than a copied form. They are next; the budget numbers from
+  entry 33 belong in §7.
+- Unpushed: three local commits, origin still at main. Runner.
