@@ -24,8 +24,9 @@
 | V3 | Scrim = raycast `heroBackground:after` verbatim, tokenised to `--bg-page` | EXTRACTED | §6 |
 | V4 | Two-tone = tone A (page: clear colour + scrim) and tone B (field: c1–c3). Both swap with the theme. Light tone B is **derived** from the source colour math (§6), not invented: source has no light palette (Astra theme-check.json). | DESIGN (derived) | §6; owner directive 2026-10-13 |
 | V5 | Pointer rotation kept (source); scene is `pointer-events: none` | EXTRACTED | §7 |
-| V6 | Reduced motion / no WebGL2 = static settled-pose AVIF behind the scrim | DESIGN | §7 |
+| V6 | Reduced motion / no WebGL2 / context error = one settled-pose AVIF per theme, in the canvas's place | DESIGN | §7 |
 | V7 | Form never depends on the scene; flag can remove it | DESIGN | baseline L6 |
+| V8 | React target: `LoginPage` → `LoginCard` + `RaycastScene`; scene keyed on theme, one effect, one `failed` state | DESIGN | §10; owner directive |
 
 ## 1. Resolved questions
 
@@ -276,8 +277,9 @@ updated in place. Anything over budget blocks the PR, not the spec.
 
 Pixel-parity against raycast.com requires matched state (interaction doc): same viewport,
 DPR, elapsed time, pointer history, frame deltas. The test apparatus is URL params on both
-sides — raycast's own `?heroDebug` plus our `?t=<s>&pointer=0&dpr=2` (ours only; never
-visible UI).
+sides — raycast's own `?heroDebug` plus our `?t=<s>&pointer=0&dpr=2`. The page parses these into
+`RaycastScene`'s `debug` prop (§10) only when the build is non-production; in production the
+prop is always undefined. Never visible UI.
 
 | # | Check | Method | Pass |
 |---|---|---|---|
