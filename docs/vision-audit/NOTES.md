@@ -471,8 +471,9 @@ process table, lane worktrees (`/tmp/wt-login`, `/tmp/wt-proj`, main checkout on
   process ran 30–40 min, printed nothing, and exited 1. In `-p` mode output arrives only at the
   end, so a kill or a swallowed API error leaves an empty log.
   FIX → Runner: run the lanes with `--output-format stream-json --verbose` so progress lands in
-  the log as it happens; check `claude_session_watchdog.sh` (73 CPU-min tonight) is not killing
-  long sessions; run one of the three in the foreground once; and split the goal (e.g. fable-projects → "board
+  the log as it happens (the watchdog script only tracks five named interactive sessions, so it
+  is not the killer); read the lane's transcript jsonl for the last assistant message; run one
+  of the three in the foreground once; and split the goal (e.g. fable-projects → "board
   layout + card" first, drag lifecycle second). Do not keep relaunching the same prompt with
   escalation 9; that is the runner equivalent of a mega-PR.
 - Until this is fixed the STATE "gaps" list is not shrinking, whatever the other lanes do.
