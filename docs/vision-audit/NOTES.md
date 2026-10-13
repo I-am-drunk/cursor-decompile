@@ -260,3 +260,113 @@ settings extraction table, Devin automations file-by-file table.
   (Customize); keep the row/frame extraction rows, retarget `McpConnectorsPage` to the
   Customize MCPs tab. The extraction evidence is still right; only the destination names moved.
 - Nothing clever. Keep as the shell source of truth.
+
+## 12 · 04:40 · `plan-devin-port` 2630d27 (local) / 991d4ae (origin) — docs/DEVIN-PORT-MAP.md (1,268 lines)
+
+**Checked:** §1 authority, §2 inventory (19 feature files), §3 Cursor-gap table, §4 run/event
+contract, §5 trigger + RRULE schedule contract, §6 handoff, §7 pinned ledger, Appendix A size.
+
+**Verdict: on-vision as evidence; slop-risk on scope and on the pushed copy.**
+
+- On-vision: every row is EXTRACTED with S-section citations; it refuses to invent (`linear:cycle_end`,
+  model picker, cron→RRULE without proof). It resolves the six-minutes-vs-six-hours spec
+  contradiction by reading the bundle. "Unknown is not permission to invent" is the brief verbatim.
+- **Slop-risk 1 — the pushed branch is truncated.** `origin/plan-devin-port` 991d4ae holds a
+  65-line file; the real 1,268-line doc is only in the local worktree commit 2630d27. Same for
+  `plan-ui-extraction` (origin 141 lines vs local 267). The two tips have diverged with the same
+  message and timestamp. A morning reader on GitHub sees a stub.
+  FIX → Runner: `git push --force-with-lease origin 2630d27:plan-devin-port` and
+  `aeb5b19:plan-ui-extraction`. Also delete the stray untracked copies of both files sitting in
+  the `design-decisions` working tree (`docs/DEVIN-PORT-MAP.md`, `docs/UI-EXTRACTION-MAP.md`).
+- **Slop-risk 2 — scope.** §2 inventories Devin's *entire* automations surface: Advanced
+  section with ACU/spend limits, security profiles, network allow-lists, child sessions,
+  Preflight, Issues triage sheet, consumption charts. The brief's product is "deliberately
+  small" and Linear-only. 1,030 lines of Appendix A copy for controls we will cut is a ledger,
+  fine; but §3 "port mappings" should not treat all of §2 as the v1 target.
+  FIX → add a one-table "v1 keeps / v1 hides / cut" pass over §2 before any component PR.
+  My read: keep list, editor (Name · Triggers · Agent · Notifications), detail Events; hide
+  Advanced except metadata; cut Issues/Consumption/analytics until a run exists to chart.
+- **Design flag (§3 row 1):** a *composed* global Run History page (analytics date controls +
+  EventsSection) is an invention, honestly labeled "requires owner plan review." Keep it parked.
+  Cursor's captured global Run History (facts/automations-web-capture) is the copy source if
+  the owner wants that view; do not compose a third thing.
+- Cross-lane contradiction found here, logged as entry 15 (cron vs RRULE).
+
+## 13 · 04:45 · `plan-server-architecture` 97f6018 — docs/ARCHITECTURE.md (416) + SERVER-SCAFFOLD.md (114)
+
+**Checked:** A1–A10 decisions, slice map, schema, scheduler, §9 provenance table; cross-read
+against SERVER-FROM-DEVIN §7 supersession table.
+
+**Verdict: superseded — correctly. Do not merge; harvest.**
+
+- This is the T3-derived plan the owner rejected ("kind of slop"). SERVER-FROM-DEVIN c30282c
+  already says it supersedes 97f6018 where they conflict. Good: the pivot was explicit.
+- What is worth keeping from it (and SERVER-FROM-DEVIN §7 does keep): one Node process, one
+  SQLite file, slice-per-folder with `index.ts` as the only public surface, tagged errors,
+  resumable runs, `recoverOpenRuns` on boot, FakeClock/FakeLinearClient test harness. These
+  are boring and exact. The `check-boundaries.mjs` CI rule is the one piece of discipline
+  that stops a mega-PR from smearing across slices.
+- What dies: A10 mentions what was not taken from t3code; fine, but A1–A9 still cite t3code
+  as the basis. The owner's model is Devin's client/server split. Provenance matters to him.
+  FIX → Runner: close the lane. Leave the branch as reference; SERVER-FROM-DEVIN is the only
+  server plan. If SCAFFOLD's file tree is reused, re-home it under SERVER-FROM-DEVIN with
+  the triggers slice changed to RRULE (see entry 15).
+
+## 14 · 04:50 · devin-decompile `re-desktop-3.10.48` 0cc66a8 + `docs-public-spec-2026-10` b20e607
+
+**Checked:** re-desktop: cloud 2026-10-13 capture (7 live asset hashes: customize,
+PluginManifestEditor, PluginFilesEditor, CreatePluginDialog, managed-plugins, mcp-marketplace
+route, linkedPluginNames), verify script. docs-public-spec: PUBLIC-DOC-INCONSISTENCIES (13
+items), marketplace-publishing + plugin-SDK public specs.
+
+**Verdict: on-vision as evidence. Two items the product lanes must read tonight.**
+
+- The cloud capture is labeled "Remote runtime, not frozen desktop 3.10.48 source" with
+  per-file SHA-256. That is the evidence hierarchy done right; remote web is kept separate
+  from the desktop bundle so nobody cites a web class on a desktop surface.
+- **Item for CONNECTORS-PAGE-SPEC / CONNECTOR-PACKAGES:** Devin's cloud now has a Create
+  Plugin dialog + manifest JSON editor + files editor. That is the authoring UX the owner's
+  connector packages need (CONNECTOR-PACKAGES §9). Copy it; do not design one.
+  FIX → the connector lane's §9 should cite `CreatePluginDialog-CigB-aT0.js` and
+  `PluginManifestEditor-CQyLf8Bc.js` as the copy source and mark its own authoring sketch DESIGN
+  until those are traced.
+- **Item for the scheduler (entry 15):** INCONSISTENCIES #1 and #13 say Devin's legacy
+  schedule is cron, the editor is RRULE, and API RRULE evaluation is UTC while the UI gives
+  each schedule its own timezone. Our server plan must pick one and say which.
+- INCONSISTENCIES #10: Devin moved the marketplace from Settings → Marketplace into
+  Customize. Confirms the owner's tab-order decision is where Devin itself went.
+- No drift. Note the lane's own log says the cloud marketplace fetch sends no Devin
+  credentials for the upstream registry; the 52-plugin catalog call (741da31) does. Two
+  catalogs, two auth models: the product spec must name which one "Available" lists.
+
+## 15 · 04:55 · CROSS-LANE — scheduler format: cron vs RRULE (3 docs disagree)
+
+**Checked:** ARCHITECTURE §3/§6.3 (`kind IN ('cron',…)`, `InvalidCron`, 5-field cron + presets);
+SERVER-FROM-DEVIN §1/§7 (RRULE + IANA tz, cron only via proven subset adapter, cron marked
+superseded); DEVIN-PORT-MAP §5.2 (all pickers persist `schedule:recurring` + one `rrule`
+condition; validator rejects EXDATE/SECONDLY/etc.); devin-decompile INCONSISTENCIES #1/#13
+(legacy cron, editor RRULE, API evaluates UTC, UI per-schedule tz).
+
+**Verdict: drift-risk. Decided in prose, not yet in one place.**
+
+- The decision is already made the right way: RRULE + tz, Devin's storage shape, cron only
+  as an adapter. Copy-first says store what Devin stores. But SCAFFOLD still names `cron.ts`
+  and the Cursor facts (preset capture: "Cron expression (UTC)", 5–7 field hint) are a Cursor
+  feature the owner may want to keep.
+  FIX → one sentence in SERVER-FROM-DEVIN §1 row "Scheduler input": "v1 UI exposes Devin's
+  presets + Visual/RRULE popover only; Cursor's raw-cron input is v2, gated on the adapter
+  proof in DEVIN-PORT-MAP §3." Then the Cursor cron row in DEVIN-PORT-MAP §3 is parked, not
+  pending. Timezone: store IANA tz per schedule (Devin UI behavior), evaluate in that tz.
+
+## 16 · 04:58 · Lane health (from /tmp/goals/*.log) — not code, but it gates the night
+
+- **astra-atsu EXIT 1** at 03:54: Playwright `ENOSPC` in `/tmp`. Disk now shows 128 GB free,
+  so it was a transient `/tmp` fill (likely the 152 MB atsu tree + browser artifacts).
+  Runner: restart the lane with the entry-05/07 FIX (write INDEX.md, shrink to one poster size).
+- **astra-raycast** (04:26, running): has the live shader programs + geometry; reports the
+  scene uses exactly three color inputs (pale cyan / pink / crimson) and **no light-mode
+  palette exists**. That confirms entry 02 ASK: two-tone light mode will be DESIGN, not copy.
+  The owner must choose; the lane must not pick.
+- **fable-login / fable-projects / fable-settings / fable-q45** started 03:50–04:04; nothing
+  committed yet. Expect LOGIN-PAGE-V2, AUTOMATION-PROJECTS, DECISION-preflight,
+  DECISION-skill-chips. Will audit on landing.
