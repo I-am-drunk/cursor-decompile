@@ -1,6 +1,6 @@
 # AUTOMATION PROJECTS — the board (iPhone-home-screen model for automations)
 
-Status: **pass 8 — build order, verification checklist, scrim wording.** Branch `design-projects`. Fable, 2026-10-13. Owner's
+Status: **pass 9 — final sweep; ready for Runner review.** Branch `design-projects`. Fable, 2026-10-13. Owner's
 flagship. Law: GOAL-SYSTEM §1 — nothing here is implemented until every state, transition, timing
 and copy string below is filled. Evidence labels: VERIFIED > OBSERVED > EXTRACTED > DOCUMENTED >
 DESIGN (ours). GAP = missing evidence, never permission to invent.
@@ -120,7 +120,7 @@ open A, drag the card out (sheet closes, §5.4), drop on B. One fewer mode, zero
 | drop | ghost `transform` | current → target card centre, scale 1.03 → .6 | 180ms | same | iOS DOCUMENTED (icon flies into folder) |
 | drop | ghost `opacity` | .92 → 0 | 180ms, last 60ms | `ease-in` | DESIGN |
 | drop | origin cell | removed from DOM when ghost finishes; grid reflows with **no** animation | 0 | — | DESIGN (cheaper; see §12) |
-| drop | target folder count badge | n → n+1 | 0 | — | — |
+| drop | target folder count badge | n → n+1; on collision the target automation card is **replaced in place** by the new folder card (no motion, name field selected §5.1) | 0 | — | iOS DOCUMENTED (folder forms at the target's slot) |
 | return | ghost `transform` | current → origin rect, scale → 1 | 220ms | `cubic-bezier(.33,1,.68,1)` | DESIGN |
 | return | origin `opacity` | .4 → 1 | last 100ms of the 220 | `ease-out` | DESIGN |
 | reduced motion | every row above | instant (duration 0) except opacity rows at 80ms | — | — | motion-audit policy |
@@ -198,7 +198,7 @@ Nesting: **never**. Dropping a folder on a folder is not possible because folder
 | search matches nothing | `No matching automations` | EXTRACTED |
 | list error, has cached data | stale-data alert above the frame | EXTRACTED |
 | list error, no data | full centred error, no frame | EXTRACTED |
-| project move failed | optimistic move reverts with the cancel motion (220ms); toast `Couldn't move "<name>"` with `Retry` | DESIGN; toast component is Devin's |
+| project move failed | optimistic move reverts with the return motion (§4.2, 220ms); toast `Couldn't move "<name>"` with `Retry` | DESIGN; toast component is Devin's |
 | open folder, 0 members | cannot happen (auto-remove §5.3); if it does (stale), sheet shows `Empty` and closes on first refetch | DESIGN |
 
 ## 8. Keyboard, touch, reduced motion
@@ -303,7 +303,7 @@ Event log rows: `project.created`, `project.renamed`, `project.removed`, `automa
 
 §4.2 is the single source of truth for every duration and curve. Two curves exist in the whole
 feature: `cubic-bezier(.22,1,.36,1)` (Cursor's captured ease, used for everything that moves
-toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 (leave), 120
+toward a goal) and `cubic-bezier(.33,1,.68,1)` (return). Durations: 80 (leave), 120
 (pickup, enter, fade), 150 (scrim in), 180 (drop), 200 (close), 220 (return), 260 (open), 300
 (scrim out). Devin's bundle ships exactly three motion tokens — `menu-in` 120ms
 `cubic-bezier(.16,1,.3,1)`, `fade-in` 150ms ease-out, sheet exit 300ms ease-in-out — and every
@@ -364,3 +364,6 @@ visual token we touch (`shadow-L3/L4`, `bg-bg-scrim`, `bg-bg-wash`, `ring-border
 - pass 7 (2026-10-13): grid gap is Devin's own `gap-0.5`, not an invented 4px; row-menu
   reveal described as Devin does it (hover/focus-within replaces the date).- pass 8 (2026-10-13): §13.1 build order (10 PRs) and §13.2 computer-use verification
   checklist added; atsu evidence row made honest; dim → scrim everywhere.
+
+- pass 9 (2026-10-13): stale `cancel` wording → `return`; collision drop row says the folder
+  card replaces the target in place. Doc frozen for Runner review; next edits come from review.
