@@ -1,4 +1,4 @@
-# SETTINGS V2 — one linear list of connections (2026-10-13, pass 3)
+# SETTINGS V2 — one linear list of connections (2026-10-13, pass 4)
 
 > Branch `design-settings-v2`. Interaction doc (GOAL-SYSTEM §1); no implementation. Supersedes
 > `SETTINGS-SIMPLIFICATION.md` where they differ. Owner directive (VISION-BRIEF §4): settings is
@@ -20,7 +20,7 @@
 |---|---|---|
 | V1 | `/settings` is one page, one list, heading `Connections`. No tabs, sub-nav, search, or help text. | OWNER; Devin `settings.connections` (PROVEN en) |
 | V2 | Every connection is the **same row**: logo, label, status line, one big button, flow slot. | OWNER "linear layout"; Devin `U` is provider-agnostic (PROVEN) |
-| V3 | The right slot holds **one button**, always: `Connect` → `Disconnect`. No overflow menu, no `Retry`, no `Reconnect` item. Expired and error states turn the one button back into `Connect`. | OWNER "big Connect/Disconnect"; simplicity test 2 |
+| V3 | The right slot holds **one button**, always: `Connect` → `Disconnect`. No overflow menu, no `Retry`, no `Reconnect`. An expired or unverifiable account is *disconnected* with a different status line; its button reads `Connect`. | OWNER "big Connect/Disconnect"; simplicity test 2 |
 | V4 | Flows open **inside the row** below the text, one input and one button per step. The row grows by that block only. | SETTINGS-SIMPLIFICATION S4; Devin swaps button → spinner in place (PROVEN :2594) |
 | V5 | Devin "connected" = server holds a valid `devin-session-token$<JWT>` and `GetAccountManagedPlugins` returned 200. Captured from the desktop app's cache; no OAuth. | VERIFIED 2026-10-12 |
 | V6 | Not rendered: team mapping, scopes, allowed bots, org gates, multi-account stacking. Team mapping ported behind `capabilities.linearTeams=false`. | SETTINGS-SIMPLIFICATION §3 |
@@ -43,10 +43,7 @@ Connections                                   ← 20px/28px (S-ACCOUNT title)
 
 One Cursor dashboard section (padding 12px 16px, radius 6px) holding rows separated by Devin's
 `border-border-secondary border-t` (PROVEN :67). The list is the whole page. Order is registry
-order (§6): Linear, Devin, then future rows. Rows never reorder by status.
-
-Removed since pass 1: the `· Marketplace access` suffix (the label already says Devin; what
-it is for belongs on the marketplace page, not here).
+order (§7): Linear, Devin, then future rows. Rows never reorder by status.
 
 ## 2. The row
 
@@ -62,7 +59,10 @@ Devin `U` (PROVEN :112-141) with the right slot holding one `lg` text button.
 | Busy | label → spinner `motion-safe:animate-spin`, button disabled (`disabled:opacity-50`) | PROVEN linear :2594, base :114 |
 | Flow slot | below the text column, spans the row, `mt-[10px] flex flex-col gap-[8px]`; mounted only while a flow is open | DESIGN (V4) |
 
-Pass 1 marked the 32px height as GAP. It is now PROVEN (`lg: h-[32px]`, emSl-pyA :350).
+Spacing rhythm (ATSU §2, three distinguishable intervals): **2px** binds status to label,
+**8px** separates input from button inside a step, **10px** separates the flow slot from the
+text, **60px** rows separate accounts, **30px** separates the heading from the list. Source
+values are kept; nothing is rounded to a grid.
 
 ## 3. States — one table for every row
 
@@ -93,7 +93,7 @@ Three states. The button has two labels. Everything else is the status line.
 |---|---|---|
 | Email | `What's your email address?` · input 28px `type=email` autofocus · `Continue` · `Cancel` | `startConnect(email)` |
 | Code | `Enter the login code we emailed to <email>` · input `one-time-code` · `Continue with login code` · link `Resend code` (live after 30s) | `completeConnect(attemptId, code)` |
-| Org (rare) | one line per workspace `<org>` · `Select` `sm` | `completeConnect(…, orgId)` |
+| Org (rare) | one line per workspace `<org>` · `Select` `md` | `completeConnect(…, orgId)` |
 | Done | slot unmounts; row → connected | — |
 
 - Inline error `text-13 text-text-red` under the input: `Code not accepted` · `Code expired,
@@ -187,3 +187,4 @@ need none never appear on this page.
 | 1 | Linear list, two rows, Devin geometry, five states, overflow menu with Reconnect |
 | 2 | Five states → four. Overflow menu, `Reconnect`, `Retry` deleted: one button, two labels. Devin paste step hidden behind a link. `· Marketplace access` suffix removed. Button height PROVEN. |
 | 3 | Four states → three: *needs attention* folded into *disconnected* as a status line. Devin `Looking for…` step deleted; cache lookup is the ordinary busy spinner, paste shown directly. |
+| 4 | Pass-history prose removed from §1/§2 (lives here). V3 reworded around the status line. Spacing rhythm named (ATSU §2). Org `Select` made `md` so every flow button is one size. |
