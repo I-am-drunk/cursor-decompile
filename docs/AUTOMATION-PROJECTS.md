@@ -1,6 +1,6 @@
 # AUTOMATION PROJECTS — the board (iPhone-home-screen model for automations)
 
-Status: **pass 2 — every section filled.** Branch `design-projects`. Fable, 2026-10-13. Owner's
+Status: **pass 3 — drag machine collapsed to six states.** Branch `design-projects`. Fable, 2026-10-13. Owner's
 flagship. Law: GOAL-SYSTEM §1 — nothing here is implemented until every state, transition, timing
 and copy string below is filled. Evidence labels: VERIFIED > OBSERVED > EXTRACTED > DOCUMENTED >
 DESIGN (ours). GAP = missing evidence, never permission to invent.
@@ -89,20 +89,22 @@ folder card does not pick up.
 
 One state machine, one pointer. Only automation cards pick up (v1). Only membership changes.
 
-### 4.1 States
+### 4.1 States (pass 3: seven states, down from ten)
 
 | State | Entered by | Visible | Exits to |
 |---|---|---|---|
 | `idle` | — | card at rest | `armed` on `pointerdown` (primary button, fine pointer) |
-| `armed` | pointerdown | nothing changes; `setPointerCapture` | `dragging` when pointer moves ≥4px from origin; `idle` on pointerup (→ click = navigate) |
-| `dragging` | ≥4px | §4.2 pickup; a **ghost** follows the pointer with 0 lag; the origin cell keeps the card at 40% opacity (iOS leaves a blank slot; a dim placeholder is calmer and keeps the grid still) | `over-card`, `over-folder`, `over-nothing`, `cancel` |
-| `over-nothing` | pointer over grid gap, frame, page | ghost only; no target highlight | drop → `settle-back` |
-| `over-card` | pointer within another **automation** card's rect inset 8px | target card gets `ring-2 ring-ring` and `bg-tint-secondary` at 120ms | drop → `create-folder` (§5.1) |
-| `over-folder` | pointer within a folder card's rect inset 8px | folder ring + wash as above; dwell timer starts (400ms) | drop → `move-into`; dwell → `folder-peek` |
-| `folder-peek` | dwell 400ms with pointer still (<6px movement) | folder opens (§5.4 open) **under** the ghost; board dims | drop inside → `move-into`; drop on dim → `settle-back`; pointer leaves sheet 300ms → close + `dragging` |
-| `cancel` | Escape, window blur, pointercancel, right button | ghost returns to origin (§4.2 "cancel") | `idle` |
-| `settle-back` | drop with no target | same return motion as cancel | `idle` |
-| `create-folder` / `move-into` | drop on target | ghost shrinks into target (§4.2 "drop"); optimistic update | `idle` |
+| `armed` | pointerdown | nothing; `setPointerCapture` | `dragging` at ≥4px; `idle` on pointerup (= click = navigate) |
+| `dragging` | ≥4px | pickup (§4.2); **ghost** follows pointer with 0 lag; origin card stays in its cell at 40% opacity so the grid never moves | `over-target`, `return`, drop → `return` |
+| `over-target` | pointer inside another card's rect inset 8px (automation **or** folder) | target gets `ring-2 ring-ring` + `bg-tint-secondary` in 120ms | leave → `dragging`; drop → `commit` |
+| `commit` | drop on target | ghost flies into target (§4.2 drop); optimistic `POST /projects` or `PATCH .../project` | `idle` when motion ends |
+| `return` | drop on nothing · Escape · blur · `pointercancel` · right button | ghost returns to origin (§4.2 return) | `idle` |
+
+Target kind decides the commit: automation → create folder (§5.1); folder → move into.
+There is no dwell-to-open while dragging (iOS "folder peek"). Cut in pass 3: it needed a
+sub-machine (sheet under the ghost, leave-to-close timer, drop-on-dim rules) for one gain —
+moving a card from folder A straight into folder B — which the open view already covers:
+open A, drag the card out (sheet closes, §5.4), drop on B. One fewer mode, zero lost outcomes.
 
 ### 4.2 Physics (the one table)
 
@@ -116,13 +118,12 @@ One state machine, one pointer. Only automation cards pick up (v1). Only members
 | drag | ghost position | = pointer − grab offset | 0 lag, per `pointermove` | none | iOS DOCUMENTED (icon stays under finger) |
 | enter target | target `ring`, `bg-tint-secondary` | off → on | 120ms | same | DESIGN |
 | leave target | same | on → off | 80ms | `ease-out` | DESIGN (leave faster than enter) |
-| dwell → peek | folder open | §5.4 open motion | 260ms | same | iOS DOCUMENTED |
 | drop | ghost `transform` | current → target card centre, scale 1.03 → .6 | 180ms | same | iOS DOCUMENTED (icon flies into folder) |
 | drop | ghost `opacity` | .92 → 0 | 180ms, last 60ms | `ease-in` | DESIGN |
 | drop | origin cell | removed from DOM when ghost finishes; grid reflows with **no** animation | 0 | — | DESIGN (cheaper; see §12) |
 | drop | target folder count badge | n → n+1 | 0 | — | — |
-| cancel / settle-back | ghost `transform` | current → origin rect, scale → 1 | 220ms | `cubic-bezier(.33,1,.68,1)` | DESIGN |
-| cancel / settle-back | origin `opacity` | .4 → 1 | last 100ms of the 220 | `ease-out` | DESIGN |
+| return | ghost `transform` | current → origin rect, scale → 1 | 220ms | `cubic-bezier(.33,1,.68,1)` | DESIGN |
+| return | origin `opacity` | .4 → 1 | last 100ms of the 220 | `ease-out` | DESIGN |
 | reduced motion | every row above | instant (duration 0) except opacity rows at 80ms | — | — | motion-audit policy |
 
 Ghost = a `position: fixed` clone (same DOM) in a portal, `pointer-events: none`, `will-change:
@@ -225,7 +226,7 @@ one-workspace product. The menu is also the touch path and the screen-reader pat
 ### 8.2 Touch (coarse pointer)
 
 Scroll must win. Pickup = press 400ms with <10px movement (atsu/iOS pattern), then the same
-state machine as §4. Haptic none (web). Dwell, drop, cancel timings identical. A 400ms press
+state machine as §4. Haptic none (web). Drop and return timings identical. A 400ms press
 on a folder opens it instead.
 
 ### 8.3 Reduced motion
@@ -291,7 +292,7 @@ Event log rows: `project.created`, `project.renamed`, `project.removed`, `automa
 | long-press (≈500ms) to pick up | mousedown + 4px movement picks up | a mouse has no tap/hold ambiguity; 4px is the common desktop drag threshold |
 | jiggle / edit mode | none; drag is always live | a mode is a cost the mouse doesn't need |
 | drop-onto-icon makes a folder | same | the one iOS idea the owner asked for |
-| hover over folder, dwell → opens | same, 400ms | lets you drop *inside* without first opening |
+| hover over folder, dwell → opens (peek) | **cut**; drop on the folder card moves in; open the folder to drop at a position | one fewer mode; §4.1 explains the no-loss argument |
 | folder opens as sheet over blurred home | same geometry; 40% dim, no blur | blur fights Cursor's flat chrome and costs frames |
 | displaced icons slide aside | nothing slides; drag changes membership only | no reorder in v1 → nothing to displace |
 | auto-named folder ("Productivity") | `Untitled project`, name field selected | no taxonomy to guess from |
@@ -304,7 +305,7 @@ Event log rows: `project.created`, `project.renamed`, `project.removed`, `automa
 §4.2 is the single source of truth for every duration and curve. Two curves exist in the whole
 feature: `cubic-bezier(.22,1,.36,1)` (Cursor's captured ease, used for everything that moves
 toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 (leave), 120
-(pickup, enter, fade), 150 (dim), 180 (drop), 200 (close), 220 (return), 260 (open), 400 (dwell).
+(pickup, enter, fade), 150 (dim), 180 (drop), 200 (close), 220 (return), 260 (open).
 
 ## 14. Open questions for Runner / owner
 
@@ -320,3 +321,5 @@ toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 
 - pass 1 (2026-10-13): skeleton banked.
 - pass 2 (2026-10-13): every section filled; evidence pulled from Devin `list/*.tsx`,
   SERVER-FROM-DEVIN §2–§3, motion-audit; reorder cut from v1.
+- pass 3 (2026-10-13): drag states 10 → 6; folder-peek (dwell-to-open while dragging) cut
+  with the no-loss argument in §4.1; `over-card`/`over-folder` merged into `over-target`.
