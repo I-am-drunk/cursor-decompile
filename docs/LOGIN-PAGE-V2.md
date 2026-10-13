@@ -297,3 +297,68 @@ visible UI).
 
 Artifacts land in `docs/verification/login-v2/` (captures + `report.json`). Spec PR → S1
 PR (scene only, ≤ 500 lines) → form PR → verification PR, per GOAL-SYSTEM §2.
+
+## 10. React component contract (DESIGN; implementation target per owner directive)
+
+The login route is a React page. Two components, no shared state, no context, no store.
+
+| Component | Owns | Does not own |
+|---|---|---|
+| `LoginPage` | form state (§4), fetches, redirect | anything visual about the scene |
+| `RaycastScene` | one `<canvas>`, one WebGL2 context, the rAF loop, pointer listener | theme, layout, any DOM outside its canvas |
+
+Theme is a prop, read by the page from `document.documentElement.dataset.theme` once per
+render. The scene is keyed on it, so a theme change unmounts and remounts the scene (§6 rule).
+
+```tsx
+// src/login/LoginPage.tsx
+export function LoginPage({ configured }: { configured: boolean | null }) {
+  const theme = useTheme();                      // 'dark' | 'light', from data-theme
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
+  return (
+    <main className="login">                     // §3 page grid
+      {reduced ? <img className="scene" src={`/login/still-${theme}.avif`} alt="" aria-hidden />
+               : <RaycastScene key={theme} theme={theme} />}
+      <div className="scrim" aria-hidden />      // §6, CSS only
+      <LoginCard configured={configured} />      // §4
+    </main>
+  );
+}
+```
+
+```tsx
+// src/login/RaycastScene.tsx — the only file that touches WebGL
+type Props = { theme: 'dark' | 'light'; debug?: { t?: number; pointer?: false; dpr?: number } };
+export function RaycastScene({ theme, debug }: Props) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [failed, setFailed] = useState(false);   // the ONLY React state in the scene
+  useEffect(() => {
+    const canvas = ref.current!;
+    let scene: Scene | null = null;
+    try { scene = createScene(canvas, PALETTE[theme], debug); }   // §5 S1 module, framework-free
+    catch { setFailed(true); return; }
+    const onMove = (e: MouseEvent) => scene!.pointer(2*e.clientX/innerWidth-1, 1-2*e.clientY/innerHeight);
+    const onVis  = () => (document.hidden ? scene!.pause() : scene!.resume());
+    if (!debug?.pointer === false) window.addEventListener('mousemove', onMove);
+    document.addEventListener('visibilitychange', onVis);
+    scene.start();                                // first frame inside this effect (≤ 100 ms budget, §8)
+    return () => { window.removeEventListener('mousemove', onMove);
+                   document.removeEventListener('visibilitychange', onVis); scene!.dispose(); };
+  }, [theme]);                                    // debug is read once; it never changes at runtime
+  if (failed) return <img className="scene" src={`/login/still-${theme}.avif`} alt="" aria-hidden />;
+  return <canvas ref={ref} className="scene" aria-hidden />;
+}
+```
+
+Props, state, effects, exactly:
+
+| Component | Props | State | Effects | Refs |
+|---|---|---|---|---|
+| `LoginPage` | `configured: boolean \| null` (from `/api/auth/status`, fetched by the route loader, not the page) | none | none | none |
+| `LoginCard` | `configured` | `email`, `password`, `status: 'idle'\|'loading'\|'error'\|'unreachable'`, `error: string` (§4) | one: focus Password when `login_hint` is present | form |
+| `RaycastScene` | `theme`, `debug?` | `failed: boolean` | one, keyed on `theme`: create → listen → start → cleanup | canvas |
+
+`PALETTE` is a 2-entry constant `{ dark: {clear, c1, c2, c3}, light: {...} }` holding the §6
+numbers. Nothing else in the scene reads CSS or the DOM. `useTheme` and `useMediaQuery` are
+the app's existing hooks (GAP: confirm names when the app shell lands; if absent, 8-line
+`matchMedia` hooks live next to the page).
