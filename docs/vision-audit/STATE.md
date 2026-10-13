@@ -1,4 +1,4 @@
-# Vision — where it stands tonight (2026-10-13, updated 07:35)
+# Vision — where it stands tonight (2026-10-13, updated 07:50)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
@@ -11,7 +11,7 @@ other Fable design lanes (login, projects, decisions) have died repeatedly with 
 
 | # | Pillar | Tonight | Risk |
 |---|---|---|---|
-| 1 | UI quality, copy-first | Doc-before-code holding across all lanes. UI-EXTRACTION-MAP pins the sidebar to captured constants and names the first-pass inventions to never repeat. DEVIN-PORT-MAP inventories all 19 Devin feature files with citations. | Raycast "exact" vs "instant" still unbudgeted; light-mode palette confirmed NOT in source (NOTES 02, 16). |
+| 1 | UI quality, copy-first | Doc-before-code holding. LOGIN-PAGE-V2 §0–§6 landed (extracted raycast facts, 3-layer stack, implementation-complete form states, staged instant rebuild with KB/ms budget, scrim copied from raycast). Two lanes independently extracted identical raycast numbers. | §7 verification plan missing; six login commits unpushed; projects board still has no spec (NOTES 33–36). |
 | 2 | Connector packages w/ skills | Thesis nailed in CONNECTOR-PACKAGES; packages = Devin plugins (CONNECTORS-PAGE-SPEC §7). Devin cloud now has a Create-Plugin dialog + manifest editor captured (NOTES 14) = our authoring UX, copy it. | Settings nav naming still split across two specs (NOTES 01, 06). |
 | 3 | Linear as brain, Devin-shaped server | SERVER-FROM-DEVIN is the only server plan; T3-derived ARCHITECTURE is superseded and should be closed (NOTES 13). Linear chat loop VERIFIED live. | Scheduler format decided in prose (RRULE+tz) but three docs still differ (NOTES 15). Runs-vs-native-Loops question open (NOTES 10). |
 | 4 | Simple settings | SETTINGS-V2 pass 5 = one list, two rows, three states, one button per row (Connect or Disconnect). Exactly the brief; lane parked clean. | Nav still 5 entries in CONNECTORS-PAGE-SPEC; collapse to ≤3 (NOTES 06, 08). |
