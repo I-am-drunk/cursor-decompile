@@ -201,3 +201,31 @@ palette.
 Contrast rule: card text ≥ 4.5:1 is guaranteed by tokens; outside the card there is no text.
 So the only measurable is that the card border remains visible: `--border-secondary` on
 `--bg-elevated` against any scene frame ≥ 1.3:1 sampled on 5 frames (Astra, §9).
+
+## 7. Load timeline, motion, reduced motion
+
+Everything the user sees in the first second, in order (DESIGN, budgets in §8):
+
+| t (ms from HTML byte 0) | What | How |
+|---|---|---|
+| 0 | HTML + inlined CSS + inlined scene module arrive in one response (≤ 24 KB gz total) | login route serves a single self-contained document |
+| ≤ 16 | First paint: page colour, card, labels, inputs. Card is in the HTML, not rendered by JS. | no JS on the critical path for the form |
+| ≤ 40 | Scene module parses; WebGL2 context + shaders compile (S3 pre-warm) | module runs before `DOMContentLoaded` |
+| ≤ 100 | First scene frame: clear colour + rods + cube at `scale ≈ 0.02` | `requestAnimationFrame` #1 |
+| 100 → ~3000 | Cube grows: `damp3(scale → 1, smoothTime 1)` = source. Visually settled (≥ 0.99) at ≈ 3.0 s | same maths as source, seeded from the first frame's clock |
+| 0 → ∞ | Colour field scrolls at speed 0.1 (period of the fastest wave ≈ 63 s). Rods distort to 15 / .025 if viewport > 7.3 world units | source |
+| 200 000 | Loop stops (`never`), last frame stays | source. Answers OQ2: it never "settles", it stops. |
+
+Pointer: kept (answers OQ3). Rotation ±0.3 rad on the cube, damp 0.5, from `mousemove` on
+`window` only. The scene is `pointer-events: none`, so the form owns every click; the
+pointer only *influences* rotation. Touch devices: no `mousemove`, no rotation (source).
+
+`prefers-reduced-motion: reduce` (answers V5 precisely): the scene module exits before
+creating a context. The page shows the **settled pose** as a static PNG: cube at scale 1,
+rotation 0, field at t = 10000 (uTime 0), rods at distortion 0. Astra renders this PNG
+from S1 at 1512×982 DPR 2 light + dark, ≤ 60 KB AVIF each, served as `<img aria-hidden>`
+behind the scrim. This is also the fallback when `WebGL2` is unavailable or context creation
+throws. No CSS animation anywhere on the page, so nothing else needs the media query.
+
+`document.hidden` → cancel rAF; resume with the clock paused (source demand-mode behaviour).
+Form submit success → cancel rAF (page is being replaced).
