@@ -28,3 +28,38 @@
 - OQ2 Does the source animation ever settle, or is it a 200 s loop then freeze?
 - OQ3 Pointer parallax on the login page: keep (source) or drop (form focus)?
 - OQ4 Instant-load target: what is the gzipped size of the extracted shaders?
+
+## 2. The source animation — EXTRACTED facts (raycast.com, 2026-10-13 live)
+
+Pulled live from `www.raycast.com` HTML + chunk `2c5k8hkujs8m5.js` (115 KB raw / 32 KB gz,
+plus three.js r123 chunk 943 KB / 247 KB gz). The scene is a React-Three-Fiber canvas
+behind the hero, lazily mounted after hydration. Config literal (RSC payload, verbatim):
+
+| Group | Values |
+|---|---|
+| scene | bg `rgb(7,9,10)`; cube at z −9, y 0; glass group z 0, rotation 0.73 rad; camera z 16.54, fov 35, near .01, far 100; dpr 2 |
+| cubeShader | speed 0.1, size 0.99; color1 `244,254,255`, color2 `255,122,152`, color3 `184,2,50`, color4 `255,22,42` (color4 unused by shader) |
+| cube mesh | `boxGeometry 7×7×7`, starts `scale 0`, `damp3(scale → 1,1,1, smoothTime 1)` per frame |
+| cubeInteraction | enabled; rotation x = pointer.x × 0.3, y = −pointer.y × 0.3, angular damp smoothTime 0.5; translationInfluence 0.2 unused |
+| glass | 16 cylinders r 0.5 h 15 subdiv 8 (`Instances`), MeshTransmissionMaterial: thickness 1, roughness .35, anisotropicBlur 2.88, ior 1.5, chromaticAberration 3, transmission 1, resolution 1024, samples 6 (5 when viewport < 7.3 world units) |
+| distortion | if viewport width > 7.3: `damp(distortion → 15, λ30)`, `damp(temporalDistortion → .025, λ10)`; else both 0 |
+| loop | `frameloop: demand` off-screen, `always` on-screen; **stops forever at elapsed > 200 s** (`setFrameloop("never")`) |
+| canvas | `linear: true`, `flat: true` (no tone mapping), `preserveDrawingBuffer` |
+| postProcessing | disabled (dither shader shipped but off) |
+
+Cube fragment shader (exact, 3 waves summed, R = 3 gamma):
+
+```glsl
+t = uTime*uSpeed + 10000.;  xy = (gl_FragCoord.xy/uResolution - .5)*uSize + .5
+horizontal = cos(3*x + t)
+diagonal   = cos(1*(x*cos(t) + 5*y*sin(t)) + t)
+radial     = sin(20*sqrt((.3x-.5+cos t)^2 + (.3y-.5+sin(.5t))^2 + 1) + t)
+nv = ((h+d+r)/3 + 1)/2
+color = nv<.5 ? mix(c3,c2,2nv) : mix(c2,c1,2(nv-.5));  out = pow(color, 3)
+```
+
+Hero CSS overlay (copied verbatim, `heroBackground:after`): bottom fade `#07080a20 → #07080a20 90% → #07080a`, plus 5 %-wide side fades to `#07080a` left and right. Hero text fades in `1 s`, `translateY(20px → 0)`, paragraph staggered `1 s`.
+
+What this means for us: the "load animation" is **two things** — (a) the cube growing from
+scale 0 with a critically-damped spring (visible for ≈ 3 s), and (b) the colour field
+scrolling at speed 0.1 behind 16 refracting glass rods. (a) is the moment people remember.
