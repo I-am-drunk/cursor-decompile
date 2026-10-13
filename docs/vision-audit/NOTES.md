@@ -866,3 +866,40 @@ and a reinstate condition, §7 import rule.
   column entirely (entry 07 FIX becomes mandatory). The import rule (drop `code_step`, one
   run-log line) is the only trace.
 - Skill-chips doc is being edited in the main checkout right now (file watcher 08:03).
+
+## 41 · 08:10 · `design-projects` d602f44 — docs/AUTOMATION-PROJECTS.md pass 1 skeleton (110 lines)
+
+**Checked:** §0 one-paragraph idea, §1 reference table (copy vs refuse), §12 iOS-vs-desktop
+resolutions, §13 physics TODO numbers, §14 owner questions; sections 2–11 are TODO stubs.
+
+**Verdict: on-vision. The flagship finally has a spine, and the spine is the owner's words.**
+
+- §0 is the brief verbatim plus the three decisions that make it desktop: immediate pickup
+  on mouse drag, no long-press, no jiggle mode. §12 justifies each refusal in one line
+  ("a mouse has no ambiguity between tap and hold"). That is simplicity test 1 and 4.
+- The card is Devin's list row (icon, 13px name, badges, subtitle, sparkline), not an
+  invented tile. Correct copy source. atsu is used as spacing/motion review questions, as
+  entry 19 asked.
+- §14 Q1 (board default vs list default) is the one question that changes the build order.
+  Default should be list (Devin truth) with board as the second view until the board is
+  CU-verified; flipping the default later is one flag.
+- **One caution for pass 2:** §13 pre-fills physics numbers (1.04 @ 120 ms, 200 ms slide,
+  260 ms folder open) as a TODO. None has a source yet. Label every number DESIGN until
+  measured against iOS or copied from Cursor's existing drag (if any). Do not let a TODO's
+  placeholder become the spec by inertia.
+- Sections 2–11 are stubs. Pass 2 should fill §2 (grid metrics) and §3 (card) first because
+  both are copies; drag physics (§4, §13) is the only invention and should come last.
+- Server gap from entry 07 is now concrete: §10 data model must land in SERVER-FROM-DEVIN §3.
+
+## 42 · 08:15 · `design-login` a313b6b — LOGIN-PAGE-V2.md P3: decisions resolved, open questions closed
+
+**Checked:** V1–V7 rewritten with status + section pointer each; §1 "Resolved questions"
+replaces OQ1–OQ4 with one line per answer.
+
+**Verdict: on-vision. P3 cut rather than added. Three of seven decisions are now EXTRACTED.**
+
+- V3 (scrim) and V5 (pointer) moved from DESIGN to EXTRACTED with sources; V4 light mode is
+  honestly DESIGN "no light palette exists in source". The DESIGN count went down between
+  passes, which is the direction the owner wants.
+- Nothing to send back. P4/P5 should only tighten copy and strike anything a reader does not
+  need. Ten commits on the branch, origin still at main.

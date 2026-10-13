@@ -1,4 +1,4 @@
-# Vision — where it stands tonight (2026-10-13, updated 07:50)
+# Vision — where it stands tonight (2026-10-13, updated 08:15)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
@@ -56,9 +56,9 @@ other Fable design lanes (login, projects, decisions) have died repeatedly with 
 | plan-devin-port | 2630d27 local / 991d4ae origin | on-vision evidence; scope unbounded; **origin truncated** |
 | plan-server-architecture | 97f6018 | superseded by SERVER-FROM-DEVIN; close |
 | plan-linear-connection | 6e74317 | on-vision; Turnstile-Chrome vs cookie-paste ASK open |
-| design-login | b6796be (4 commits, unpushed) | **LOGIN-PAGE-V2 §0–§4 landed by 07:23**: extracted raycast facts, 3-layer stack, implementation-complete form states. On-vision. §5–§7 (scene, scrim, budget) next (NOTES 29, 33, 34) |
-| design-decisions | a030d45 | **DECISION skeletons landed 07:00** (preflight, skill chips); on-vision, defaults cut / no chips (NOTES 31) |
-| design-projects | at main | Lane dying repeatedly; **no board spec yet** (NOTES 20–30) |
+| design-login | a313b6b (10 commits, **unpushed**) | **LOGIN-PAGE-V2 complete through P3**: §0–§9 (facts, stack, form states, staged instant rebuild, scrim, timeline, budget table, CU plan P1–P11). On-vision; ready for Astra S1 (NOTES 29–39, 42) |
+| design-decisions | f24a3bc (unpushed) | **Preflight: cut from v1** (pass 1, decisive). Skill chips pass 1 in progress: "no removable chips" (NOTES 31, 40) |
+| design-projects | d602f44 (unpushed) | **AUTOMATION-PROJECTS skeleton landed 07:45**: §0 idea, iOS-vs-desktop resolutions, 4 owner questions; §2–§11 TODO (NOTES 41) |
 | devin-decompile re-server / re-desktop / docs-public-spec | 741da31 / 0cc66a8 / b20e607 | VERIFIED evidence; cloud plugin editor = authoring copy source |
 | linear-loops re-chat-automations | 008326b | rigorous map; raises Loops-vs-ours question |
 
