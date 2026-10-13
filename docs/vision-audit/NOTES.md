@@ -622,3 +622,13 @@ fragment, hash grain seeded per pixel), lane log 06:14 perf trace.
   each at 06:18, zero writes. Same read-first pattern, 20 minutes in.
 - Nothing new to audit from them. The FIX in entries 20/24 (resume + transcript-mtime
   watchdog + "commit a skeleton in 10 minutes") is still the only lever.
+
+## 28 · 06:25 · fable-login died a fourth time; raycast lane reconnecting
+
+- fable-login session 2d8057f0 ended 06:21:50: `API Error: Connection lost before a response
+  was produced.` 40 tool calls, zero writes, 64 min. Relaunched at escalation 10 with the same
+  prompt. Four deaths tonight on this goal; total output from it: nothing.
+- astra-raycast (codex) logged `Reconnecting... 1/5` at 06:23. If it dies, its 58-line draft
+  of RAYCAST-ANIMATION.md is **uncommitted** in the worktree. Runner should commit that file
+  now even if the proof is unfinished; it is already the best spec on the branch.
+- Projects (24 calls) and q45 (22 calls) at 06:23: still zero writes.
