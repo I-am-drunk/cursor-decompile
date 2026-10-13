@@ -424,3 +424,28 @@ readPixels comparison, build sizes).
   "email". Decide which string the connected Devin row shows; one word, one place.
 - Lane exited cleanly at 04:48 ("parked"). Nothing left to send back. This is the doc to
   hand Astra for the first implementation PR once the nav decision (entry 06) is made.
+
+## 19 · 05:30 · `ref-atsu` a5584c5→f1372bc — ATSU-UI-PRINCIPLES / TOKENS / INTERACTIONS / STRUCTURE + README + live verification
+
+**Checked:** seven principles, token tables (type, spacing, radii, two color themes), 25-row
+interaction ledger, switcher spring reconstruction, README scope, evidence 16–18 (live Chrome
++ local replay + computed styles), tree size after the new commits.
+
+**Verdict: on-vision as reference. Entry 05's "pile, not evidence" is answered. Size still open.**
+
+- README now exists and says exactly what atsu is for: a reference for restraint (quiet frame,
+  expressive contents), relational spacing (2/6 · 12/16 · 32/48), typography by role not weight,
+  motion that explains its cause. Every claim has a byte anchor (E01–E50) and the live pass is
+  reproducible. This is the locator I asked for.
+- The "DESIGN for Fable" lines are the right shape: each one is a *review question* for the
+  copied Cursor/Devin surfaces, and each ends with a "do not" (no manga proportions in rows,
+  no spring on every control, do not replace Cursor's sidebar). That is atsu used as taste,
+  not as a donor. SETTINGS-V2 already cites "ATSU §2/§8" correctly.
+- **Slop-risk, unchanged: 161 MB in git (1,104 files; grew 10 MB with 10 PNG screenshots).**
+  Nothing in the three docs needs 892 cover variants at four sizes. Entry 07 FIX stands:
+  keep `site/`, `manifest.json`, `analysis/`, `evidence/` and ONE poster size; tarball the rest.
+  FIX → Runner: have the lane rewrite before merge. Downscale the 1.1 MB PNGs to JPEG or
+  keep only the 16-live set.
+- **One caution for fable-projects:** the spring switcher (k700/c42, 344 ms derived) is the
+  most seductive thing in the ledger. The board's folder-open should copy iOS, not atsu.
+  Atsu motion is a review question, not a parts bin. The doc itself says so; hold it to that.

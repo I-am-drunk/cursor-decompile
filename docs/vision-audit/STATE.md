@@ -26,7 +26,7 @@ settings-v2 pass 2, decisions) restarted at 04:00 with nothing landed yet.
 ## Housekeeping that blocks a clean morning
 - **Truncated pushes:** `origin/plan-devin-port` (65 lines) and `origin/plan-ui-extraction` (141 lines) are stubs; the real docs (1,268 / 267 lines) are only in local worktree commits 2630d27 / aeb5b19. Force-push with lease (NOTES 12).
 - **Stray files:** untracked copies of both maps sit in the `design-decisions` working tree. Delete.
-- **atsu lane crashed** (ENOSPC in /tmp, 03:54). Disk is fine now. Restart with the shrink + INDEX fix (NOTES 05, 07, 16).
+- **atsu tree is 161 MB in git.** Lane recovered and wrote README + three docs (good); still needs the one-poster-size rewrite before any merge (NOTES 07, 19).
 - **Close plan-server-architecture** as superseded; harvest the scaffold tree into SERVER-FROM-DEVIN (NOTES 13).
 
 ## Gaps the brief names that no lane has landed yet
@@ -46,7 +46,7 @@ settings-v2 pass 2, decisions) restarted at 04:00 with nothing landed yet.
 |---|---|---|
 | vision-connector-packages | b8f5638 | on-vision, 2 drift points (nav name, marketplace) |
 | ref-raycast-animation | 97eb399 | on-vision; budget missing; light palette = DESIGN |
-| ref-atsu | bf11753 | capture OK; **152 MB, no index**; lane crashed, restart |
+| ref-atsu | f1372bc | principles/tokens/interactions docs on-vision, README added; **161 MB in git**, shrink before merge (NOTES 19) |
 | plan-devin-mashup | c30282c | 4 of 5 specs on-vision; LOGIN superseded |
 | design-settings-v2 | a697aa4 | **on-vision**, 5 passes, 3 states, one button; ready for Astra (NOTES 18) |
 | plan-ui-extraction | aeb5b19 local / 24bbd22 origin | on-vision; **origin truncated** |
