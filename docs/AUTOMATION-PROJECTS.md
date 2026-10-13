@@ -1,6 +1,6 @@
 # AUTOMATION PROJECTS — the board (iPhone-home-screen model for automations)
 
-Status: **pass 7 — grid gap = Devin row gap; menu reveal wording; sweep.** Branch `design-projects`. Fable, 2026-10-13. Owner's
+Status: **pass 8 — build order, verification checklist, scrim wording.** Branch `design-projects`. Fable, 2026-10-13. Owner's
 flagship. Law: GOAL-SYSTEM §1 — nothing here is implemented until every state, transition, timing
 and copy string below is filled. Evidence labels: VERIFIED > OBSERVED > EXTRACTED > DOCUMENTED >
 DESIGN (ours). GAP = missing evidence, never permission to invent.
@@ -25,7 +25,7 @@ long-press, no jiggle mode.
 | Devin `ListFrame` / `AutomationsListPage.tsx` | page frame `py-4 sm:py-8`, `px-4 sm:px-6`, `max-w-[min(1200px,max(50vw,800px))]`; header 18px medium + 13px secondary subtitle; `mx-1 rounded-lg border-border-secondary bg-bg-elevated` shell; rows `gap-0.5 p-1`, `rounded-md px-3 py-2 hover:bg-tint-secondary` | EXTRACTED (`ListPagination.tsx` L71–L79, `AutomationsListPage.tsx` L28–L30, L208–L213) |
 | Devin template card (spec §7.3) | grid card grammar: `rounded-xl`, secondary border, elevated bg, `p-4`, hover primary-border/wash, 2→3 columns at `lg`, min-height 126px | EXTRACTED (spec §7.3) |
 | Cursor shell | 180ms `cubic-bezier(.22,1,.36,1)` is the one captured easing in this repo; neutral chrome; the board lives inside Cursor's page frame | OBSERVED (`docs/verification/motion-audit.md`) |
-| atsu.moe | capture on disk is a splash shell only (`../atsu-original.html`, 21 KB) — principles below are from the owner's brief, labelled DESIGN | GAP for timings |
+| atsu.moe | capture on disk is a splash shell only (`../atsu-original.html`, 21 KB); the owner's brief gives the principles we apply: quiet frame, response before decoration, motion follows the cause | DESIGN (brief), GAP for timings |
 
 Refused from iOS: long-press to pick up, jiggle/edit mode, page paging, badges, widgets, the
 App Library, blur behind folders. Reasons in §12.
@@ -169,7 +169,7 @@ removed **automatically** (iOS DOCUMENTED) — immediate, with the folder card f
 | open | sheet grows from the folder card's rect to a centred panel `max-w-[720px]`, `max-h-[70vh]`, `rounded-lg border-border-secondary bg-bg-elevated`; `shadow-L4`; board behind gets Devin's `bg-bg-scrim` (`0 0 0/.12` light, `.32` dark) | 260ms `cubic-bezier(.22,1,.36,1)` on transform (scale + translate from source rect), opacity over the first 120ms; scrim = Devin `fade-in` 150ms ease-out | iOS geometry DOCUMENTED; scrim, shadow, fade EXTRACTED (`index.css` L49, L71, L246); 260ms DESIGN |
 | content | title row: folder glyph · inline-editable name · count · `…` (Rename, Remove project) · close ×. Below: the **same grid** (§2) of member cards | — | — |
 | close | reverse of open, 200ms; scrim fades 300ms (Devin's dialog exit `transition-opacity duration-300`) | Escape · click scrim · × | iOS DOCUMENTED; scrim exit EXTRACTED (`IssuesSection.tsx` L193) |
-| drag out | pick up a member and move the pointer onto the dim: the sheet closes (200ms) and the drag continues on the board in `dragging`; drop anywhere → unfiled, drop on a card/folder → §4.1 commit | iOS DOCUMENTED; no timer (pass 4) |
+| drag out | pick up a member and move the pointer onto the scrim: the sheet closes (200ms) and the drag continues on the board in `dragging`; drop anywhere → unfiled, drop on a card/folder → §4.1 commit | iOS DOCUMENTED; no timer (pass 4) |
 | URL | `?project=<id>` via router replace; deep-linkable; refresh re-opens without motion | DESIGN (matches Devin's `replace` policy §6.1) |
 | run view | while open, the global run view filters to `project_id` (VISION: "the global run view's context") | — | — |
 
@@ -231,7 +231,7 @@ on a folder opens it instead.
 ### 8.3 Reduced motion
 
 `prefers-reduced-motion: reduce`: all transforms instant; opacity changes 80ms; the folder
-sheet appears centred without the grow-from-tile; dim is instant. The ghost still follows
+sheet appears centred without the grow-from-tile; scrim is instant. The ghost still follows
 the pointer (it is position, not animation).
 
 ## 9. Coexistence with the list view
@@ -310,6 +310,32 @@ toward a goal) and `cubic-bezier(.33,1,.68,1)` (return / cancel). Durations: 80 
 visual token we touch (`shadow-L3/L4`, `bg-bg-scrim`, `bg-bg-wash`, `ring-border-primary`,
 `bg-tint-secondary`) is theirs. Nothing in this feature introduces a colour or shadow.
 
+### 13.1 Build order (one idea per PR, GOAL-SYSTEM §2)
+
+1. server: migration + `projects` table + `project_id` column + `GET /automations` `projects[]`
+2. server: `POST /projects` (collision) · `PATCH /automations/:id/project` · invariants tests
+3. server: `PATCH/DELETE /projects/:id` + auto-remove on empty + event rows
+4. ui: view toggle + `localStorage` + `?view` (list still Devin's, board renders cards read-only)
+5. ui: automation card (§3.1) + folder card (§3.2) + skeleton + empty states (§7)
+6. ui: drag machine `idle→armed→dragging→return` only (no targets yet), ghost + physics
+7. ui: `over-target` + `commit` (create folder, move into), optimistic + revert toast
+8. ui: folder open view (§5.4) + URL + drag-out
+9. ui: rename / remove / `Move to project ›` menu (§5.2, §5.3, §8.1)
+10. ui: keyboard + touch + reduced motion (§8); verification PR with CU artifacts
+
+### 13.2 Verification checklist (Astra, computer-use, before any UI PR flips ready)
+
+- 4px threshold: a 3px mousedown-move-up on a card navigates; 5px picks up.
+- Pickup, drop, return each measured with a frame recording: 120 / 180 / 220ms ±1 frame.
+- Drop on automation → folder card appears in the target's cell, name field selected.
+- Drop on folder → count badge +1, no layout shift anywhere else on the board.
+- Escape mid-drag, window blur mid-drag, right-click mid-drag → return, no stuck ghost.
+- Open folder: sheet origin rect = folder card rect; scrim colour sampled = `bg-bg-scrim`.
+- Drag last member out → folder disappears; refresh → still gone (server auto-remove).
+- Keyboard-only: create a folder and move a card using only `Move to project ›`.
+- `prefers-reduced-motion`: no transform animates; opacity rows ≤80ms.
+- Dark and light: screenshots of rest / hover / drag / target / open, compared side by side.
+
 ## 14. Open questions for Runner / owner
 
 1. Board default: pass 4 sets board always (§9). Confirm.
@@ -336,4 +362,5 @@ visual token we touch (`shadow-L3/L4`, `bg-bg-scrim`, `bg-bg-wash`, `ring-border
   150/300ms. DESIGN labels on those rows replaced by EXTRACTED with `index.css` line refs.
 
 - pass 7 (2026-10-13): grid gap is Devin's own `gap-0.5`, not an invented 4px; row-menu
-  reveal described as Devin does it (hover/focus-within replaces the date).
+  reveal described as Devin does it (hover/focus-within replaces the date).- pass 8 (2026-10-13): §13.1 build order (10 PRs) and §13.2 computer-use verification
+  checklist added; atsu evidence row made honest; dim → scrim everywhere.
