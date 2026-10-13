@@ -1,4 +1,4 @@
-# Vision — where it stands tonight (2026-10-13, updated 06:15)
+# Vision — where it stands tonight (2026-10-13, updated 06:40)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
@@ -15,7 +15,7 @@ other Fable design lanes (login, projects, decisions) have died repeatedly with 
 | 2 | Connector packages w/ skills | Thesis nailed in CONNECTOR-PACKAGES; packages = Devin plugins (CONNECTORS-PAGE-SPEC §7). Devin cloud now has a Create-Plugin dialog + manifest editor captured (NOTES 14) = our authoring UX, copy it. | Settings nav naming still split across two specs (NOTES 01, 06). |
 | 3 | Linear as brain, Devin-shaped server | SERVER-FROM-DEVIN is the only server plan; T3-derived ARCHITECTURE is superseded and should be closed (NOTES 13). Linear chat loop VERIFIED live. | Scheduler format decided in prose (RRULE+tz) but three docs still differ (NOTES 15). Runs-vs-native-Loops question open (NOTES 10). |
 | 4 | Simple settings | SETTINGS-V2 pass 5 = one list, two rows, three states, one button per row (Connect or Disconnect). Exactly the brief; lane parked clean. | Nav still 5 entries in CONNECTORS-PAGE-SPEC; collapse to ≤3 (NOTES 06, 08). |
-| 5 | Speed | LOGIN-PAGE-SPEC §1 budget exists; raycast lane has live shaders + geometry in hand. | Budget predates the WebGL source; needs ms/KB numbers in the raycast contract (NOTES 02). |
+| 5 | Speed | Raycast lane measured it: live raycast.com spends ~325 ms parsing + evaluating script; the proof spends ~8 ms (NOTES 26). Color math is four lines of trig; glass pass is the only cost. | Numbers are in the lane log, not yet in the doc; gz size and budget line still missing (NOTES 17, 26). |
 
 ## Contradictions to resolve first (Runner, in this order)
 1. **Login background.** LOGIN-PAGE-SPEC offers 3 invented options; owner chose raycast. Strike §2/§4, point at `docs/interactions/raycast-animation.md`, carry the perf budget over. (fable-login is rewriting this now as LOGIN-PAGE-V2.)
@@ -48,7 +48,7 @@ other Fable design lanes (login, projects, decisions) have died repeatedly with 
 | Lane | Tip | Verdict |
 |---|---|---|
 | vision-connector-packages | b8f5638 | on-vision, 2 drift points (nav name, marketplace) |
-| ref-raycast-animation | 97eb399 | on-vision; budget missing; light palette = DESIGN |
+| ref-raycast-animation | 97eb399 + 58-line uncommitted draft | on-vision, evidence-grade math/geometry; **commit the draft**; budget line missing (NOTES 25, 26, 28) |
 | ref-atsu | f1372bc | principles/tokens/interactions docs on-vision, README added; **161 MB in git**, shrink before merge (NOTES 19) |
 | plan-devin-mashup | c30282c | 4 of 5 specs on-vision; LOGIN superseded |
 | design-settings-v2 | a697aa4 | **on-vision**, 5 passes, 3 states, one button; ready for Astra (NOTES 18) |
