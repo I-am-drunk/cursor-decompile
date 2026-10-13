@@ -1,4 +1,4 @@
-# Vision — where it stands tonight (2026-10-13, updated 02:55)
+# Vision — where it stands tonight (2026-10-13, updated 03:15)
 
 Sixty-second read for the morning. Detail per audit in `NOTES.md`. Law: `/tmp/goals/VISION-BRIEF.md`.
 
@@ -25,6 +25,7 @@ contradict decisions the owner made last night. Fix the contradictions before an
 - **Automation projects board** (iPhone-home-screen folders, default unfiled). No spec, no
   schema, `design-projects` branch is empty at main. Highest-value unstarted item.
 - **Light/dark two-tone for the raycast background.** Source has one palette. Owner decision needed.
+- **Our runs vs Linear native Loops.** linear-loops 008326b maps Linear's own Loop system (definitions, runs, history, inbox). Our plan drives plain chats. Owner must pick one (NOTES 10). Default stays: our records.
 
 ## Lane scoreboard (commits ahead of main)
 | Lane | Tip | Ahead | Verdict |
@@ -36,6 +37,7 @@ contradict decisions the owner made last night. Fix the contradictions before an
 | design-settings-v2 | 56311b0 | 1 | **on-vision**, best doc tonight |
 | design-login / design-projects | 65afacc | 0 | not started |
 | devin-decompile re-server-3.10.48 | 741da31 | — | marketplace evidence VERIFIED |
+| linear-loops re-chat-automations | 008326b | — | rigorous map; raises Loops-vs-ours question |
 
 ## What "good" looks like by morning
 Contradictions 1–3 resolved in docs; a projects-board interaction doc exists; raycast contract

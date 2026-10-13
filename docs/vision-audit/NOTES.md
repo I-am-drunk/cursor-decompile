@@ -221,3 +221,22 @@ skill injection, elicitation handling.
 - §2.3 defines connector packages as `src/connectors/*.json` with `{title, body}` skills.
   That predates CONNECTOR-PACKAGES.md (folder + frontmatter). FIX → §2.3 points at
   CONNECTOR-PACKAGES §3 and drops its own shape. One package format, one place.
+
+## 10 · 03:00 · linear-loops `re-chat-automations` 008326b — docs/LINEAR-CHAT-AUTOMATIONS.md (301 lines)
+
+**Checked:** entity model (WorkflowDefinition / Draft / AiConversation / LoopExecution), chat
+authoring presets, publish boundary, RunLoop tool, run history queries, widget registry.
+
+**Verdict: on-vision as research; one strategic question it raises for the owner.**
+
+- Rigorous: every claim labeled EXTRACTED / VERIFIED / UNVERIFIED with byte-offset citations;
+  it refuses to call a draft edit a publish. This is what evidence looks like.
+- **Strategic finding:** Linear already has native Loops: definitions, drafts, scheduled runs,
+  run history, inbox notifications, EntityCard widgets. Our LOOP-RUNTIME plan drives plain
+  chats and keeps run state in our SQLite. Two run systems now exist on the same brain.
+  ASK → owner: are our automations *our* records that talk to Linear chat (current plan,
+  fully in our control, verified free), or thin wrappers over native Linear Loops (less code,
+  but RunLoop dispatch and publish are UNVERIFIED and entitlement is unknown)? The brief says
+  "our server is a thin orchestrator"; it does not say which. Runner should not let a lane
+  pick silently. Current plan stays the default until the owner answers.
+- No drift in the doc itself. It does not recommend; it maps.
