@@ -240,3 +240,23 @@ authoring presets, publish boundary, RunLoop tool, run history queries, widget r
   "our server is a thin orchestrator"; it does not say which. Runner should not let a lane
   pick silently. Current plan stays the default until the owner answers.
 - No drift in the doc itself. It does not recommend; it maps.
+
+## 11 · 21:41 (landed) · `plan-ui-extraction` aeb5b19 — docs/UI-EXTRACTION-MAP.md (267 lines)
+
+**Checked:** provenance block, shell extraction table, sidebar pixel/motion contract,
+settings extraction table, Devin automations file-by-file table.
+
+**Verdict: on-vision. This is the antidote to the sidebar trauma.**
+
+- Sidebar is specified from the captured source constants (280px panel, 43px edge, 150/200 ms
+  motion, clip-path insets, exact glyph names) with "do not replace with opacity-only labels or
+  squeezed widths" called out. "Never add whole-rail focus/drag expansion" kills the first-pass
+  invention by name. Copy-first is enforced row by row with acceptance evidence per file.
+- Honest about the missing `corpus/` tree: it bounds its own claims rather than guessing.
+- **Stale rows:** §3 still says "exactly four settings destinations: Linear connection, MCP
+  connectors, Accounts, General" and plans `McpConnectorsPage.tsx`. SETTINGS-V2 and the
+  Customize decision supersede this.
+  FIX → §3 header points at SETTINGS-V2 (connections list) and CONNECTORS-PAGE-SPEC §3–§5
+  (Customize); keep the row/frame extraction rows, retarget `McpConnectorsPage` to the
+  Customize MCPs tab. The extraction evidence is still right; only the destination names moved.
+- Nothing clever. Keep as the shell source of truth.
