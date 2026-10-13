@@ -258,7 +258,7 @@ Measured on the login route, cold cache, Chrome 130, M1 Air, loopback server.
 |---|---|---|
 | Bytes before first scene frame (HTML + CSS + page JS + `scene.ts`) | ≤ 24 KB gz; ≤ 3 requests, all `modulepreload`ed | `curl -sw %{size_download}` with `Accept-Encoding: gzip` |
 | Scene module alone | S1 ≤ 18 KB gz, S2 ≤ 12 KB gz | `esbuild --minify \| gzip -9 \| wc -c` |
-| Reduced-motion/fallback PNG (AVIF) | ≤ 60 KB each, 2 files, lazy (only loaded when used) | file size |
+| Still images `still-{dark,light}.avif` | ≤ 60 KB each, loaded only on the fallback branch | file size |
 | First Contentful Paint | ≤ 50 ms after HTML | Performance panel |
 | First scene frame | ≤ 100 ms after HTML | `performance.mark` in module, reported in CU run |
 | Shader compile (both programs) | ≤ 30 ms | `performance.measure` around `linkProgram` |
@@ -337,7 +337,7 @@ export function RaycastScene({ theme, debug }: Props) {
     catch { setFailed(true); return; }
     const onMove = (e: MouseEvent) => scene!.pointer(2*e.clientX/innerWidth-1, 1-2*e.clientY/innerHeight);
     const onVis  = () => (document.hidden ? scene!.pause() : scene!.resume());
-    if (!debug?.pointer === false) window.addEventListener('mousemove', onMove);
+    if (debug?.pointer !== false) window.addEventListener('mousemove', onMove);
     document.addEventListener('visibilitychange', onVis);
     scene.start();                                // first frame inside this effect (≤ 100 ms budget, §8)
     return () => { window.removeEventListener('mousemove', onMove);
