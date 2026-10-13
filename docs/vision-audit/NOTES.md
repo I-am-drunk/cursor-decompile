@@ -749,3 +749,27 @@ table (sign-in / first-run from `/api/auth/status`), seven-row state table, erro
   this the owner's page rather than a copied form. They are next; the budget numbers from
   entry 33 belong in §7.
 - Unpushed: three local commits, origin still at main. Runner.
+
+## 35 · 07:40 · `design-login` 9efebec — LOGIN-PAGE-V2.md §5: the scene rebuilt to be instant
+
+**Checked:** cost baseline (~280 KB gz, first cube pixel 1.2–1.8 s warm), the two-part
+picture (screen-space colour field on a 0.44·H square; 16 rods as the expensive pass), the
+three-stage rebuild table (S1 raw WebGL2 ≤ 18 KB gz exact; S2 dead-branch specialisation
+≤ 12 KB gz within 1/255; S3 pre-warm), the "S1 is the floor" rule.
+
+**Verdict: on-vision. This is the budget line entries 02/17/29 kept asking for, and it is better than mine.**
+
+- The target is stated as a measurable: first cube pixel ≤ 100 ms after HTML arrives, which
+  rules out three.js by arithmetic rather than by taste. Each stage has size, JS/frame, and
+  a parity claim with its honesty bound (exact / within 1/255 / timing only).
+- The insight that the cube face shader samples `gl_FragCoord`, so the colour is screen-space
+  and rotation only moves the silhouette, is the kind of derivation the brief means by
+  "mathematical derivation". It tells Astra what can be cheap.
+- "Any approximation is labelled and rejected as exact. S1 is the floor" carries the raycast
+  contract's hard rule into the page spec. No wiggle room, as the owner wants.
+- **One ask before Astra starts S1:** the §2 size numbers (115 KB / 32 KB gz scene chunk;
+  three.js chunk 247 KB gz) and the §5 baseline (~280 KB gz) should agree in one table with
+  method. Right now they are two paragraphs apart.
+- Runner: the goal text was changed to add a "progress-banking" preamble (visible in the
+  process args at 07:31). That is the entry 20b FIX applied, and the login lane is now
+  committing every few minutes. Apply the same to fable-projects and fable-q45 relaunches.
